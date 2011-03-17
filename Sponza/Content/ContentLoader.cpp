@@ -1,28 +1,34 @@
 #include "stdafx.h"
 #include "Content/ContentLoader.h"
 
+using namespace std;
+
 ContentLoader::ContentLoader(const std::string& contentRoot)
 {
 	memset(&m_contentLoaded, 0, sizeof(bool)*ContentID::CONTENT_MAX);
+	memset(m_contentData,	 0, sizeof(ContentItem*)*ContentID::CONTENT_MAX);
 
-	const std::string manifest = contentRoot + "\\Manifest.txt";
-	FILE * pFile = fopen(manifest.c_str(), "r");
+	const string manifest = contentRoot + "\\Manifest.txt";
+	ifstream filestr(manifest);
 	
-	if (pFile == NULL) throw std::exception("Manifest file not found!");
-	char contentFile[256];
-
-	int rootLength = contentRoot.size();
-	size_t id = 0;
-	while (!feof(pFile) && id < ContentID::CONTENT_MAX)
+	if (filestr.good())
 	{
-		fgets( contentFile, 256, pFile );
-		m_contentPaths[id] =  contentRoot;
-		m_contentPaths[id] += std::string(contentFile);
+		char contentFile[256];
 
-		++id;
+		size_t id = 0;
+		while (!filestr.eof())
+		{
+			filestr.getline(contentFile, 255);
+			if (*contentFile == 0) break;
+
+			m_contentPaths[id] =  contentRoot;
+			m_contentPaths[id] += contentFile;
+
+			++id;
+		}
 	}
 
-	fclose( pFile );
+	filestr.close();
 }
 
 ContentLoader::~ContentLoader()

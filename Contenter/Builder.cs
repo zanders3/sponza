@@ -123,7 +123,7 @@ namespace Contenter
                     buildItems.Add(new BuildItem()
                     {
                         Input = file,
-                        Output = Path.Combine(config.OutputPath, Path.GetFileNameWithoutExtension(file) + ".bin"),
+                        Output = Path.Combine(config.OutputPath, Path.GetFileNameWithoutExtension(file) + ".blob"),
                         Name = Path.GetFileNameWithoutExtension(file).ToUpper(),
                         Processor = target.Program
                     });

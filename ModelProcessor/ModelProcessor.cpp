@@ -6,6 +6,23 @@
 
 using namespace std;
 
+struct Vertex
+{
+	Vertex() {}
+	Vertex(const aiVector3D& position, const aiVector3D& normal, const aiVector3D& tangent, const aiVector3D& texCoord) :
+		mPosition(position),
+		mNormal(normal),
+		mTangent(tangent),
+		mTexCoord(aiVector2D(texCoord.x, texCoord.y))
+	{
+	}
+
+	aiVector3D mPosition;
+	aiVector3D mNormal;
+	aiVector3D mTangent;
+	aiVector2D mTexCoord;
+};
+
 int main(int argc, char ** argv)
 {
 	if (argc != 3)
@@ -43,28 +60,50 @@ int main(int argc, char ** argv)
 			return 1;
 		}
 
-		std::fstream fs(argv[2], std::ios::binary | std::ios::out);
+		std::ofstream fs(argv[2], ios::out|ios::binary|ios::trunc);
 
-		if (fs.rdstate() & ifstream::badbit)
+		if (!fs.good())
 		{
 			cerr << "Error creating: \"" << argv[2] << "\"" << endl;
 			return 1;
 		}
 
-		fs << scene->mNumMeshes;
-		for (size_t i = 0; i<scene->mNumMeshes; ++i)
+		try
 		{
-			aiMesh* pMesh = scene->mMeshes[i];
-
-			fs << pMesh->mNumVertices;
-			for (size_t j = 0; j<pMesh->mNumVertices; ++j)
+			fs.write((char*)&scene->mNumMeshes, sizeof(size_t));
+			for (size_t i = 0; i<scene->mNumMeshes; ++i)
 			{
-				fs << pMesh->mVertices[j].x << pMesh->mVertices[j].y << pMesh->mVertices[j].z;
-				fs << pMesh->mNormals[j].x  << pMesh->mNormals[j].y  << pMesh->mNormals[j].z;
-				fs << pMesh->mTangents[j].x << pMesh->mTangents[j].y << pMesh->mTangents[j].z;
-				fs << pMesh->mBitangents[j].x << pMesh->mBitangents[j].y << pMesh->mBitangents[j].z;
-				fs << pMesh->mTextureCoords[0][j].x << pMesh->mTextureCoords[0][j].y;
+				aiMesh* pMesh = scene->mMeshes[i];
+
+				if (!pMesh->HasNormals()) throw std::exception("Model has no Normals!");
+				if (!pMesh->HasTangentsAndBitangents()) throw std::exception("Model has no Tangents or Bitangents!");
+				if (!pMesh->HasTextureCoords(0)) throw std::exception("Model has no TexCoords!");
+
+				fs.write((char*)&pMesh->mNumVertices, sizeof(size_t));
+
+				Vertex * pVertices = new Vertex[pMesh->mNumVertices];
+				for (size_t j = 0; j<pMesh->mNumVertices; ++j)
+				{
+					pVertices[j] = Vertex(pMesh->mVertices[j], pMesh->mNormals[j], pMesh->mTangents[j], pMesh->mTextureCoords[0][j]);
+				}
+
+				fs.write((char*)pVertices, sizeof(Vertex)*pMesh->mNumVertices);
+				delete[] pVertices;
+
+				size_t numIndices = pMesh->mNumFaces * 3;
+				fs.write((char*)&numIndices, sizeof(size_t));
+				
+				for (size_t j = 0; j<pMesh->mNumFaces; ++j)
+				{
+					fs.write((char*)&pMesh->mFaces[j].mIndices, sizeof(size_t) * pMesh->mFaces[j].mNumIndices);
+				}
 			}
+		}
+		catch (std::exception e)
+		{
+			cerr << "Error Building: " << e.what() << endl;
+			fs.close();
+			return 1;
 		}
 
 		fs.close();

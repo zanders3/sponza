@@ -10,6 +10,9 @@
       <Platform>Win32</Platform>
     </ProjectConfiguration>
   </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="ModelProcessor.cpp" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{635D6D56-6B52-412C-A622-5D60466E6EC4}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
@@ -79,13 +82,6 @@
       <AdditionalLibraryDirectories>$(LIBS)\assimp--2.0.863-sdk\lib\assimp_debug-dll_win32;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
-  <ItemGroup>
-    <ClCompile Include="ModelContent.cpp" />
-    <ClCompile Include="ModelProcessor.cpp" />
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="ModelContent.h" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

@@ -4,7 +4,7 @@
 #include "stdafx.h"
 #include "Game.h"
 
-Game game;
+Game* game;
 
 bool CALLBACK IsD3D10DeviceAcceptable( UINT Adapter, UINT Output, D3D10_DRIVER_TYPE DeviceType,
                                        DXGI_FORMAT BufferFormat, bool bWindowed, void* pUserContext )
@@ -15,19 +15,19 @@ bool CALLBACK IsD3D10DeviceAcceptable( UINT Adapter, UINT Output, D3D10_DRIVER_T
 HRESULT CALLBACK OnD3D10CreateDevice( ID3D10Device* pd3dDevice, const DXGI_SURFACE_DESC* pBufferSurfaceDesc,
                                       void* pUserContext )
 {
-	game.LoadContent(pd3dDevice, pBufferSurfaceDesc->Width, pBufferSurfaceDesc->Height);
+	game->LoadContent(pd3dDevice, pBufferSurfaceDesc->Width, pBufferSurfaceDesc->Height);
 
 	return S_OK;
 }
 
 void CALLBACK OnD3D10FrameRender( ID3D10Device* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext )
 {
-	game.Render( pd3dDevice, fTime, fElapsedTime );
+	game->Render( pd3dDevice, fTime, fElapsedTime );
 }
 
 void CALLBACK OnFrameMove( double fTime, float fElapsedTime, void* pUserContext )
 {
-	game.Update( fTime, fElapsedTime );
+	game->Update( fTime, fElapsedTime );
 }
 
 int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow )
@@ -42,10 +42,14 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 	DXUTSetCallbackD3D10FrameRender( OnD3D10FrameRender );
 	DXUTSetCallbackFrameMove( OnFrameMove );
 
+	game = new Game();
+
 	DXUTInit();
 	DXUTCreateWindow(L"Sponza");
 	DXUTCreateDevice( true, 640, 480 );
 	DXUTMainLoop();
+
+	delete game;
 
 	return DXUTGetExitCode();
 }

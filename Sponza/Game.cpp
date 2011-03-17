@@ -3,12 +3,11 @@
 
 #include "Content/ContentIDs.h"
 #include "Content/ContentLoader.h"
-#include "..\ModelProcessor\ModelContent.h"
+#include "Graphics/Model.h"
 
 Game::Game() :
 	m_content("..\\Content\\Out")
 {
-	content::Model* model = m_content.Get<content::Model>(ContentID::SPONZA_ATRIUM);
 }
 
 Game::~Game()
@@ -17,6 +16,9 @@ Game::~Game()
 
 void Game::LoadContent( ID3D10Device* pd3dDevice, int width, int height )
 {
+	m_content.SetDevice(pd3dDevice);
+
+	Model* model = m_content.Get<Model>(ContentID::SPONZA_ATRIUM);
 }
 
 void Game::Render( ID3D10Device* pd3dDevice, double fTime, float fElapsedTime )
