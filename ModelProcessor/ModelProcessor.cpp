@@ -56,7 +56,7 @@ int main(int argc, char ** argv)
 
 		if ( !scene )
 		{
-			cerr << "Error Building: \"" << argv[1] << "\"\n\n" << importer.GetErrorString() << endl;
+			cout << "Error Building: \"" << argv[1] << "\"\n\n" << importer.GetErrorString() << endl;
 			return 1;
 		}
 
@@ -64,7 +64,7 @@ int main(int argc, char ** argv)
 
 		if (!fs.good())
 		{
-			cerr << "Error creating: \"" << argv[2] << "\"" << endl;
+			cout << "Error creating: \"" << argv[2] << "\"" << endl;
 			return 1;
 		}
 
@@ -101,7 +101,7 @@ int main(int argc, char ** argv)
 		}
 		catch (std::exception e)
 		{
-			cerr << "Error Building: " << e.what() << endl;
+			cout << "Error Building: " << e.what() << endl;
 			fs.close();
 			return 1;
 		}
