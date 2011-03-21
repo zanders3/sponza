@@ -2,6 +2,9 @@
 
 #include "resource.h"
 #include "Content\ContentLoader.h"
+#include "Graphics\Model.h"
+#include "Graphics\Shader.h"
+#include "Graphics\Camera.h"
 
 class Game
 {
@@ -15,4 +18,8 @@ public:
 
 private:
 	ContentLoader m_content;
+	Camera		  m_camera;
+
+	Model*		  m_model;
+	Shader*		  m_shader;
 };

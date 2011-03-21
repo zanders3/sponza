@@ -10,14 +10,13 @@ Model::Model() :
 
 Model::~Model()
 {
-	if (mMeshes)
-	{
-		delete[] mMeshes;
-	}
+	if (mMeshes) delete[] mMeshes;
 }
 
 void Model::Load(ifstream& input)
 {
+	if (mMeshes) delete[] mMeshes;
+
 	input.read((char*)&mNumMeshes, sizeof(size_t));
 
 	mMeshes = new Mesh[mNumMeshes];
@@ -26,6 +25,15 @@ void Model::Load(ifstream& input)
 		mMeshes[i].Load(input, m_pDevice);
 	}
 }
+
+void Model::Draw()
+{
+	m_pDevice->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+	for (size_t i = 0; i<mNumMeshes; ++i)
+		mMeshes[i].Draw(m_pDevice);
+}
+
+//----------------------------------------------------------------------------------------
 
 Mesh::Mesh() :
 	mVertexBuffer(nullptr),
@@ -83,4 +91,17 @@ void Mesh::Create(Vertex* pVertex, size_t numVertices, size_t* pIndices, size_t 
     bd.MiscFlags = 0;
     InitData.pSysMem = pIndices;
     V(pDevice->CreateBuffer( &bd, &InitData, &mIndexBuffer));
+
+	mNumIndices = numIndices;
+}
+
+void Mesh::Draw(ID3D10Device* pDevice)
+{
+	pDevice->IASetIndexBuffer(mIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
+	UINT stride = sizeof(Vertex);
+	UINT offset = 0;
+
+	pDevice->IASetVertexBuffers(0, 1, &mVertexBuffer, &stride, &offset);
+
+	pDevice->DrawIndexed(mNumIndices, 0, 0);
 }

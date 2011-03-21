@@ -29,6 +29,12 @@ ContentLoader::ContentLoader(const std::string& contentRoot)
 	}
 
 	filestr.close();
+
+#ifdef _DEBUG
+	m_socket = unique_ptr<Socket>(new Socket());
+	if (!m_socket->Connect("127.0.0.1", 4567))
+		cout << "Failed to connect to Contenter!" << endl;
+#endif
 }
 
 ContentLoader::~ContentLoader()
@@ -38,4 +44,16 @@ ContentLoader::~ContentLoader()
 		if (m_contentLoaded[id])
 			delete m_contentData[id];
 	}
+}
+
+void ContentLoader::Update()
+{
+#ifdef _DEBUG
+	const string& data = m_socket->ReadData();
+	if (data.size() > 0)
+	{
+		cout << "Got sum data:" << endl;
+		cout << data << endl;
+	}
+#endif
 }

@@ -95,7 +95,7 @@ int main(int argc, char ** argv)
 				
 				for (size_t j = 0; j<pMesh->mNumFaces; ++j)
 				{
-					fs.write((char*)&pMesh->mFaces[j].mIndices, sizeof(size_t) * pMesh->mFaces[j].mNumIndices);
+					fs.write((char*)pMesh->mFaces[j].mIndices, sizeof(size_t) * pMesh->mFaces[j].mNumIndices);
 				}
 			}
 		}

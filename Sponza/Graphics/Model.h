@@ -19,9 +19,12 @@ public:
 
 	void Create(Vertex* pVertex, size_t numVertices, size_t* pIndices, size_t numIndices, ID3D10Device* pDevice);
 	void Load(std::istream& input, ID3D10Device* pDevice);
+
+	void Draw(ID3D10Device* pDevice);
 private:
 	ID3D10Buffer* mVertexBuffer;
 	ID3D10Buffer* mIndexBuffer;
+	size_t		  mNumIndices;
 };
 
 class Model : public ContentItem
@@ -32,10 +35,9 @@ public:
 
 public:
 	void Load(std::ifstream& input);
+	void Draw();
 
 private:
 	unsigned int mNumMeshes;
 	Mesh * mMeshes;
-
-	
 };

@@ -1,0 +1,16 @@
+<?xml version="1.0"?>
+<Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ContentPath>..\Content</ContentPath>
+  <OutputPath>..\Content\Out</OutputPath>
+  <HeaderPath>..\Sponza\Content</HeaderPath>
+  <BuildTargets>
+    <BuildTarget>
+      <Program>ModelProcessor.exe</Program>
+      <FileType>*.3DS</FileType>
+    </BuildTarget>
+	<BuildTarget>
+	  <Program>ShaderProcessor.exe</Program>
+	  <FileType>*.fx</FileType>
+	</BuildTarget>
+  </BuildTargets>
+</Configuration>

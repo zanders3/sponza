@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="Builder.cs" />
     <Compile Include="Configuration.cs" />
+    <Compile Include="Listener.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

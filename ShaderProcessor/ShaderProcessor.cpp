@@ -121,7 +121,7 @@ int main(int argc, char ** argv)
 		EffectInclude include(filePath.substr(0,found+1));
 
 		UINT flags = D3D10_SHADER_WARNINGS_ARE_ERRORS;
-#ifdef DEBUG
+#ifdef _DEBUG
 		flags |= D3D10_SHADER_DEBUG;
 #else
 		flags |= D3D10_SHADER_OPTIMIZATION_LEVEL3;
@@ -162,7 +162,9 @@ int main(int argc, char ** argv)
 	{
 		ofstream filestr(argv[2], ios::out | ios::binary);
 
-		filestr.write((char*)pCompiledShader->GetBufferPointer(), pCompiledShader->GetBufferSize());
+		size_t bufferSize = pCompiledShader->GetBufferSize();
+		char* buffer = (char*)pCompiledShader->GetBufferPointer();
+		filestr.write(buffer, bufferSize);
 
 		filestr.close();
 	}

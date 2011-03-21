@@ -12,7 +12,7 @@ namespace Contenter
 {
     public static class Builder
     {
-        class BuildItem
+        public class BuildItem
         {
             public string Processor;
             public string Name;
@@ -21,7 +21,7 @@ namespace Contenter
 
             public bool NeedsBuilding()
             {
-                return File.GetLastAccessTime(Output) < File.GetLastAccessTime(Input);
+                return File.GetLastWriteTime(Output) < File.GetLastWriteTime(Input);
             }
 
             public void Build()
@@ -59,16 +59,18 @@ namespace Contenter
             }
         }
 
-        public static void Build(Configuration config, bool rebuildAll = false)
+        public static IEnumerable<BuildItem> Build(Configuration config, bool rebuildAll = false)
         {
             List<BuildItem> contentItems = GenerateBuildItems(config);
-            IEnumerable<BuildItem> buildItems = rebuildAll ? contentItems : contentItems.Where(item => item.NeedsBuilding());
+            List<BuildItem> buildItems = rebuildAll ? contentItems : contentItems.Where(item => item.NeedsBuilding()).ToList();
 
             foreach (BuildItem item in buildItems)
                 item.Build();
 
-            if (buildItems.Any())
-                GenerateHeaders(config, contentItems);
+            Console.WriteLine("Generating Content Header..");
+            GenerateHeaders(config, contentItems);
+
+            return buildItems;
         }
 
         private static void GenerateHeaders(Configuration config, List<BuildItem> buildItems)

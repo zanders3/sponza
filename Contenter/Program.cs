@@ -12,12 +12,12 @@ namespace Contenter
         static void Main(string[] args)
         {
             string currentDirectory = Environment.CurrentDirectory;
-            Console.WriteLine("Building Content...");
 
             try
             {
                 string startupPath = Environment.CommandLine.Split(' ').First().Trim('"', ' ', '\\');
-                Environment.CurrentDirectory = Path.GetDirectoryName(startupPath);
+                if (File.Exists(startupPath))
+                    Environment.CurrentDirectory = Path.GetDirectoryName(startupPath);
 
                 if (args.Length == 0)
                 {
@@ -45,13 +45,15 @@ namespace Contenter
                 switch (args[0].ToLower())
                 {
                     case "build":
+                        Console.WriteLine("Building Content...");
                         Builder.Build(config);
                         break;
                     case "rebuild":
+                        Console.WriteLine("Building Content...");
                         Builder.Build(config, true);
                         break;
                     case "listen":
-                        //TODO!
+                        new Listener(config).Listen();
                         break;
                     default:
                         PrintHelp();

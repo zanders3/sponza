@@ -1,0 +1,25 @@
+syntax: glob
+
+*.idb
+*.tlog
+*.manifest
+*.res
+*.rc
+*.pch
+*.lastbuildstate
+*.obj
+*.ipch
+*.exe
+*.pdb
+*.ilk
+*.log
+*.dll
+*.sdf
+*.cache
+*.blob
+Content\*.*
+Content\textures\*.*
+Sponza\Debug\*.*
+Sponza\Release\*.*
+*.opensdf
+Contenter\obj\x86\Debug\Contenter.csproj.FileListAbsolute.txt
