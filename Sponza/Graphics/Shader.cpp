@@ -25,7 +25,7 @@ Shader::~Shader()
 	SAFE_RELEASE(m_pEffect);
 }
 
-void Shader::Load(ifstream& input)
+void Shader::Load(istream& input)
 {
 	//Clean up the effect if it's being reloaded
 	if (m_pEffect != nullptr)

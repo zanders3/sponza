@@ -57,7 +57,7 @@ const std::string& Socket::ReadData()
 		}
 		else
 		{
-			mData = "";
+			mData = "\0";
 		}
 	}
 

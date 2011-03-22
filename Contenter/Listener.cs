@@ -61,7 +61,7 @@ namespace Contenter
             this.config = config;
         }
 
-        void fileChanged(object sender, FileSystemEventArgs e)
+        private void fileChanged(object sender, FileSystemEventArgs e)
         {
             if (e.ChangeType == WatcherChangeTypes.Changed && !changedFiles.Contains(e.FullPath))
             {
@@ -90,14 +90,15 @@ namespace Contenter
 
                     if (changedFiles.Any())
                     {
-                        IEnumerable<Builder.BuildItem> builtItems = Builder.Build(config);
-                        if (builtItems.Any())
+                        Builder builder = new Builder(config);
+                        builder.Build();
+                        if (builder.RebuiltItems.Any())
                         {
                             Console.WriteLine("Notifying Content Changes..");
                             StringBuilder message = new StringBuilder();
-                            foreach (Builder.BuildItem item in builtItems)
+                            foreach (Builder.BuildItem item in builder.RebuiltItems)
                             {
-                                message.AppendLine("BUILD " + item.Name);
+                                message.AppendLine("LOAD " + builder.IDMap[item]);
                             }
 
                             clients.ForEach(client => client.SendMessage(message.ToString()));

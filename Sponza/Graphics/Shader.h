@@ -24,7 +24,7 @@ public:
 	Shader();
 	~Shader();
 
-	void Load(std::ifstream& input);
+	void Load(std::istream& input);
 
 	inline void Bind(int pass) { m_passes[pass]->Bind();  }
 	inline int  NumPasses()	   { return m_passes.size(); }

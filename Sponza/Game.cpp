@@ -47,5 +47,7 @@ void Game::Render( ID3D10Device* pd3dDevice, double fTime, float fElapsedTime )
 
 void Game::Update( double fTime, float fElapsedTime )
 {
-	m_content.Update();
+#ifdef _DEBUG
+	m_content.ReloadContent();
+#endif
 }

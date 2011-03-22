@@ -61,6 +61,7 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>ws2_32.lib;d3d10.lib;dxerr.lib;dxguid.lib;d3dx9.lib;d3d9.lib;winmm.lib;comctl32.lib;d3dx10d.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
       <Command>"$(OutDir)Contenter.exe" Build</Command>
@@ -127,6 +128,8 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Thread\Mutex.h" />
+    <ClInclude Include="Thread\Thread.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\ContentLoader.cpp" />

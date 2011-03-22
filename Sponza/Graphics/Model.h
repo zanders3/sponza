@@ -34,7 +34,7 @@ public:
 	~Model();
 
 public:
-	void Load(std::ifstream& input);
+	void Load(std::istream& input);
 	void Draw();
 
 private:

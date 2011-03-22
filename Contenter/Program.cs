@@ -45,12 +45,10 @@ namespace Contenter
                 switch (args[0].ToLower())
                 {
                     case "build":
-                        Console.WriteLine("Building Content...");
-                        Builder.Build(config);
+                        new Builder(config).Build().GenerateHeader();
                         break;
                     case "rebuild":
-                        Console.WriteLine("Building Content...");
-                        Builder.Build(config, true);
+                        new Builder(config).Build(true).GenerateHeader();
                         break;
                     case "listen":
                         new Listener(config).Listen();

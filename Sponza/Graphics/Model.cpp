@@ -13,7 +13,7 @@ Model::~Model()
 	if (mMeshes) delete[] mMeshes;
 }
 
-void Model::Load(ifstream& input)
+void Model::Load(std::istream& input)
 {
 	if (mMeshes) delete[] mMeshes;
 

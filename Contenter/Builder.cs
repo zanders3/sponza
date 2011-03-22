@@ -7,10 +7,11 @@ using System.IO;
 using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.Collections;
+using System.Collections.ObjectModel;
 
 namespace Contenter
 {
-    public static class Builder
+    public class Builder
     {
         public class BuildItem
         {
@@ -59,22 +60,66 @@ namespace Contenter
             }
         }
 
-        public static IEnumerable<BuildItem> Build(Configuration config, bool rebuildAll = false)
+        private Configuration config;
+        private List<BuildItem> allItems;
+        private List<BuildItem> rebuiltItems;
+        private Dictionary<BuildItem, uint> idMap = null;
+
+        public Dictionary<BuildItem, uint> IDMap
         {
-            List<BuildItem> contentItems = GenerateBuildItems(config);
-            List<BuildItem> buildItems = rebuildAll ? contentItems : contentItems.Where(item => item.NeedsBuilding()).ToList();
+            get
+            {
+                if (idMap == null)
+                {
+                    idMap = new Dictionary<BuildItem, uint>();
 
-            foreach (BuildItem item in buildItems)
-                item.Build();
-
-            Console.WriteLine("Generating Content Header..");
-            GenerateHeaders(config, contentItems);
-
-            return buildItems;
+                    uint index = 0;
+                    foreach (BuildItem item in allItems.OrderBy(item => item.Name))
+                    {
+                        idMap.Add(item, index);
+                        ++index;
+                    }
+                }
+                return idMap;
+            }
         }
 
-        private static void GenerateHeaders(Configuration config, List<BuildItem> buildItems)
+        public IEnumerable<BuildItem> RebuiltItems
         {
+            get { return rebuiltItems; }
+        }
+
+        public IEnumerable<BuildItem> AllItems
+        {
+            get { return allItems; }
+        }
+
+        public Builder(Configuration config)
+        {
+            this.config = config;
+
+            allItems = GenerateBuildItems();
+            rebuiltItems = allItems.Where(item => item.NeedsBuilding()).ToList();
+        }
+
+        public Builder Build(bool rebuildAll = false)
+        {
+            List<BuildItem> buildItems = rebuildAll ? allItems : rebuiltItems;
+
+            if (buildItems.Any())
+            {
+                Console.WriteLine("Building Content...");
+                foreach (BuildItem item in buildItems)
+                    item.Build();
+            }
+            return this;
+        }
+
+        public Builder GenerateHeader()
+        {
+            if (!allItems.Any()) return this;
+
+            Console.WriteLine("Generating Header...");
             StringBuilder headerFile = new StringBuilder();
             StringBuilder hashFile = new StringBuilder();
 
@@ -93,14 +138,11 @@ namespace Contenter
 
             HashSet<uint> usedHashes = new HashSet<uint>();
 
-            uint hash = 0;
-            foreach (BuildItem item in buildItems.OrderBy(item => item.Name))
+            foreach (BuildItem item in allItems.OrderBy(item => item.Name))
             {
                 // Create the header
                 headerFile.AppendLine(String.Format("        {0},", item.Name));
                 hashFile.AppendLine(item.Output.Replace(config.OutputPath, String.Empty));
-
-                ++hash;
             }
 
             headerFile.AppendLine("        CONTENT_MAX");
@@ -109,9 +151,11 @@ namespace Contenter
 
             File.WriteAllText(Path.Combine(config.HeaderPath, "ContentIDs.h"), headerFile.ToString());
             File.WriteAllText(Path.Combine(config.OutputPath, "Manifest.txt"), hashFile.ToString());
+
+            return this;
         }
 
-        private static List<BuildItem> GenerateBuildItems(Configuration config)
+        private List<BuildItem> GenerateBuildItems()
         {
             string[] files = Directory.GetFiles(config.ContentPath);
             List<BuildItem> buildItems = new List<BuildItem>();
@@ -137,7 +181,7 @@ namespace Contenter
             return buildItems;
         }
 
-        public static Regex WildcardToRegex(string pattern)
+        private static Regex WildcardToRegex(string pattern)
         {
             return new Regex("^" + Regex.Escape(pattern).
             Replace("\\*", ".*").
