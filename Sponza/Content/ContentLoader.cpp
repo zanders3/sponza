@@ -69,6 +69,7 @@ void ContentReloader::Run(int)
 	while (m_threadRunning)
 	{
 		const std::string& data = m_socket->ReadData();
+		if (data.size() > 0)
 		{
 			Lock lock(&m_mutex);
 			m_reloadList.push_back(data);

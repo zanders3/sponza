@@ -6,13 +6,13 @@ D3DXVECTOR3 Camera::m_Eye = D3DXVECTOR3( 0.0f, 3.0f, -6.0f );
 D3DXVECTOR3 Camera::m_At = D3DXVECTOR3( 0.0f, 1.0f, 0.0f );
 D3DXVECTOR3 Camera::m_Up = D3DXVECTOR3( 0.0f, 1.0f, 0.0f );
 
-int m_mouseX = 0;
-int m_mouseY = 0;
-float m_rotX = 0.0f;
-float m_rotY = 0.0f;
-D3DXVECTOR3 m_Fwd = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
-D3DXVECTOR3 m_Side = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
-D3DXVECTOR2 m_Dir = D3DXVECTOR2( 0.0f, 0.0f );
+int Camera::m_mouseX = 0;
+int Camera::m_mouseY = 0;
+float Camera::m_rotX = 0.0f;
+float Camera::m_rotY = 0.0f;
+D3DXVECTOR3 Camera::m_Fwd = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
+D3DXVECTOR3 Camera::m_Side = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
+D3DXVECTOR2 Camera::m_Dir = D3DXVECTOR2( 0.0f, 0.0f );
 
 Camera::Camera()
 {
@@ -49,7 +49,7 @@ void Camera::Update(float dt)
 //--------------------------------------------------------------------------------------
 void CALLBACK Camera::OnKeyboard( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext )
 {
-	float value = bKeyDown ? 5.0f : 0.0f;
+	float value = bKeyDown ? 100.0f : 0.0f;
 
     switch( nChar )
     {

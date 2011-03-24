@@ -3,6 +3,7 @@
 #include <aiPostProcess.h>
 #include <fstream>
 #include <iostream>
+#include "../Contenter/Dependency.h"
 
 using namespace std;
 
@@ -22,6 +23,19 @@ struct Vertex
 	aiVector3D mTangent;
 	aiVector2D mTexCoord;
 };
+
+int LoadTexture(Dependency* pDependencyMan, aiMaterial* pMat, aiTextureType type)
+{
+	aiString path;
+	if (pMat->GetTexture(type, 0, &path) == aiReturn_SUCCESS)
+	{
+		return pDependencyMan->RequestDependency(std::string(path.data, path.length));
+	}
+	else
+	{
+		return -1;
+	}
+}
 
 int main(int argc, char ** argv)
 {
@@ -68,8 +82,26 @@ int main(int argc, char ** argv)
 			return 1;
 		}
 
+		Dependency dependencyMan;
+
 		try
 		{
+			if (!scene->HasMaterials()) throw std::exception("Model has no Materials!");
+
+			//---------------------------------------------------
+			//Material Data
+			//---------------------------------------------------
+			fs.write((char*)&scene->mNumMaterials, sizeof(size_t));
+			for (size_t i = 0; i<scene->mNumMaterials; ++i)
+			{
+				aiMaterial* pMat = scene->mMaterials[i];
+				
+				int diffuse = LoadTexture(&dependencyMan, pMat, aiTextureType_DIFFUSE);
+			}
+
+			//---------------------------------------------------
+			//Mesh Data
+			//---------------------------------------------------
 			fs.write((char*)&scene->mNumMeshes, sizeof(size_t));
 			for (size_t i = 0; i<scene->mNumMeshes; ++i)
 			{
@@ -79,6 +111,14 @@ int main(int argc, char ** argv)
 				if (!pMesh->HasTangentsAndBitangents()) throw std::exception("Model has no Tangents or Bitangents!");
 				if (!pMesh->HasTextureCoords(0)) throw std::exception("Model has no TexCoords!");
 
+				//---------------------------------------------------
+				//Material ID
+				//---------------------------------------------------
+				fs.write((char*)&pMesh->mMaterialIndex, sizeof(size_t));
+
+				//---------------------------------------------------
+				//Write out Vertices Data
+				//---------------------------------------------------
 				fs.write((char*)&pMesh->mNumVertices, sizeof(size_t));
 
 				Vertex * pVertices = new Vertex[pMesh->mNumVertices];
@@ -90,6 +130,9 @@ int main(int argc, char ** argv)
 				fs.write((char*)pVertices, sizeof(Vertex)*pMesh->mNumVertices);
 				delete[] pVertices;
 
+				//---------------------------------------------------
+				//Write out Indices Data
+				//---------------------------------------------------
 				size_t numIndices = pMesh->mNumFaces * 3;
 				fs.write((char*)&numIndices, sizeof(size_t));
 				

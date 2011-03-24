@@ -11,40 +11,6 @@ namespace Contenter
 {
     public class Listener
     {
-        class Client
-        {
-            public Client(TcpClient client)
-            {
-                this.client = client;
-                writer = new StreamWriter(client.GetStream());
-                Connected = client.Connected;
-            }
-
-            public bool Connected { get; private set; }
-
-            private TcpClient client;
-            private StreamWriter writer;
-
-            public void SendMessage(string text)
-            {
-                if (!Connected) return;
-
-                try
-                {
-                    writer.WriteLine(text);
-                    writer.Flush();
-                }
-                catch
-                {
-                    Connected = client.Connected;
-                    if (Connected) 
-                        throw;
-                    else
-                        Console.WriteLine("Client Disconnected");
-                }
-            }
-        }
-
         private FileSystemWatcher fsw;
         private Configuration config;
         private List<string> changedFiles = new List<string>();
@@ -75,7 +41,7 @@ namespace Contenter
         public void Listen()
         {
             Console.WriteLine("Listening for content changes.. (Press Q to Quit)");
-            TcpListener listener = new TcpListener(IPAddress.Parse("127.0.0.1"), 4567);
+            TcpListener listener = new TcpListener(IPAddress.Parse("127.0.0.1"), Ports.ListenerPort);
             listener.Start();
 
             try
@@ -90,23 +56,30 @@ namespace Contenter
 
                     if (changedFiles.Any())
                     {
-                        Builder builder = new Builder(config);
-                        builder.Build();
-                        if (builder.RebuiltItems.Any())
+                        try
                         {
-                            Console.WriteLine("Notifying Content Changes..");
-                            StringBuilder message = new StringBuilder();
-                            foreach (Builder.BuildItem item in builder.RebuiltItems)
+                            Builder builder = new Builder(config);
+                            builder.Build();
+                            if (builder.RebuiltItems.Any())
                             {
-                                message.AppendLine("LOAD " + builder.IDMap[item]);
+                                Console.WriteLine("Notifying Content Changes..");
+                                StringBuilder message = new StringBuilder();
+                                foreach (Builder.BuildItem item in builder.RebuiltItems)
+                                {
+                                    message.AppendLine("LOAD " + builder.IDMap[item]);
+                                }
+
+                                clients.ForEach(client => client.SendMessage(message.ToString()));
                             }
 
-                            clients.ForEach(client => client.SendMessage(message.ToString()));
+                            Thread.Sleep(1000);
+                            changedFiles.Clear();
                         }
-
-                        Thread.Sleep(1000);
-                        changedFiles.Clear();
-
+                        catch (BuildException e)
+                        {
+                            Console.WriteLine(e.Message);
+                        }
+                        
                         Console.WriteLine("Listening for Console Changes..");
                     }
 

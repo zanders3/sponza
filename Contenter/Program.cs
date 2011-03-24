@@ -7,6 +7,12 @@ using System.Diagnostics;
 
 namespace Contenter
 {
+    public static class Ports
+    {
+        public const int ListenerPort = 4567;
+        public const int DependencyPort = 5678;
+    }
+
     class Program
     {
         static void Main(string[] args)
@@ -53,10 +59,20 @@ namespace Contenter
                     case "listen":
                         new Listener(config).Listen();
                         break;
+                    case "dependencytest":
+                        new Builder(config);
+                        Console.ReadLine();
+                        break;
                     default:
                         PrintHelp();
                         break;
                 }
+            }
+            catch (BuildException e)
+            {
+                Console.WriteLine(e.Message);
+
+                Environment.Exit(1);
             }
             catch (Exception e)
             {

@@ -11,6 +11,13 @@ using System.Collections.ObjectModel;
 
 namespace Contenter
 {
+    public class BuildException : Exception
+    {
+        public BuildException(string message) : base(message)
+        {
+        }
+    }
+
     public class Builder
     {
         public class BuildItem
@@ -25,8 +32,13 @@ namespace Contenter
                 return File.GetLastWriteTime(Output) < File.GetLastWriteTime(Input);
             }
 
+            private bool IsBuilt = false;
+
             public void Build()
             {
+                if (IsBuilt) return;
+                IsBuilt = true;
+
                 Process process = new Process();
                 process.StartInfo.FileName = Processor;
                 process.StartInfo.Arguments = String.Format("\"{0}\" \"{1}\"", Input, Output);
@@ -48,7 +60,7 @@ namespace Contenter
 
                 if (process.ExitCode != 0)
                 {
-                    throw new Exception(String.Format("Item Build Failed: {0} \"{1}\" -> \"{2}\"\n{3}{4}",
+                    throw new BuildException(String.Format("Item Build Failed: {0} \"{1}\" -> \"{2}\"\n{3}{4}",
                         Processor,
                         Input,
                         Output,
@@ -61,6 +73,7 @@ namespace Contenter
         }
 
         private Configuration config;
+        private DependencyService dependencyService;
         private List<BuildItem> allItems;
         private List<BuildItem> rebuiltItems;
         private Dictionary<BuildItem, uint> idMap = null;
@@ -97,6 +110,7 @@ namespace Contenter
         public Builder(Configuration config)
         {
             this.config = config;
+            this.dependencyService = new DependencyService(this);
 
             allItems = GenerateBuildItems();
             rebuiltItems = allItems.Where(item => item.NeedsBuilding()).ToList();

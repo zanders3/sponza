@@ -2,5 +2,24 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <ClCompile Include="ModelProcessor.cpp" />
+    <ClCompile Include="..\Contenter\Dependency.cpp">
+      <Filter>Dependency</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Contenter\Socket.cpp">
+      <Filter>Dependency</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Dependency">
+      <UniqueIdentifier>{1368cc75-72fc-4e47-8496-d83884804d21}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\Contenter\Dependency.h">
+      <Filter>Dependency</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Contenter\Socket.h">
+      <Filter>Dependency</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

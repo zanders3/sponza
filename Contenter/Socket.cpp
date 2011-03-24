@@ -1,5 +1,4 @@
-#include "stdafx.h"
-#include "Net/Socket.h"
+#include "Socket.h"
 
 int Socket::mSocketCount = 0;
 
@@ -44,8 +43,8 @@ bool Socket::Connect(const std::string& ipaddress, int port)
 	}
 	else
 	{
-		u_long enable = 1;
-		ioctlsocket(mSocket, FIONBIO, &enable);
+		//u_long enable = 1;
+		//ioctlsocket(mSocket, FIONBIO, &enable);
 
 		return true;
 	}
@@ -67,4 +66,12 @@ const std::string& Socket::ReadData()
 	}
 
 	return mData;
+}
+
+void Socket::WriteData(const std::string& data)
+{
+	if (mSocket != INVALID_SOCKET)
+	{
+		send(mSocket, data.c_str(), data.size(), 0);
+	}
 }

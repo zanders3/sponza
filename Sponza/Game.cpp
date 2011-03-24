@@ -9,7 +9,7 @@ Game::Game() :
 	m_camera()
 {
 	DXUTSetCallbackKeyboard(&m_camera.OnKeyboard);
-	DXUTSetCallbackMouse(&m_camera.OnMouse);
+	DXUTSetCallbackMouse(&m_camera.OnMouse, true);
 }
 
 Game::~Game()
