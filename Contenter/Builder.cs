@@ -39,10 +39,9 @@ namespace Contenter
 
             private bool IsBuilt = false;
 
-            public void Build()
+            public void Build(Builder builder)
             {
                 if (IsBuilt) return;
-                IsBuilt = true;
 
                 Process process = new Process();
                 process.StartInfo.FileName = Processor;
@@ -74,16 +73,23 @@ namespace Contenter
                 }
 
                 Console.WriteLine(String.Format("{0} -> {1}", Path.GetFileName(Input), Path.GetFileName(Output)));
-            }
+
+                builder.ValidateDependencies(process.StandardOutput.ReadToEnd()
+                    .Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(line =>
+                        line.Replace("DEPENDENCY ", string.Empty).Trim()).ToList());
+
+                IsBuilt = true;
+            }            
         }
 
         private Configuration config;
         private List<BuildItem> allItems;
-        private List<BuildItem> rebuiltItems;
+        private List<BuildItem> rebuildItems;
 
         public IEnumerable<BuildItem> RebuiltItems
         {
-            get { return rebuiltItems; }
+            get { return rebuildItems; }
         }
 
         public IEnumerable<BuildItem> AllItems
@@ -96,18 +102,18 @@ namespace Contenter
             this.config = config;
 
             allItems = GenerateBuildItems();
-            rebuiltItems = allItems.Where(item => item.NeedsBuilding()).ToList();
+            rebuildItems = allItems.Where(item => item.NeedsBuilding()).ToList();
         }
 
         public Builder Build(bool rebuildAll = false)
         {
-            List<BuildItem> buildItems = rebuildAll ? allItems : rebuiltItems;
+            List<BuildItem> buildItems = rebuildAll ? allItems : rebuildItems;
 
             if (buildItems.Any())
             {
                 Console.WriteLine("Building Content...");
                 foreach (BuildItem item in buildItems)
-                    item.Build();
+                    item.Build(this);
             }
             return this;
         }
@@ -150,38 +156,45 @@ namespace Contenter
             return this;
         }
 
-        private List<BuildItem> GenerateBuildItems()
+        private IEnumerable<BuildItem> BuildTargetsFromTarget(BuildTarget target)
         {
-            string[] files = Directory.GetFiles(config.ContentPath);
-            List<BuildItem> buildItems = new List<BuildItem>();
-
-            foreach (BuildTarget target in config.BuildTargets)
-            {
-                Regex regex = WildcardToRegex(target.FileType);
-
-                foreach (string file in files.Where(file => regex.IsMatch(file)))
+            return
+                Directory.GetFiles(config.ContentPath, target.FileType, SearchOption.AllDirectories)
+                .Select(file => new BuildItem()
                 {
-                    buildItems.Add(new BuildItem()
-                    {
-                        Input = file,
-                        Output = Path.Combine(config.OutputPath, Path.GetFileNameWithoutExtension(file) + ".blob"),
-                        Name = Path.GetFileNameWithoutExtension(file).ToUpper(),
-                        Processor = target.Program,
-                        ID = HashString(Path.GetFileNameWithoutExtension(file))
-                    });
-                }
-            }
-
-            buildItems = buildItems.OrderBy(item => item.Processor).ToList();
-
-            return buildItems;
+                    Input = file,
+                    Output = Path.Combine(config.OutputPath, Path.GetFileNameWithoutExtension(file) + ".blob"),
+                    Name = Path.GetFileNameWithoutExtension(file).ToUpper(),
+                    Processor = target.Program,
+                    ID = HashString(Path.GetFileNameWithoutExtension(file))
+                });
         }
 
-        private static Regex WildcardToRegex(string pattern)
+        private List<BuildItem> GenerateBuildItems()
         {
-            return new Regex("^" + Regex.Escape(pattern).
-            Replace("\\*", ".*").
-            Replace("\\?", ".") + "$");
+            return config.BuildTargets
+                .SelectMany(target => BuildTargetsFromTarget(target)).ToList()
+                .OrderBy(item => item.Processor).ToList();
+        }
+
+        private void ValidateDependencies(List<string> dependencies)
+        {
+            HashSet<string> itemList = new HashSet<string>(allItems.Select(item => Path.GetFullPath(item.Input)));
+
+            var list = dependencies.Where(dep => 
+                !itemList.Contains(dep));
+            if (list.Any())
+            {
+                string rootedContentPath = Path.GetFullPath(config.ContentPath);
+
+                StringBuilder errorMessage = new StringBuilder("Build Failed due to missing dependencies:\n");
+                foreach (string item in list)
+                {
+                    errorMessage.AppendLine(item.Replace(rootedContentPath, string.Empty));
+                }
+
+                throw new BuildException(errorMessage.ToString());
+            }
         }
     }
 }

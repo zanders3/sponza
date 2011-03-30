@@ -13,7 +13,7 @@ namespace Contenter
     {
         private FileSystemWatcher fsw;
         private Configuration config;
-        private List<string> changedFiles = new List<string>();
+        private HashSet<string> changedFiles = new HashSet<string>();
         private List<Client> clients = new List<Client>();
 
         public Listener(Configuration config)
@@ -73,12 +73,13 @@ namespace Contenter
                             }
 
                             Thread.Sleep(1000);
-                            changedFiles.Clear();
                         }
                         catch (BuildException e)
                         {
                             Console.WriteLine(e.Message);
                         }
+
+                        changedFiles.Clear();
                         
                         Console.WriteLine("Listening for Console Changes..");
                     }

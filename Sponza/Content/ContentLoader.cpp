@@ -1,6 +1,9 @@
 #include "stdafx.h"
 #include "Content/ContentLoader.h"
 
+#include <stdlib.h>
+#include <limits.h>
+
 using namespace std;
 
 ContentLoader::ContentLoader(const std::string& contentRoot)
@@ -8,27 +11,27 @@ ContentLoader::ContentLoader(const std::string& contentRoot)
 	const string manifest = contentRoot + "\\Manifest.txt";
 	ifstream filestr(manifest);
 	
-	if (filestr.good())
+	if (!filestr.good()) throw std::exception("Failed to load the content manifest file!");
+
+	char line[256];
+
+	while (!filestr.eof())
 	{
-		char line[256];
+		filestr.getline(line, 255);
+		if (*line == 0) break;
 
-		while (!filestr.eof())
-		{
-			filestr.getline(line, 255);
-			if (*line == 0) break;
+		std::string lineStr(line);
 
-			std::string lineStr(line);
+		ContentState state;
+		state.m_loaded = false;
+		state.m_data   = nullptr;
 
-			ContentState state;
-			state.m_loaded = false;
-			state.m_data   = nullptr;
-
-			int hashIndex = lineStr.find(',');
-			size_t contentID = atoi(lineStr.substr(hashIndex+1).c_str());
-			state.m_path = contentRoot + lineStr.substr(0, hashIndex);
+		int hashIndex = lineStr.find(',');
+		std::string contentIDStr = lineStr.substr(hashIndex+1);
+		size_t contentID = strtoul(contentIDStr.c_str(), (char**)NULL, 10);
+		state.m_path = contentRoot + lineStr.substr(0, hashIndex);
 			
-			m_pContent.insert(std::pair<size_t, ContentState>(contentID, state));
-		}
+		m_pContent.insert(std::pair<size_t, ContentState>(contentID, state));
 	}
 
 	filestr.close();

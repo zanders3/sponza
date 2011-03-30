@@ -31,6 +31,8 @@ size_t LoadTexture(aiMaterial* pMat, aiTextureType type)
 	{
 		std::string pathStr = std::string(path.data, path.length);
 
+		cout << "DEPENDENCY " << pathStr << endl;
+
 		int fileNameStart = pathStr.find_last_of('\\');
 		int fileNameEnd = pathStr.find_last_of('.');
 

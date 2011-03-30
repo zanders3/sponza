@@ -5,7 +5,7 @@
 #include "Content/ContentLoader.h"
 
 Game::Game() :
-	m_content("..\\Content\\Out"),
+	m_content(".\\Content"),
 	m_camera()
 {
 	DXUTSetCallbackKeyboard(&m_camera.OnKeyboard);

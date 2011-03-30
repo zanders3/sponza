@@ -7,6 +7,7 @@
 #include <string>
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <memory>
 #include <vector>
 #include <map>
@@ -67,7 +68,11 @@ public:
 		auto iter = m_pContent.find(contentID);
 
 		if (iter == m_pContent.end())
-			return nullptr;
+		{
+			std::stringstream str;
+			str << "Failed to load asset ID: " << contentID << std::endl;
+			throw std::exception(str.str().c_str());
+		}
 
 		ContentState state = iter->second;
 

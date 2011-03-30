@@ -59,8 +59,12 @@ namespace Contenter
                     case "listen":
                         new Listener(config).Listen();
                         break;
-                    case "dependencytest":
-                        new Builder(config);
+                    case "clean":
+                        string[] files = Directory.GetFiles(config.OutputPath, "*.blob");
+                        foreach (string file in files)
+                            File.Delete(file);
+
+                        File.Delete(Path.Combine(config.OutputPath, "Manifest.txt"));
                         break;
                     default:
                         PrintHelp();
@@ -94,6 +98,7 @@ namespace Contenter
             Console.WriteLine("Commands:");
             Console.WriteLine("     Build   - Builds content");
             Console.WriteLine("     Rebuild - Forces a full content rebuild");
+            Console.WriteLine("     Clean   - Cleans the content output directory");
             Console.WriteLine("     Listen  - Listens for content changes then builds and notifies the game.");
         }
     }

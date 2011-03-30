@@ -42,14 +42,22 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 	DXUTSetCallbackD3D10FrameRender( OnD3D10FrameRender );
 	DXUTSetCallbackFrameMove( OnFrameMove );
 
-	game = new Game();
+	try
+	{
+		game = new Game();
+	
+		DXUTInit();
+		DXUTCreateWindow(L"Sponza");
+		DXUTCreateDevice( true, 640, 480 );
+		DXUTMainLoop();
 
-	DXUTInit();
-	DXUTCreateWindow(L"Sponza");
-	DXUTCreateDevice( true, 640, 480 );
-	DXUTMainLoop();
-
-	delete game;
+		delete game;
+	}
+	catch (std::exception excp)
+	{
+		OutputDebugStringA(excp.what());
+		MessageBoxA(DXUTGetHWND(), excp.what(), "Exception in Sponza", 0);
+	}
 
 	return DXUTGetExitCode();
 }

@@ -58,13 +58,8 @@ const std::string& Socket::ReadData()
 		int len = recv(mSocket, (char*)&mBuffer, 255, 0);
 		if (len >= 0)
 		{
-			mData = std::string(mBuffer, len);
-		}
-		else
-		{
-			mData = "\0";
+			return std::string(mBuffer, len);
 		}
 	}
-
-	return mData;
+	return "\0";
 }

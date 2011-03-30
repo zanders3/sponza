@@ -115,6 +115,9 @@ void Mesh::Create(Vertex* pVertex, size_t numVertices, size_t* pIndices, size_t 
 
 void Mesh::Draw(ID3D10Device* pDevice)
 {
+	if (mMaterial->mDiffuse)
+		mMaterial->mDiffuse->Bind(Texture::Diffuse);
+
 	pDevice->IASetIndexBuffer(mIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;

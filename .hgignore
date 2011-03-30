@@ -19,6 +19,7 @@ syntax: glob
 *.blob
 *.exp
 *.lib
+Art\*.*
 Content\*.*
 Content\textures\*.*
 Sponza\Debug\*.*

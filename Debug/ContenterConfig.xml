@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Configuration xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ContentPath>..\Content</ContentPath>
-  <OutputPath>..\Content\Out</OutputPath>
+  <OutputPath>Content</OutputPath>
   <HeaderPath>..\Sponza\Content</HeaderPath>
   <BuildTargets>
     <BuildTarget>
@@ -11,6 +11,10 @@
 	<BuildTarget>
 	  <Program>ShaderProcessor.exe</Program>
 	  <FileType>*.fx</FileType>
+	</BuildTarget>
+	<BuildTarget>
+	  <Program>TextureProcessor.exe</Program>
+	  <FileType>*.tga</FileType>
 	</BuildTarget>
   </BuildTargets>
 </Configuration>
