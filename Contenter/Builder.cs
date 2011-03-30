@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Text.RegularExpressions;
 using System.Collections;
 using System.Collections.ObjectModel;
+using System.Runtime.InteropServices;
 
 namespace Contenter
 {
@@ -20,12 +21,16 @@ namespace Contenter
 
     public class Builder
     {
+        [DllImport("ContentHasher.dll")]
+        static extern uint HashString(String hash);
+
         public class BuildItem
         {
             public string Processor;
             public string Name;
             public string Input;
             public string Output;
+            public uint ID;
 
             public bool NeedsBuilding()
             {
@@ -73,29 +78,8 @@ namespace Contenter
         }
 
         private Configuration config;
-        private DependencyService dependencyService;
         private List<BuildItem> allItems;
         private List<BuildItem> rebuiltItems;
-        private Dictionary<BuildItem, uint> idMap = null;
-
-        public Dictionary<BuildItem, uint> IDMap
-        {
-            get
-            {
-                if (idMap == null)
-                {
-                    idMap = new Dictionary<BuildItem, uint>();
-
-                    uint index = 0;
-                    foreach (BuildItem item in allItems.OrderBy(item => item.Name))
-                    {
-                        idMap.Add(item, index);
-                        ++index;
-                    }
-                }
-                return idMap;
-            }
-        }
 
         public IEnumerable<BuildItem> RebuiltItems
         {
@@ -110,7 +94,6 @@ namespace Contenter
         public Builder(Configuration config)
         {
             this.config = config;
-            this.dependencyService = new DependencyService(this);
 
             allItems = GenerateBuildItems();
             rebuiltItems = allItems.Where(item => item.NeedsBuilding()).ToList();
@@ -155,11 +138,9 @@ namespace Contenter
             foreach (BuildItem item in allItems.OrderBy(item => item.Name))
             {
                 // Create the header
-                headerFile.AppendLine(String.Format("        {0},", item.Name));
-                hashFile.AppendLine(item.Output.Replace(config.OutputPath, String.Empty));
+                headerFile.AppendLine(String.Format("        {0} = {1},", item.Name, item.ID));
+                hashFile.AppendLine(String.Format("{0},{1}", item.Output.Replace(config.OutputPath, String.Empty), item.ID));
             }
-
-            headerFile.AppendLine("        CONTENT_MAX");
             headerFile.AppendLine("    };");
             headerFile.AppendLine("};");
 
@@ -185,7 +166,8 @@ namespace Contenter
                         Input = file,
                         Output = Path.Combine(config.OutputPath, Path.GetFileNameWithoutExtension(file) + ".blob"),
                         Name = Path.GetFileNameWithoutExtension(file).ToUpper(),
-                        Processor = target.Program
+                        Processor = target.Program,
+                        ID = HashString(Path.GetFileNameWithoutExtension(file))
                     });
                 }
             }

@@ -17,6 +17,8 @@ syntax: glob
 *.sdf
 *.cache
 *.blob
+*.exp
+*.lib
 Content\*.*
 Content\textures\*.*
 Sponza\Debug\*.*

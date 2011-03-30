@@ -11,9 +11,15 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contenter", "Contenter\Contenter.csproj", "{E540CE1B-8EB7-4B85-B20B-5F19153FC82A}"
 	ProjectSection(ProjectDependencies) = postProject
 		{635D6D56-6B52-412C-A622-5D60466E6EC4} = {635D6D56-6B52-412C-A622-5D60466E6EC4}
+		{50F57664-D324-442E-9FAD-10DB82C4A8E1} = {50F57664-D324-442E-9FAD-10DB82C4A8E1}
+		{8535A897-9F7A-477D-B218-B5DB49C874EA} = {8535A897-9F7A-477D-B218-B5DB49C874EA}
 	EndProjectSection
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ShaderProcessor", "ShaderProcessor\ShaderProcessor.vcxproj", "{50F57664-D324-442E-9FAD-10DB82C4A8E1}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pipeline", "Pipeline", "{A16AC706-3195-406B-B5A0-47BEFCA6AAD7}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ContentHasher", "ContentHasher\ContentHasher.vcxproj", "{8535A897-9F7A-477D-B218-B5DB49C874EA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,6 +32,7 @@ Global
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
 		{DDB6F2BF-AA17-4857-8F50-E87B00C6BF06}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{DDB6F2BF-AA17-4857-8F50-E87B00C6BF06}.Debug|Mixed Platforms.Build.0 = Debug|Win32
 		{DDB6F2BF-AA17-4857-8F50-E87B00C6BF06}.Debug|Win32.ActiveCfg = Debug|Win32
 		{DDB6F2BF-AA17-4857-8F50-E87B00C6BF06}.Debug|Win32.Build.0 = Debug|Win32
 		{DDB6F2BF-AA17-4857-8F50-E87B00C6BF06}.Debug|x86.ActiveCfg = Debug|Win32
@@ -64,8 +71,24 @@ Global
 		{50F57664-D324-442E-9FAD-10DB82C4A8E1}.Release|Win32.ActiveCfg = Release|Win32
 		{50F57664-D324-442E-9FAD-10DB82C4A8E1}.Release|Win32.Build.0 = Release|Win32
 		{50F57664-D324-442E-9FAD-10DB82C4A8E1}.Release|x86.ActiveCfg = Release|Win32
+		{8535A897-9F7A-477D-B218-B5DB49C874EA}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
+		{8535A897-9F7A-477D-B218-B5DB49C874EA}.Debug|Mixed Platforms.Build.0 = Debug|Win32
+		{8535A897-9F7A-477D-B218-B5DB49C874EA}.Debug|Win32.ActiveCfg = Debug|Win32
+		{8535A897-9F7A-477D-B218-B5DB49C874EA}.Debug|Win32.Build.0 = Debug|Win32
+		{8535A897-9F7A-477D-B218-B5DB49C874EA}.Debug|x86.ActiveCfg = Debug|Win32
+		{8535A897-9F7A-477D-B218-B5DB49C874EA}.Release|Mixed Platforms.ActiveCfg = Release|Win32
+		{8535A897-9F7A-477D-B218-B5DB49C874EA}.Release|Mixed Platforms.Build.0 = Release|Win32
+		{8535A897-9F7A-477D-B218-B5DB49C874EA}.Release|Win32.ActiveCfg = Release|Win32
+		{8535A897-9F7A-477D-B218-B5DB49C874EA}.Release|Win32.Build.0 = Release|Win32
+		{8535A897-9F7A-477D-B218-B5DB49C874EA}.Release|x86.ActiveCfg = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{E540CE1B-8EB7-4B85-B20B-5F19153FC82A} = {A16AC706-3195-406B-B5A0-47BEFCA6AAD7}
+		{50F57664-D324-442E-9FAD-10DB82C4A8E1} = {A16AC706-3195-406B-B5A0-47BEFCA6AAD7}
+		{635D6D56-6B52-412C-A622-5D60466E6EC4} = {A16AC706-3195-406B-B5A0-47BEFCA6AAD7}
+		{8535A897-9F7A-477D-B218-B5DB49C874EA} = {A16AC706-3195-406B-B5A0-47BEFCA6AAD7}
 	EndGlobalSection
 EndGlobal

@@ -6,7 +6,7 @@
   <BuildTargets>
     <BuildTarget>
       <Program>ModelProcessor.exe</Program>
-      <FileType>*.3DS</FileType>
+      <FileType>*.DAE</FileType>
     </BuildTarget>
 	<BuildTarget>
 	  <Program>ShaderProcessor.exe</Program>

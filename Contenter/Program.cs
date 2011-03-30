@@ -61,7 +61,6 @@ namespace Contenter
                         break;
                     case "dependencytest":
                         new Builder(config);
-                        Console.ReadLine();
                         break;
                     default:
                         PrintHelp();

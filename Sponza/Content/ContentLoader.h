@@ -9,6 +9,7 @@
 #include <fstream>
 #include <memory>
 #include <vector>
+#include <map>
 
 #ifdef _DEBUG
 #include "Net/Socket.h"
@@ -41,6 +42,13 @@ private:
 };
 #endif
 
+struct ContentState
+{
+	bool		 m_loaded;
+	std::string  m_path;
+	ContentItem* m_data;
+};
+
 class ContentLoader
 {
 public:
@@ -54,39 +62,45 @@ public:
 		m_pDevice = pDevice;
 	}
 
-	template <typename T> T* Get( ContentID::Type contentId )
+	template <typename T> T* Get( ContentID::Type contentID )
 	{
-		if (!m_contentLoaded[contentId])
+		auto iter = m_pContent.find(contentID);
+
+		if (iter == m_pContent.end())
+			return nullptr;
+
+		ContentState state = iter->second;
+
+		if (!state.m_loaded)
 		{
-			if (m_contentData[contentId] == nullptr)
+			if (state.m_data == nullptr)
 			{
-				m_contentData[contentId] = new T();
+				state.m_data = new T();
 			}
 
 			std::ifstream infile;
-			std::string& path = m_contentPaths[contentId];
-			infile.open(path, std::ios::in|std::ios::binary);
+			infile.open(state.m_path, std::ios::in|std::ios::binary);
 
 			if (infile.good())
 			{
-				ContentItem* item = m_contentData[contentId];
+				ContentItem* item = state.m_data;
 				item->m_pDevice = m_pDevice;
+				item->m_pContent = this;
 				item->Load(infile);
 				
-				m_contentLoaded[contentId] = true;
+				state.m_loaded = true;
+				m_pContent[contentID] = state;
 			}
 
 			infile.close();
 		}
 
-		return static_cast<T*>(m_contentData[contentId]);
+		return static_cast<T*>(state.m_data);
 	}
 
 private:
-	bool			m_contentLoaded[ContentID::CONTENT_MAX];
-	ContentItem *	m_contentData  [ContentID::CONTENT_MAX];
-	std::string 	m_contentPaths [ContentID::CONTENT_MAX];
-	ID3D10Device*	m_pDevice;
+	std::map<size_t, ContentState>	m_pContent;
+	ID3D10Device*					m_pDevice;
 
 #ifdef _DEBUG
 	ContentReloader m_reloader;

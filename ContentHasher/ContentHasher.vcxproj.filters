@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="Hasher.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Foo">
+      <UniqueIdentifier>{b5f0a4fa-4b69-4018-967b-8e62bb16c6bb}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

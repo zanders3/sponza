@@ -1,15 +1,14 @@
 #pragma once
 //---------------------------------------------------------------------------
 //Auto Generated Contenter Content ID Header
-//Created At: 23.3.11 8:41 pm
+//Created At: 30.3.11 8:21 pm
 //---------------------------------------------------------------------------
 
 struct ContentID
 {
     enum Type : unsigned int
     {
-        BLANKSHADER,
-        SPONZA_ATRIUM,
-        CONTENT_MAX
+        BLANKSHADER = 1352622501,
+        SPONZA_ATRIUM = 1131486756,
     };
 };

@@ -76,6 +76,9 @@
     <ClInclude Include="Thread\Thread.h">
       <Filter>Thread</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\Texture.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXUT\Core\DXUT.cpp">
@@ -106,6 +109,9 @@
     </ClCompile>
     <ClCompile Include="Net\Socket.cpp">
       <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Texture.cpp">
+      <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

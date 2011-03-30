@@ -1,28 +1,40 @@
 #include "stdafx.h"
 #include "Model.h"
+#include "Content/ContentLoader.h"
 
 using namespace std;
 
 Model::Model() :
-	mMeshes(nullptr)
+	mMeshes(nullptr),
+	mMaterials(nullptr)
 {
 }
 
 Model::~Model()
 {
 	if (mMeshes) delete[] mMeshes;
+	if (mMaterials) delete[] mMaterials;
 }
 
 void Model::Load(std::istream& input)
 {
 	if (mMeshes) delete[] mMeshes;
+	if (mMaterials) delete[] mMaterials;
+
+	input.read((char*)&mNumMaterials, sizeof(size_t));
+
+	mMaterials = new Material[mNumMaterials];
+	for (size_t i = 0; i<mNumMaterials; ++i)
+	{
+		mMaterials[i].Load(input, m_pContent);
+	}
 
 	input.read((char*)&mNumMeshes, sizeof(size_t));
 
 	mMeshes = new Mesh[mNumMeshes];
 	for (size_t i = 0; i<mNumMeshes; ++i)
 	{
-		mMeshes[i].Load(input, m_pDevice);
+		mMeshes[i].Load(input, m_pDevice, mMaterials);
 	}
 }
 
@@ -37,7 +49,8 @@ void Model::Draw()
 
 Mesh::Mesh() :
 	mVertexBuffer(nullptr),
-	mIndexBuffer(nullptr)
+	mIndexBuffer(nullptr),
+	mMaterial(nullptr)
 {
 }
 
@@ -47,12 +60,17 @@ Mesh::~Mesh()
 	SAFE_RELEASE(mIndexBuffer);
 }
 
-void Mesh::Load(std::istream& input, ID3D10Device* pDevice)
+void Mesh::Load(std::istream& input, ID3D10Device* pDevice, Material* pMaterials)
 {
+	size_t   mMaterialID;
+
 	size_t	 mNumVertices;
 	Vertex * mVertices;
 	size_t	 mNumIndices;
 	size_t * mIndices;
+
+	input.read((char*)&mMaterialID, sizeof(size_t));
+	mMaterial = pMaterials + mMaterialID;
 
 	input.read((char*)&mNumVertices, sizeof(size_t));
 
@@ -104,4 +122,17 @@ void Mesh::Draw(ID3D10Device* pDevice)
 	pDevice->IASetVertexBuffers(0, 1, &mVertexBuffer, &stride, &offset);
 
 	pDevice->DrawIndexed(mNumIndices, 0, 0);
+}
+
+//----------------------------------------------------------------------------------------
+
+void Material::Load(std::istream& input, ContentLoader* pLoader)
+{
+	size_t diffuse;
+	input.read((char*)&diffuse, sizeof(size_t));
+
+	if (diffuse == 0)
+		mDiffuse = nullptr;
+	else
+		mDiffuse = pLoader->Get<Texture>(static_cast<ContentID::Type>(diffuse));
 }

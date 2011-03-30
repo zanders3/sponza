@@ -2,6 +2,8 @@
 #include "stdafx.h"
 #include <fstream>
 
+class ContentLoader;
+
 class ContentItem
 {
 private:
@@ -17,5 +19,6 @@ public:
 		throw std::exception("WTF?");
 	}
 
-	ID3D10Device* m_pDevice;
+	ID3D10Device*  m_pDevice;
+	ContentLoader* m_pContent;
 };

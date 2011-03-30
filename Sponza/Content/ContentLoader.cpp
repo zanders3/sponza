@@ -5,26 +5,29 @@ using namespace std;
 
 ContentLoader::ContentLoader(const std::string& contentRoot)
 {
-	memset(&m_contentLoaded, 0, sizeof(bool)*ContentID::CONTENT_MAX);
-	memset(m_contentData,	 0, sizeof(ContentItem*)*ContentID::CONTENT_MAX);
-
 	const string manifest = contentRoot + "\\Manifest.txt";
 	ifstream filestr(manifest);
 	
 	if (filestr.good())
 	{
-		char contentFile[256];
+		char line[256];
 
-		size_t id = 0;
 		while (!filestr.eof())
 		{
-			filestr.getline(contentFile, 255);
-			if (*contentFile == 0) break;
+			filestr.getline(line, 255);
+			if (*line == 0) break;
 
-			m_contentPaths[id] =  contentRoot;
-			m_contentPaths[id] += contentFile;
+			std::string lineStr(line);
 
-			++id;
+			ContentState state;
+			state.m_loaded = false;
+			state.m_data   = nullptr;
+
+			int hashIndex = lineStr.find(',');
+			size_t contentID = atoi(lineStr.substr(hashIndex+1).c_str());
+			state.m_path = contentRoot + lineStr.substr(0, hashIndex);
+			
+			m_pContent.insert(std::pair<size_t, ContentState>(contentID, state));
 		}
 	}
 
@@ -37,10 +40,11 @@ ContentLoader::ContentLoader(const std::string& contentRoot)
 
 ContentLoader::~ContentLoader()
 {
-	for (size_t id = 0; id<ContentID::CONTENT_MAX; ++id)
+	auto end = m_pContent.end();
+	for (auto iter = m_pContent.begin(); iter != end; ++iter)
 	{
-		if (m_contentLoaded[id])
-			delete m_contentData[id];
+		if (iter->second.m_loaded)
+			delete iter->second.m_data;
 	}
 }
 
@@ -98,9 +102,10 @@ void ContentReloader::HandleCommand(const std::string& name, const std::string& 
 	if (name == "LOAD")
 	{
 		ContentID::Type value = static_cast<ContentID::Type>(atoi(data.c_str()));
-		if (value >= 0 && value < ContentID::CONTENT_MAX)
+		auto iter = m_pLoader->m_pContent.find(value);
+		if (iter != m_pLoader->m_pContent.end())
 		{
-			m_pLoader->m_contentLoaded[value] = false;
+			iter->second.m_loaded = false;
 			m_pLoader->Get<ContentItem>(value);
 		}
 	}

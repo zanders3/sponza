@@ -3,7 +3,7 @@
 #include <aiPostProcess.h>
 #include <fstream>
 #include <iostream>
-#include "../Contenter/Dependency.h"
+#include <hash_map>
 
 using namespace std;
 
@@ -24,16 +24,28 @@ struct Vertex
 	aiVector2D mTexCoord;
 };
 
-int LoadTexture(Dependency* pDependencyMan, aiMaterial* pMat, aiTextureType type)
+size_t LoadTexture(aiMaterial* pMat, aiTextureType type)
 {
 	aiString path;
 	if (pMat->GetTexture(type, 0, &path) == aiReturn_SUCCESS)
 	{
-		return pDependencyMan->RequestDependency(std::string(path.data, path.length));
+		std::string pathStr = std::string(path.data, path.length);
+
+		int fileNameStart = pathStr.find_last_of('\\');
+		int fileNameEnd = pathStr.find_last_of('.');
+
+		if (fileNameStart == -1 || fileNameEnd == -1) return 0;
+
+		++fileNameStart;
+
+		std::string fileName = pathStr.substr(fileNameStart, fileNameEnd - fileNameStart);
+
+		static const std::hash<std::string> hasher;
+		return hasher(fileName);
 	}
 	else
 	{
-		return -1;
+		return 0;
 	}
 }
 
@@ -82,8 +94,6 @@ int main(int argc, char ** argv)
 			return 1;
 		}
 
-		Dependency dependencyMan;
-
 		try
 		{
 			if (!scene->HasMaterials()) throw std::exception("Model has no Materials!");
@@ -96,7 +106,8 @@ int main(int argc, char ** argv)
 			{
 				aiMaterial* pMat = scene->mMaterials[i];
 				
-				int diffuse = LoadTexture(&dependencyMan, pMat, aiTextureType_DIFFUSE);
+				size_t diffuse = LoadTexture(pMat, aiTextureType_DIFFUSE);
+				fs.write((char*)&diffuse, sizeof(size_t));
 			}
 
 			//---------------------------------------------------

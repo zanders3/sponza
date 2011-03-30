@@ -66,7 +66,7 @@ namespace Contenter
                                 StringBuilder message = new StringBuilder();
                                 foreach (Builder.BuildItem item in builder.RebuiltItems)
                                 {
-                                    message.AppendLine("LOAD " + builder.IDMap[item]);
+                                    message.AppendLine("LOAD " + item.ID);
                                 }
 
                                 clients.ForEach(client => client.SendMessage(message.ToString()));
