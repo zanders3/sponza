@@ -51,15 +51,16 @@ bool Socket::Connect(const std::string& ipaddress, int port)
 	}
 }
 
-const std::string& Socket::ReadData()
+const std::string* Socket::ReadData()
 {
 	if (mSocket != INVALID_SOCKET)
 	{
 		int len = recv(mSocket, (char*)&mBuffer, 255, 0);
-		if (len >= 0)
+		if (len > 0)
 		{
-			return std::string(mBuffer, len);
+			mData = std::string(mBuffer, len);
+			return &mData;
 		}
 	}
-	return "\0";
+	return nullptr;
 }

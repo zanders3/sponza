@@ -63,6 +63,11 @@ public:
 		m_pDevice = pDevice;
 	}
 
+	inline ID3D10Device* GetDevice()
+	{
+		return m_pDevice;
+	}
+
 	template <typename T> T* Get( ContentID::Type contentID )
 	{
 		auto iter = m_pContent.find(contentID);

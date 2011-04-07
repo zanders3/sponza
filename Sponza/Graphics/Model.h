@@ -4,21 +4,15 @@
 #include <fstream>
 
 #include "Graphics/Texture.h"
+#include "Graphics/Material.h"
 
 class Vertex
 {
 	D3DXVECTOR3 mPosition;
 	D3DXVECTOR3 mNormal;
 	D3DXVECTOR3 mTangent;
+	D3DXVECTOR3 mBiNormal;
 	D3DXVECTOR2 mTexCoord;
-};
-
-class Material
-{
-public:
-	void Load(std::istream& input, ContentLoader* pLoader);
-
-	Texture* mDiffuse;
 };
 
 class Mesh

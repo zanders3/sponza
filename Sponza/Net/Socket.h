@@ -10,7 +10,7 @@ public:
 
 	bool Connect(const std::string& ipaddress, int port);
 
-	const std::string& ReadData();
+	const std::string* ReadData();
 
 private:
 	SOCKET mSocket;

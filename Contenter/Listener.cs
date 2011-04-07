@@ -40,13 +40,21 @@ namespace Contenter
 
         public void Listen()
         {
-            Console.WriteLine("Listening for content changes.. (Press Q to Quit)");
+            Console.WriteLine("Listening for changes... (Press Enter to Quit)");
             TcpListener listener = new TcpListener(IPAddress.Parse("127.0.0.1"), Ports.ListenerPort);
             listener.Start();
 
             try
             {
-                while (true)
+                bool running = true;
+
+                new Thread(new ThreadStart(delegate()
+                    {
+                        Console.ReadLine();
+                        running = false;
+                    })).Start();
+
+                while (running)
                 {
                     if (listener.Pending())
                     {
@@ -54,44 +62,54 @@ namespace Contenter
                         clients.Add(new Client(listener.AcceptTcpClient()));
                     }
 
-                    if (changedFiles.Any())
+                    bool anyChangedFiles = false;
+                    lock (changedFiles)
                     {
-                        try
-                        {
-                            Builder builder = new Builder(config);
-                            builder.Build();
-                            if (builder.RebuiltItems.Any())
-                            {
-                                Console.WriteLine("Notifying Content Changes..");
-                                StringBuilder message = new StringBuilder();
-                                foreach (Builder.BuildItem item in builder.RebuiltItems)
-                                {
-                                    message.AppendLine("LOAD " + item.ID);
-                                }
+                        anyChangedFiles = changedFiles.Count > 0;
+                    }
 
-                                clients.ForEach(client => client.SendMessage(message.ToString()));
+                    if (anyChangedFiles)
+                    {
+                        lock (changedFiles)
+                        {
+                            try
+                            {
+                                Builder builder = new Builder(config);
+                                builder.Build();
+                                if (builder.BuiltItems.Any())
+                                {
+                                    StringBuilder message = new StringBuilder();
+                                    foreach (Builder.BuildItem item in builder.BuiltItems)
+                                    {
+                                        Console.WriteLine("LOAD " + Path.GetFileName(item.Input));
+                                        message.AppendLine("LOAD " + item.ID);
+                                    }
+
+                                    clients.ForEach(client => client.SendMessage(message.ToString()));
+                                }
+                            }
+                            catch (BuildException e)
+                            {
+                                Console.WriteLine(e.Message);
                             }
 
-                            Thread.Sleep(1000);
-                        }
-                        catch (BuildException e)
-                        {
-                            Console.WriteLine(e.Message);
+                            changedFiles.Clear();
                         }
 
-                        changedFiles.Clear();
-                        
-                        Console.WriteLine("Listening for Console Changes..");
+                        Thread.Sleep(5000);
                     }
+
+                    foreach (Client client in clients.Where(client => !client.Connected))
+                        Console.WriteLine("Client Disconnected");
 
                     clients.RemoveAll(client => !client.Connected);
 
-                    if (Console.KeyAvailable && Console.ReadKey().Key == ConsoleKey.Q)
-                        break;
+                    Thread.Sleep(500);
                 }
             }
             finally
             {
+                clients.Clear();
                 listener.Stop();
             }
         }

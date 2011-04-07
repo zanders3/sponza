@@ -75,11 +75,11 @@ void ContentReloader::Run(int)
 {
 	while (m_threadRunning)
 	{
-		const std::string& data = m_socket->ReadData();
-		if (data.size() > 0)
+		const std::string* data = m_socket->ReadData();
+		if (data != nullptr)
 		{
 			Lock lock(&m_mutex);
-			m_reloadList.push_back(data);
+			m_reloadList.push_back(*data);
 		}
 	}
 }
@@ -98,6 +98,8 @@ void ContentReloader::ReloadContent()
 			HandleCommand(commandName, commandData);
 		}
 	}
+
+	m_reloadList.clear();
 }
 
 void ContentReloader::HandleCommand(const std::string& name, const std::string& data)

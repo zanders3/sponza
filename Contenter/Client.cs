@@ -27,8 +27,15 @@ namespace Contenter
             Connected = true;
         }
 
+        ~Client()
+        {
+            client.Close();
+        }
+
         public void SendMessage(string text)
         {
+            Connected = client.Connected;
+
             if (!Connected) return;
 
             try
@@ -48,6 +55,8 @@ namespace Contenter
 
         public string ReadMessage()
         {
+            Connected = client.Connected;
+
             if (!Connected) return string.Empty;
 
             try
@@ -60,6 +69,7 @@ namespace Contenter
             catch
             {
                 Connected = client.Connected;
+
                 if (Connected)
                     throw;
                 else

@@ -19,108 +19,69 @@ namespace Contenter
         }
     }
 
-    public class Builder
+    public partial class Builder
     {
-        [DllImport("ContentHasher.dll")]
-        static extern uint HashString(String hash);
-
-        public class BuildItem
-        {
-            public string Processor;
-            public string Name;
-            public string Input;
-            public string Output;
-            public uint ID;
-
-            public bool NeedsBuilding()
-            {
-                return File.GetLastWriteTime(Output) < File.GetLastWriteTime(Input);
-            }
-
-            private bool IsBuilt = false;
-
-            public void Build(Builder builder)
-            {
-                if (IsBuilt) return;
-
-                Process process = new Process();
-                process.StartInfo.FileName = Processor;
-                process.StartInfo.Arguments = String.Format("\"{0}\" \"{1}\"", Input, Output);
-                process.StartInfo.ErrorDialog = false;
-                process.StartInfo.CreateNoWindow = true;
-                process.StartInfo.RedirectStandardError = true;
-                process.StartInfo.RedirectStandardOutput = true;
-                process.StartInfo.UseShellExecute = false;
-
-                try
-                {
-                    process.Start();
-                    process.WaitForExit();
-                }
-                catch (Exception e)
-                {
-                    throw new Exception(String.Format("Could not run: \"{0}\"\n{1}", Processor, e.Message));
-                }
-
-                if (process.ExitCode != 0)
-                {
-                    throw new BuildException(String.Format("Item Build Failed: {0} \"{1}\" -> \"{2}\"\n{3}{4}",
-                        Processor,
-                        Input,
-                        Output,
-                        process.StandardOutput.ReadToEnd(),
-                        process.StandardError.ReadToEnd()));
-                }
-
-                Console.WriteLine(String.Format("{0} -> {1}", Path.GetFileName(Input), Path.GetFileName(Output)));
-
-                builder.ValidateDependencies(process.StandardOutput.ReadToEnd()
-                    .Split(new char[] { '\n' }, StringSplitOptions.RemoveEmptyEntries)
-                    .Select(line =>
-                        line.Replace("DEPENDENCY ", string.Empty).Trim()).ToList());
-
-                IsBuilt = true;
-            }            
-        }
-
         private Configuration config;
-        private List<BuildItem> allItems;
-        private List<BuildItem> rebuildItems;
+        private List<BuildItem> buildItems;
 
-        public IEnumerable<BuildItem> RebuiltItems
-        {
-            get { return rebuildItems; }
-        }
+        private HashSet<BuildItem> builtItems = new HashSet<BuildItem>();
+        private Queue<BuildItem> buildQueue;
 
-        public IEnumerable<BuildItem> AllItems
+        public IEnumerable<BuildItem> BuiltItems
         {
-            get { return allItems; }
+            get { return builtItems; }
         }
 
         public Builder(Configuration config)
         {
             this.config = config;
 
-            allItems = GenerateBuildItems();
-            rebuildItems = allItems.Where(item => item.NeedsBuilding()).ToList();
+            buildItems = GenerateBuildItems().ToList();
         }
 
         public Builder Build(bool rebuildAll = false)
         {
-            List<BuildItem> buildItems = rebuildAll ? allItems : rebuildItems;
+            builtItems.Clear();
+            buildQueue = new Queue<BuildItem>(buildItems);
 
-            if (buildItems.Any())
+            List<BuildException> exceptions = new List<BuildException>();
+
+            Console.WriteLine("Building Content...");
+            while (buildQueue.Count > 0)
             {
-                Console.WriteLine("Building Content...");
-                foreach (BuildItem item in buildItems)
-                    item.Build(this);
+                BuildItem item = buildQueue.Dequeue();
+                if (rebuildAll || item.NeedsBuilding())
+                {
+                    try
+                    {
+                        item.Build(this);
+                        builtItems.Add(item);
+                    }
+                    catch (BuildException e)
+                    {
+                        exceptions.Add(e);
+                        File.Delete(item.Output);
+                    }
+                }
             }
+
+            if (exceptions.Any())
+            {
+                StringBuilder messages = new StringBuilder();
+                foreach (BuildException e in exceptions)
+                    messages.AppendLine(e.Message);
+
+                throw new BuildException(messages.ToString());
+            }
+
             return this;
         }
 
         public Builder GenerateHeader()
         {
-            if (!allItems.Any()) return this;
+            string manifestFilePath = Path.Combine(config.OutputPath, "Manifest.txt");
+
+            if (!builtItems.Any() && File.Exists(manifestFilePath)) return this;
 
             Console.WriteLine("Generating Header...");
             StringBuilder headerFile = new StringBuilder();
@@ -140,60 +101,66 @@ namespace Contenter
             headerFile.AppendLine("    {");
 
             HashSet<uint> usedHashes = new HashSet<uint>();
+            string outputPath = Path.GetFullPath(config.OutputPath);
 
-            foreach (BuildItem item in allItems.OrderBy(item => item.Name))
+            foreach (BuildItem item in Directory.GetFiles(config.OutputPath, "*.blob").Select(file => new BuildItem(file, config, null)))
             {
                 // Create the header
                 headerFile.AppendLine(String.Format("        {0} = {1},", item.Name, item.ID));
-                hashFile.AppendLine(String.Format("{0},{1}", item.Output.Replace(config.OutputPath, String.Empty), item.ID));
+                hashFile.AppendLine(String.Format("{0},{1}", item.Output.Replace(outputPath, String.Empty), item.ID));
             }
             headerFile.AppendLine("    };");
             headerFile.AppendLine("};");
 
             File.WriteAllText(Path.Combine(config.HeaderPath, "ContentIDs.h"), headerFile.ToString());
-            File.WriteAllText(Path.Combine(config.OutputPath, "Manifest.txt"), hashFile.ToString());
+            File.WriteAllText(manifestFilePath, hashFile.ToString());
 
             return this;
+        }
+
+        private BuildTarget BuildTargetFromFile(string file)
+        {
+            string fileType = Path.GetExtension(file);
+            return config.BuildTargets.FirstOrDefault(target => target.FileType.EndsWith(fileType));
         }
 
         private IEnumerable<BuildItem> BuildTargetsFromTarget(BuildTarget target)
         {
             return
-                Directory.GetFiles(config.ContentPath, target.FileType, SearchOption.AllDirectories)
-                .Select(file => new BuildItem()
-                {
-                    Input = file,
-                    Output = Path.Combine(config.OutputPath, Path.GetFileNameWithoutExtension(file) + ".blob"),
-                    Name = Path.GetFileNameWithoutExtension(file).ToUpper(),
-                    Processor = target.Program,
-                    ID = HashString(Path.GetFileNameWithoutExtension(file))
-                });
+                Directory.GetFiles(config.ContentPath, target.FileType, SearchOption.TopDirectoryOnly)
+                .Select(file => new BuildItem(file, config, target));
         }
 
-        private List<BuildItem> GenerateBuildItems()
+        private IEnumerable<BuildItem> GenerateBuildItems()
         {
             return config.BuildTargets
                 .SelectMany(target => BuildTargetsFromTarget(target)).ToList()
-                .OrderBy(item => item.Processor).ToList();
+                .OrderBy(item => item.Processor);
         }
 
-        private void ValidateDependencies(List<string> dependencies)
+        private void AddDependencies(List<string> dependencies)
         {
-            HashSet<string> itemList = new HashSet<string>(allItems.Select(item => Path.GetFullPath(item.Input)));
+            //Root all dependency paths realative to the content path.
+            dependencies = dependencies.Select(dep => Path.IsPathRooted(dep) ? dep : Path.GetFullPath(Path.Combine(config.ContentPath, dep))).ToList();
 
-            var list = dependencies.Where(dep => 
-                !itemList.Contains(dep));
-            if (list.Any())
+            StringBuilder errorList = new StringBuilder(String.Empty);
+
+            foreach (string dependency in dependencies)
             {
-                string rootedContentPath = Path.GetFullPath(config.ContentPath);
-
-                StringBuilder errorMessage = new StringBuilder("Build Failed due to missing dependencies:\n");
-                foreach (string item in list)
+                BuildTarget target = BuildTargetFromFile(dependency);
+                if (target == null)
+                    errorList.AppendLine(String.Format("Failed to find content builder for type: \"{0}\"", dependency));
+                else if (!File.Exists(dependency))
+                    errorList.AppendLine(String.Format("Dependency doesn't exist: \"{0}\"", dependency));
+                else
                 {
-                    errorMessage.AppendLine(item.Replace(rootedContentPath, string.Empty));
+                    buildQueue.Enqueue(new BuildItem(dependency, config, target));
                 }
+            }
 
-                throw new BuildException(errorMessage.ToString());
+            if (errorList.Length > 0)
+            {
+                throw new BuildException(errorList.ToString());
             }
         }
     }

@@ -115,8 +115,7 @@ void Mesh::Create(Vertex* pVertex, size_t numVertices, size_t* pIndices, size_t 
 
 void Mesh::Draw(ID3D10Device* pDevice)
 {
-	if (mMaterial->mDiffuse)
-		mMaterial->mDiffuse->Bind(Texture::Diffuse);
+	mMaterial->Bind();
 
 	pDevice->IASetIndexBuffer(mIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	UINT stride = sizeof(Vertex);
@@ -125,17 +124,4 @@ void Mesh::Draw(ID3D10Device* pDevice)
 	pDevice->IASetVertexBuffers(0, 1, &mVertexBuffer, &stride, &offset);
 
 	pDevice->DrawIndexed(mNumIndices, 0, 0);
-}
-
-//----------------------------------------------------------------------------------------
-
-void Material::Load(std::istream& input, ContentLoader* pLoader)
-{
-	size_t diffuse;
-	input.read((char*)&diffuse, sizeof(size_t));
-
-	if (diffuse == 0)
-		mDiffuse = nullptr;
-	else
-		mDiffuse = pLoader->Get<Texture>(static_cast<ContentID::Type>(diffuse));
 }

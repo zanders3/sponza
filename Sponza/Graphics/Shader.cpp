@@ -9,7 +9,8 @@ D3D10_INPUT_ELEMENT_DESC Shader::s_layout[] =
 	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,  D3D10_INPUT_PER_VERTEX_DATA, 0 },
 	{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D10_INPUT_PER_VERTEX_DATA, 0 },
 	{ "TANGENT",  0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 24, D3D10_INPUT_PER_VERTEX_DATA, 0 },
-	{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,	  0, 36, D3D10_INPUT_PER_VERTEX_DATA, 0 }
+	{ "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 36, D3D10_INPUT_PER_VERTEX_DATA, 0 },
+	{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,	  0, 48, D3D10_INPUT_PER_VERTEX_DATA, 0 }
 };
 
 Shader::Shader() :
@@ -73,7 +74,7 @@ void Shader::Load(istream& input)
 			D3D10_PASS_DESC passDesc;
 			pPass->GetDesc(&passDesc);
 
-			V(m_pDevice->CreateInputLayout(s_layout, 4, passDesc.pIAInputSignature, passDesc.IAInputSignatureSize, &pLayout));
+			V(m_pDevice->CreateInputLayout(s_layout, 5, passDesc.pIAInputSignature, passDesc.IAInputSignatureSize, &pLayout));
 
 			m_passes.push_back(std::unique_ptr<ShaderPass>(new ShaderPass(m_pDevice, pPass, pLayout)));
 		}

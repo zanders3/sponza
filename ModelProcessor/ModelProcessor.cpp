@@ -10,17 +10,19 @@ using namespace std;
 struct Vertex
 {
 	Vertex() {}
-	Vertex(const aiVector3D& position, const aiVector3D& normal, const aiVector3D& tangent, const aiVector3D& texCoord) :
+	Vertex(const aiVector3D& position, const aiVector3D& normal, const aiVector3D& tangent, const aiVector3D& binormal, const aiVector3D& texCoord) :
 		mPosition(position),
 		mNormal(normal),
 		mTangent(tangent),
-		mTexCoord(aiVector2D(texCoord.x, texCoord.y))
+		mBiNormal(binormal),
+		mTexCoord(aiVector2D(1.0f - texCoord.y, texCoord.x))
 	{
 	}
 
 	aiVector3D mPosition;
 	aiVector3D mNormal;
 	aiVector3D mTangent;
+	aiVector3D mBiNormal;
 	aiVector2D mTexCoord;
 };
 
@@ -73,11 +75,8 @@ int main(int argc, char ** argv)
 			aiProcess_ImproveCacheLocality		|
 			aiProcess_RemoveRedundantMaterials	|
 			aiProcess_GenSmoothNormals 			|
-			aiProcess_TransformUVCoords			|
 			aiProcess_OptimizeGraph				|
-			aiProcess_RemoveRedundantMaterials	|
 			aiProcess_FindInvalidData			|
-			aiProcess_FlipUVs					|
 			aiProcess_SortByPType				;
 
 		const aiScene* scene = importer.ReadFile( argv[1], flags );
@@ -110,6 +109,12 @@ int main(int argc, char ** argv)
 				
 				size_t diffuse = LoadTexture(pMat, aiTextureType_DIFFUSE);
 				fs.write((char*)&diffuse, sizeof(size_t));
+
+				size_t normal = LoadTexture(pMat, aiTextureType_NORMALS);
+				if (normal == 0)
+					normal = LoadTexture(pMat, aiTextureType_HEIGHT);
+
+				fs.write((char*)&normal, sizeof(size_t));
 			}
 
 			//---------------------------------------------------
@@ -137,7 +142,7 @@ int main(int argc, char ** argv)
 				Vertex * pVertices = new Vertex[pMesh->mNumVertices];
 				for (size_t j = 0; j<pMesh->mNumVertices; ++j)
 				{
-					pVertices[j] = Vertex(pMesh->mVertices[j], pMesh->mNormals[j], pMesh->mTangents[j], pMesh->mTextureCoords[0][j]);
+					pVertices[j] = Vertex(pMesh->mVertices[j], pMesh->mNormals[j], pMesh->mTangents[j], pMesh->mBitangents[j], pMesh->mTextureCoords[0][j]);
 				}
 
 				fs.write((char*)pVertices, sizeof(Vertex)*pMesh->mNumVertices);

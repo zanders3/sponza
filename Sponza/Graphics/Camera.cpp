@@ -49,7 +49,7 @@ void Camera::Update(float dt)
 //--------------------------------------------------------------------------------------
 void CALLBACK Camera::OnKeyboard( UINT nChar, bool bKeyDown, bool bAltDown, void* pUserContext )
 {
-	float value = bKeyDown ? 100.0f : 0.0f;
+	float value = bKeyDown ? 300.0f : 0.0f;
 
     switch( nChar )
     {

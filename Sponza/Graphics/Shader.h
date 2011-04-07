@@ -40,5 +40,5 @@ private:
 	ID3D10EffectMatrixVariable *m_pWorld, *m_pView, *m_pProjection;
 
 	static std::vector<Shader*> s_shaderList;
-	static D3D10_INPUT_ELEMENT_DESC s_layout[4];
+	static D3D10_INPUT_ELEMENT_DESC s_layout[5];
 };

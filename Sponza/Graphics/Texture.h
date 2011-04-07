@@ -14,12 +14,15 @@ public:
 	};
 
 	Texture();
+	Texture(ID3D10Device* pDevice, D3DCOLOR pixel);
 	~Texture();
 
 	void Load(std::istream& input);
-
 	void Bind(const BindType& type);
 
 private:
-	ID3D10ShaderResourceView* m_pTexture;
+	void CreatePixelTexture(D3DCOLOR color);
+
+	ID3D10ShaderResourceView* m_pTextureView;
+	ID3D10Texture2D*		  m_pTexture;
 };

@@ -27,8 +27,7 @@ namespace Contenter
 
                 if (args.Length == 0)
                 {
-                    PrintHelp();
-                    return;
+                    args = new string[] { "listen" };
                 }
 
                 // Load the configuration file

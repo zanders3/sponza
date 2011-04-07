@@ -20,7 +20,7 @@ void Game::LoadContent( ID3D10Device* pd3dDevice, int width, int height )
 {
 	m_content.SetDevice(pd3dDevice);
 
-	m_model = m_content.Get<Model>(ContentID::SPONZA_ATRIUM);
+	m_model = m_content.Get<Model>(ContentID::SPONZA);
 	m_shader = m_content.Get<Shader>(ContentID::BLANKSHADER);
 }
 
