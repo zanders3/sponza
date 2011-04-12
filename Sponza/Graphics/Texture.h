@@ -15,12 +15,15 @@ public:
 
 	Texture();
 	Texture(ID3D10Device* pDevice, D3DCOLOR pixel);
-	~Texture();
+	virtual ~Texture();
 
 	void Load(std::istream& input);
 	void Bind(const BindType& type);
 
-private:
+	static Texture* GetDiffuseDefault(ID3D10Device* pDevice);
+	static Texture* GetNormalDefault(ID3D10Device* pDevice);
+
+protected:
 	void CreatePixelTexture(D3DCOLOR color);
 
 	ID3D10ShaderResourceView* m_pTextureView;

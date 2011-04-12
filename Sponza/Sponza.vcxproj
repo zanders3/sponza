@@ -127,13 +127,18 @@
     <ClInclude Include="DXUT\Core\DXUTenum.h" />
     <ClInclude Include="DXUT\Core\DXUTmisc.h" />
     <ClInclude Include="Graphics\Camera.h" />
+    <ClInclude Include="Graphics\DepthTexture.h" />
     <ClInclude Include="Graphics\Material.h" />
     <ClInclude Include="Graphics\Model.h" />
+    <ClInclude Include="Graphics\RenderTexture.h" />
+    <ClInclude Include="Graphics\ScreenQuad.h" />
     <ClInclude Include="Graphics\Shader.h" />
     <ClInclude Include="Graphics\Texture.h" />
     <ClInclude Include="Net\Socket.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Scene\Renderer.h" />
+    <ClInclude Include="Scene\SceneList.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Thread\Mutex.h" />
     <ClInclude Include="Thread\Thread.h" />
@@ -145,12 +150,17 @@
     <ClCompile Include="DXUT\Core\DXUTmisc.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Graphics\Camera.cpp" />
+    <ClCompile Include="Graphics\DepthTexture.cpp" />
     <ClCompile Include="Graphics\Material.cpp" />
     <ClCompile Include="Graphics\Model.cpp" />
+    <ClCompile Include="Graphics\RenderTexture.cpp" />
+    <ClCompile Include="Graphics\ScreenQuad.cpp" />
     <ClCompile Include="Graphics\Shader.cpp" />
     <ClCompile Include="Graphics\Texture.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Net\Socket.cpp" />
+    <ClCompile Include="Scene\Renderer.cpp" />
+    <ClCompile Include="Scene\SceneList.cpp" />
     <ClCompile Include="stdafx.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>

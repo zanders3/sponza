@@ -6,7 +6,7 @@
 #include "Graphics/Texture.h"
 #include "Graphics/Material.h"
 
-class Vertex
+struct Vertex
 {
 	D3DXVECTOR3 mPosition;
 	D3DXVECTOR3 mNormal;
@@ -15,9 +15,13 @@ class Vertex
 	D3DXVECTOR2 mTexCoord;
 };
 
+class Model;
+
 class Mesh
 {
 public:
+	friend Model;
+
 	Mesh();
 	~Mesh();
 

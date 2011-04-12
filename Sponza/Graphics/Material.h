@@ -13,8 +13,6 @@ public:
 	Texture* mDiffuse;
 	Texture* mNormal;
 
+	// Binds the textures to the device
 	void Bind();
-
-	Texture* Material::GetDiffuseDefault(ID3D10Device* pDevice);
-	Texture* Material::GetNormalDefault(ID3D10Device* pDevice);
 };

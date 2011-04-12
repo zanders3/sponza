@@ -91,3 +91,19 @@ void Texture::Bind(const BindType& type)
 {
 	m_pDevice->PSSetShaderResources((UINT)type, 1, &m_pTextureView);
 }
+
+//----------------------------------------------------------------------------------------
+
+Texture* Texture::GetDiffuseDefault(ID3D10Device* pDevice)
+{
+	static Texture texture(pDevice, D3DCOLOR_ARGB(255, 255, 0, 255));
+
+	return &texture;
+}
+
+Texture* Texture::GetNormalDefault(ID3D10Device* pDevice)
+{
+	static Texture texture(pDevice, D3DCOLOR_RGBA(255, 128, 128, 255));
+
+	return &texture;
+}

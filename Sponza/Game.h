@@ -5,6 +5,8 @@
 #include "Graphics\Model.h"
 #include "Graphics\Shader.h"
 #include "Graphics\Camera.h"
+#include "Scene\Renderer.h"
+#include "Scene\SceneList.h"
 
 class Game
 {
@@ -17,9 +19,9 @@ public:
 	void Update( double fTime, float fElapsedTime ); 
 
 private:
-	ContentLoader m_content;
-	Camera		  m_camera;
+	ContentLoader	m_content;
+	Camera			m_camera;
 
-	Model*		  m_model;
-	Shader*		  m_shader;
+	SceneListPtr	m_scene;
+	RendererPtr		m_renderer;
 };

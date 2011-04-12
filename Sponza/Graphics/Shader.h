@@ -3,6 +3,7 @@
 #include "Content/ContentItem.h"
 #include <fstream>
 #include <vector>
+#include <array>
 
 class ShaderPass
 {
@@ -26,7 +27,7 @@ public:
 
 	void Load(std::istream& input);
 
-	inline void Bind(int pass) { m_passes[pass]->Bind();  }
+	inline void Bind(int pass) { m_passes[pass]->Bind(); }
 	inline int  NumPasses()	   { return m_passes.size(); }
 
 	void SetWorld(const D3DXMATRIX& world);
@@ -34,11 +35,11 @@ public:
 	static void SetProjection(const D3DXMATRIX& projection);
 
 private:
-	ID3D10Effect*			m_pEffect;
-	std::vector<std::unique_ptr<ShaderPass>> m_passes;
+	ID3D10Effect*									m_pEffect;
+	std::vector<std::unique_ptr<ShaderPass>>		m_passes;
 
 	ID3D10EffectMatrixVariable *m_pWorld, *m_pView, *m_pProjection;
 
-	static std::vector<Shader*> s_shaderList;
-	static D3D10_INPUT_ELEMENT_DESC s_layout[5];
+	static std::vector<Shader*>						s_shaderList;
+	static D3D10_INPUT_ELEMENT_DESC					s_layout[5];
 };

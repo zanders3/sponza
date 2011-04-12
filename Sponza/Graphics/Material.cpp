@@ -6,22 +6,6 @@ using namespace std;
 
 //----------------------------------------------------------------------------------------
 
-Texture* Material::GetDiffuseDefault(ID3D10Device* pDevice)
-{
-	static Texture texture(pDevice, D3DCOLOR_ARGB(255, 255, 0, 255));
-
-	return &texture;
-}
-
-Texture* Material::GetNormalDefault(ID3D10Device* pDevice)
-{
-	static Texture texture(pDevice, D3DCOLOR_RGBA(255, 128, 128, 255));
-
-	return &texture;
-}
-
-//----------------------------------------------------------------------------------------
-
 void Material::Load(std::istream& input, ContentLoader* pLoader)
 {
 	ContentID::Type diffuse;
@@ -30,8 +14,8 @@ void Material::Load(std::istream& input, ContentLoader* pLoader)
 	ContentID::Type normal;
 	input.read((char*)&normal, sizeof(size_t));
 
-	mDiffuse = diffuse == 0 ? GetDiffuseDefault(pLoader->GetDevice()) : pLoader->Get<Texture>(diffuse);
-	mNormal  = normal  == 0 ? GetNormalDefault(pLoader->GetDevice())  : pLoader->Get<Texture>(normal );
+	mDiffuse = diffuse == 0 ? Texture::GetDiffuseDefault(pLoader->GetDevice()) : pLoader->Get<Texture>(diffuse);
+	mNormal  = normal  == 0 ? Texture::GetNormalDefault(pLoader->GetDevice())  : pLoader->Get<Texture>(normal );
 }
 
 void Material::Bind()

@@ -3923,6 +3923,14 @@ HRESULT DXUTCreate3DEnvironment10( ID3D10Device* pd3d10DeviceFromApp )
     CD3D10EnumAdapterInfo* pAdapterInfo = pd3dEnum->GetAdapterInfo( pNewDeviceSettings->d3d10.AdapterOrdinal );
     DXUTUpdateD3D10DeviceStats( pNewDeviceSettings->d3d10.DriverType, &pAdapterInfo->AdapterDesc );
 
+	// Setup the render target view and viewport
+    hr = DXUTSetupD3D10Views( pd3d10Device, pNewDeviceSettings );
+    if( FAILED( hr ) )
+    {
+        DXUT_ERR( L"DXUTSetupD3D10Views", hr );
+        return DXUTERR_CREATINGDEVICEOBJECTS;
+    }
+
     // Call the app's device created callback if non-NULL
     const DXGI_SURFACE_DESC* pBackBufferSurfaceDesc = DXUTGetDXGIBackBufferSurfaceDesc();
     GetDXUTState().SetInsideDeviceCallback( true );
@@ -3940,14 +3948,6 @@ HRESULT DXUTCreate3DEnvironment10( ID3D10Device* pd3d10DeviceFromApp )
         return ( hr == DXUTERR_MEDIANOTFOUND ) ? DXUTERR_MEDIANOTFOUND : DXUTERR_CREATINGDEVICEOBJECTS;
     }
     GetDXUTState().SetDeviceObjectsCreated( true );
-
-    // Setup the render target view and viewport
-    hr = DXUTSetupD3D10Views( pd3d10Device, pNewDeviceSettings );
-    if( FAILED( hr ) )
-    {
-        DXUT_ERR( L"DXUTSetupD3D10Views", hr );
-        return DXUTERR_CREATINGDEVICEOBJECTS;
-    }
 
     // Create performance counters
     //DXUTCreateD3D10Counters( pd3d10Device );

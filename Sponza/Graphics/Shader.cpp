@@ -74,7 +74,14 @@ void Shader::Load(istream& input)
 			D3D10_PASS_DESC passDesc;
 			pPass->GetDesc(&passDesc);
 
-			V(m_pDevice->CreateInputLayout(s_layout, 5, passDesc.pIAInputSignature, passDesc.IAInputSignatureSize, &pLayout));
+			if (passDesc.pIAInputSignature != nullptr)
+			{
+				V(m_pDevice->CreateInputLayout(s_layout, 5, passDesc.pIAInputSignature, passDesc.IAInputSignatureSize, &pLayout));
+			}
+			else
+			{
+				pLayout = nullptr;
+			}
 
 			m_passes.push_back(std::unique_ptr<ShaderPass>(new ShaderPass(m_pDevice, pPass, pLayout)));
 		}
