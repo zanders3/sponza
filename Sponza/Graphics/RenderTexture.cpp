@@ -10,18 +10,6 @@ RenderTexture::RenderTexture(ID3D10Device* pDevice, DepthTexture* pDepth)
 	m_pDevice = pDevice;
 	m_pRenderTargetView = DXUTGetD3D10RenderTargetView();
 	m_isBaseRenderView = true;
-
-	//D3D10_RENDER_TARGET_VIEW_DESC rtDesc;
-	//m_pRenderTargetView->GetDesc(&rtDesc);
-
-	// Create the shader-resource view
-	/*D3D10_SHADER_RESOURCE_VIEW_DESC srDesc;
-	srDesc.Format = rtDesc.Format;
-	srDesc.ViewDimension = D3D10_SRV_DIMENSION_TEXTURE2D;
-	srDesc.Texture2D.MostDetailedMip = 0;
-	srDesc.Texture2D.MipLevels = 1;
-
-	V(pDevice->CreateShaderResourceView( m_pTexture, &srDesc, &m_pTextureView ));*/
 }
 
 RenderTexture::RenderTexture(ID3D10Device* pDevice, DepthTexture* pDepth, DXGI_FORMAT format, int width, int height)

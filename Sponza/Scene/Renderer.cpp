@@ -7,6 +7,7 @@ Renderer::Renderer(ID3D10Device* pDevice, Shader* pShader, SceneListPtr sceneLis
 	m_pShader(pShader),
 	m_frameDepth(pDevice),
 	m_frameBuffer(pDevice, &m_frameDepth),
+	m_normalBuffer(pDevice, &m_frameDepth, DXGI_FORMAT_B8G8R8A8_UNORM, DXUTGetWindowWidth(), DXUTGetWindowHeight()),
 	m_lightBuffer(pDevice, &m_frameDepth, DXGI_FORMAT_B8G8R8A8_UNORM, DXUTGetWindowWidth(), DXUTGetWindowHeight()),
 	m_sceneList(sceneList)
 {
@@ -20,7 +21,18 @@ void Renderer::Draw()
 		PIXEvent(L"Normal Pass");
 		m_lightBuffer.BindRT();
 		m_lightBuffer.Clear(clearColor);
-		DrawPass(Normals);
+
+		m_pShader->Bind(Pass::Normals);
+		m_sceneList->Draw(m_pShader);
+	}
+
+	{
+		PIXEvent(L"Lights Pass");
+		//m_lightBuffer.BindRT();
+		//m_lightBuffer.Clear(clearColor);
+
+		m_pShader->Bind(Pass::Lights);
+		m_sceneList->DrawLights();
 	}
 
 	{
@@ -28,7 +40,7 @@ void Renderer::Draw()
 		m_frameBuffer.BindRT();
 		m_frameBuffer.Clear(clearColor);
 
-		m_pShader->Bind(1);
+		m_pShader->Bind(Pass::Color);
 		m_lightBuffer.Bind(Texture::Diffuse);
 		ScreenQuad::Draw(m_pDevice);
 
@@ -38,7 +50,5 @@ void Renderer::Draw()
 
 void Renderer::DrawPass(Pass pass)
 {
-	m_pass = pass;
-	m_pShader->Bind(pass);
-	m_sceneList->Draw(m_pShader);
+	
 }

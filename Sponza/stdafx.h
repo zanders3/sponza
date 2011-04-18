@@ -38,3 +38,5 @@ public:
 #define PIXEvent(name) __noop
 
 #endif
+
+ID3D10Device* GetDevice();

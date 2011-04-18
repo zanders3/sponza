@@ -17,7 +17,7 @@ D3DXVECTOR2 Camera::m_Dir = D3DXVECTOR2( 0.0f, 0.0f );
 Camera::Camera()
 {
 	float fAspect = static_cast<float>( 640.0f ) / static_cast<float>( 480.0f );
-    D3DXMatrixPerspectiveFovLH( &m_Projection, D3DX_PI * 0.25f, fAspect, 0.1f, 10000.0f );
+    D3DXMatrixPerspectiveFovLH( &m_Projection, D3DX_PI * 0.25f, fAspect, 100.0f, 3000.0f );
 }
 
 float lastDt = 0.0f;

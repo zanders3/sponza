@@ -5,6 +5,7 @@
 #include "Game.h"
 
 Game* game;
+ID3D10Device* pDevice;
 
 bool CALLBACK IsD3D10DeviceAcceptable( UINT Adapter, UINT Output, D3D10_DRIVER_TYPE DeviceType,
                                        DXGI_FORMAT BufferFormat, bool bWindowed, void* pUserContext )
@@ -15,6 +16,7 @@ bool CALLBACK IsD3D10DeviceAcceptable( UINT Adapter, UINT Output, D3D10_DRIVER_T
 HRESULT CALLBACK OnD3D10CreateDevice( ID3D10Device* pd3dDevice, const DXGI_SURFACE_DESC* pBufferSurfaceDesc,
                                       void* pUserContext )
 {
+	pDevice = pd3dDevice;
 	game->LoadContent(pd3dDevice, pBufferSurfaceDesc->Width, pBufferSurfaceDesc->Height);
 
 	return S_OK;
@@ -30,6 +32,16 @@ void CALLBACK OnFrameMove( double fTime, float fElapsedTime, void* pUserContext 
 	game->Update( fTime, fElapsedTime );
 }
 
+HRESULT CALLBACK OnD3D10Resized( ID3D10Device* pd3dDevice, IDXGISwapChain *pSwapChain, const DXGI_SURFACE_DESC* pBackBufferSurfaceDesc, void* pUserContext )
+{
+	return S_OK;
+}
+
+ID3D10Device* GetDevice()
+{
+	return pDevice;
+}
+
 int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdLine, int nCmdShow )
 {
     // Enable run-time memory check for debug builds.
@@ -40,6 +52,7 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 	DXUTSetCallbackD3D10DeviceAcceptable( IsD3D10DeviceAcceptable );
 	DXUTSetCallbackD3D10DeviceCreated( OnD3D10CreateDevice );
 	DXUTSetCallbackD3D10FrameRender( OnD3D10FrameRender );
+	DXUTSetCallbackD3D10SwapChainResized( OnD3D10Resized );
 	DXUTSetCallbackFrameMove( OnFrameMove );
 
 	try

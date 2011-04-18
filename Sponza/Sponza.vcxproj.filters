@@ -103,6 +103,9 @@
     <ClInclude Include="Graphics\ScreenQuad.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\Lights.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXUT\Core\DXUT.cpp">
@@ -153,6 +156,9 @@
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\ScreenQuad.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Lights.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
   </ItemGroup>

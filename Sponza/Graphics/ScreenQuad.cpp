@@ -49,5 +49,6 @@ void ScreenQuad::Draw(ID3D10Device* pDevice)
 {
 	static ScreenQuad quad(pDevice);
 
+	pDevice->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
 	quad.Mesh::Draw(pDevice);
 }

@@ -15,13 +15,9 @@ struct Vertex
 	D3DXVECTOR2 mTexCoord;
 };
 
-class Model;
-
 class Mesh
 {
 public:
-	friend Model;
-
 	Mesh();
 	~Mesh();
 

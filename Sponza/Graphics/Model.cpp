@@ -43,7 +43,6 @@ void Model::Draw()
 	m_pDevice->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	for (size_t i = 0; i<mNumMeshes; ++i)
 	{
-		mMeshes[i].mMaterial->Bind();
 		mMeshes[i].Draw(m_pDevice);
 	}
 }
@@ -118,6 +117,8 @@ void Mesh::Create(Vertex* pVertex, size_t numVertices, size_t* pIndices, size_t 
 
 void Mesh::Draw(ID3D10Device* pDevice)
 {
+	if (mMaterial) mMaterial->Bind();
+
 	pDevice->IASetIndexBuffer(mIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	UINT stride = sizeof(Vertex);
 	UINT offset = 0;

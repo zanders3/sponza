@@ -14,7 +14,7 @@ public:
 	enum Pass
 	{
 		Normals,
-		LightPrePass,
+		Lights,
 		Color
 	};
 
@@ -33,6 +33,7 @@ private:
 	DepthTexture	m_frameDepth;
 
 	RenderTexture	m_frameBuffer;
+	RenderTexture	m_normalBuffer;
 	RenderTexture	m_lightBuffer;
 	
 	SceneListPtr	m_sceneList;
