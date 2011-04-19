@@ -5,6 +5,7 @@
 
 #include "Graphics/Texture.h"
 #include "Graphics/Material.h"
+#include "Graphics/InputLayout.h"
 
 struct Vertex
 {
@@ -48,4 +49,6 @@ private:
 
 	size_t		mNumMeshes;
 	Mesh *		mMeshes;
+
+	static D3D10_INPUT_ELEMENT_DESC	s_layoutDesc[5];
 };

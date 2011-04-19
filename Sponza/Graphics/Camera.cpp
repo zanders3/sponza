@@ -2,8 +2,8 @@
 #include "Camera.h"
 
 // Initialize the view matrix
-D3DXVECTOR3 Camera::m_Eye = D3DXVECTOR3( 0.0f, 3.0f, -6.0f );
-D3DXVECTOR3 Camera::m_At = D3DXVECTOR3( 0.0f, 1.0f, 0.0f );
+D3DXVECTOR3 Camera::m_Eye = D3DXVECTOR3( 0.0f, 30.0f, -200.0f );
+D3DXVECTOR3 Camera::m_At = D3DXVECTOR3( 0.0f, 0.0f, 0.0f );
 D3DXVECTOR3 Camera::m_Up = D3DXVECTOR3( 0.0f, 1.0f, 0.0f );
 
 int Camera::m_mouseX = 0;

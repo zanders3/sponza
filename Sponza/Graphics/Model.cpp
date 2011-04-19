@@ -1,8 +1,18 @@
 #include "stdafx.h"
 #include "Model.h"
 #include "Content/ContentLoader.h"
+#include "Graphics/Shader.h"
 
 using namespace std;
+
+D3D10_INPUT_ELEMENT_DESC Model::s_layoutDesc[] =
+{
+	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,  D3D10_INPUT_PER_VERTEX_DATA, 0 },
+	{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D10_INPUT_PER_VERTEX_DATA, 0 },
+	{ "TANGENT",  0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 24, D3D10_INPUT_PER_VERTEX_DATA, 0 },
+	{ "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 36, D3D10_INPUT_PER_VERTEX_DATA, 0 },
+	{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,	  0, 48, D3D10_INPUT_PER_VERTEX_DATA, 0 }
+};
 
 Model::Model() :
 	mMeshes(nullptr),
@@ -40,6 +50,9 @@ void Model::Load(std::istream& input)
 
 void Model::Draw()
 {
+	static InputLayout inputLayout(reinterpret_cast<D3D10_INPUT_ELEMENT_DESC*>(&s_layoutDesc), 5);
+	inputLayout.Bind();
+
 	m_pDevice->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
 	for (size_t i = 0; i<mNumMeshes; ++i)
 	{

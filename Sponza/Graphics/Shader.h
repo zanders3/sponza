@@ -1,6 +1,9 @@
 #pragma once
 #include "stdafx.h"
+
 #include "Content/ContentItem.h"
+#include "Graphics/InputLayout.h"
+
 #include <fstream>
 #include <vector>
 #include <array>
@@ -8,15 +11,19 @@
 class ShaderPass
 {
 public:
-	ShaderPass(ID3D10Device* pDevice, ID3D10EffectPass* pPass, ID3D10InputLayout* pLayout);
+	friend InputLayout;
+
+	ShaderPass(ID3D10EffectPass* pPass);
 	~ShaderPass();
 
 	void Bind();
 
 private:
-	ID3D10Device*		m_pDevice;
 	ID3D10EffectPass*	m_pPass;
-	ID3D10InputLayout*	m_pLayout;
+	size_t				m_id;
+
+	static size_t		s_maxID;
+	static ShaderPass*	s_pCurrent;
 };
 
 class Shader : public ContentItem
@@ -27,7 +34,7 @@ public:
 
 	void Load(std::istream& input);
 
-	inline void Bind(int pass) { m_passes[pass]->Bind(); }
+	inline void Bind(int pass) { m_passes[pass].Bind(); }
 	inline int  NumPasses()	   { return m_passes.size(); }
 
 	void SetWorld(const D3DXMATRIX& world);
@@ -36,10 +43,9 @@ public:
 
 private:
 	ID3D10Effect*									m_pEffect;
-	std::vector<std::unique_ptr<ShaderPass>>		m_passes;
+	std::vector<ShaderPass>							m_passes;
 
 	ID3D10EffectMatrixVariable *m_pWorld, *m_pView, *m_pProjection;
 
 	static std::vector<Shader*>						s_shaderList;
-	static D3D10_INPUT_ELEMENT_DESC					s_layout[5];
 };

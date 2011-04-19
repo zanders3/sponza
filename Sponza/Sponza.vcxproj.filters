@@ -26,6 +26,9 @@
     <Filter Include="Scene">
       <UniqueIdentifier>{41aa920e-a115-4f05-9625-46e735303d06}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Graphics\Particles">
+      <UniqueIdentifier>{1ee50e93-fb87-4dbf-b61f-7f7ce4cfe5f2}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="small.ico">
@@ -103,8 +106,14 @@
     <ClInclude Include="Graphics\ScreenQuad.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Lights.h">
+    <ClInclude Include="Graphics\InputLayout.h">
       <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Particles\Billboard.h">
+      <Filter>Graphics\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Lights.h">
+      <Filter>Graphics\Particles</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -158,8 +167,14 @@
     <ClCompile Include="Graphics\ScreenQuad.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Lights.cpp">
+    <ClCompile Include="Graphics\InputLayout.cpp">
       <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Particles\Billboard.cpp">
+      <Filter>Graphics\Particles</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Lights.cpp">
+      <Filter>Graphics\Particles</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

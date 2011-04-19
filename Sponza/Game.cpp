@@ -27,7 +27,9 @@ void Game::LoadContent( ID3D10Device* pd3dDevice, int width, int height )
 	m_scene->Add(m_content.Get<Model>(ContentID::SPONZA), zero);
 
 	Light* light = m_scene->CreateLight();
-	light->SetColor(D3DXVECTOR3(1.0f, 1.0f, 1.0f));
+	light->SetSize(200.0f);
+	light->SetPosition(D3DXVECTOR3(0.0f, 20.0f, 0.0f));
+	light->SetColor(D3DCOLOR_ARGB(255,255,255,255));
 }
 
 void Game::Render( ID3D10Device* pd3dDevice, double fTime, float fElapsedTime )

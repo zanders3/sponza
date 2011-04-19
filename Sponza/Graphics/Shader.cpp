@@ -3,15 +3,17 @@
 
 using namespace std;
 
+//-------------------------------------------------
+// Statics
+//-------------------------------------------------
+
 std::vector<Shader*> Shader::s_shaderList;
-D3D10_INPUT_ELEMENT_DESC Shader::s_layout[] =
-{
-	{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,  D3D10_INPUT_PER_VERTEX_DATA, 0 },
-	{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D10_INPUT_PER_VERTEX_DATA, 0 },
-	{ "TANGENT",  0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 24, D3D10_INPUT_PER_VERTEX_DATA, 0 },
-	{ "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 36, D3D10_INPUT_PER_VERTEX_DATA, 0 },
-	{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,	  0, 48, D3D10_INPUT_PER_VERTEX_DATA, 0 }
-};
+size_t				 ShaderPass::s_maxID = 0;
+ShaderPass*			ShaderPass::s_pCurrent = nullptr;
+
+//-------------------------------------------------
+// Shader Class Implementation
+//-------------------------------------------------
 
 Shader::Shader() :
 	m_pEffect(nullptr),
@@ -65,25 +67,11 @@ void Shader::Load(istream& input)
 	{
 		ID3D10EffectTechnique* pTechnique = m_pEffect->GetTechniqueByIndex(0);
 		D3D10_TECHNIQUE_DESC desc;
-		ID3D10InputLayout* pLayout;
 		pTechnique->GetDesc(&desc);
 
 		for (size_t i = 0; i<desc.Passes; ++i)
 		{
-			ID3D10EffectPass* pPass = pTechnique->GetPassByIndex(i);
-			D3D10_PASS_DESC passDesc;
-			pPass->GetDesc(&passDesc);
-
-			if (passDesc.pIAInputSignature != nullptr)
-			{
-				V(m_pDevice->CreateInputLayout(s_layout, 5, passDesc.pIAInputSignature, passDesc.IAInputSignatureSize, &pLayout));
-			}
-			else
-			{
-				pLayout = nullptr;
-			}
-
-			m_passes.push_back(std::unique_ptr<ShaderPass>(new ShaderPass(m_pDevice, pPass, pLayout)));
+			m_passes.push_back(ShaderPass(pTechnique->GetPassByIndex(i)));
 		}
 	}
 }
@@ -107,22 +95,22 @@ void Shader::SetProjection(const D3DXMATRIX& projection)
 		s_shaderList[i]->m_pProjection->SetMatrix((float*)&projection);
 }
 
-//----------------------------------------------------------------------------
+//-------------------------------------------------
+// Shader Pass Class Implementation
+//-------------------------------------------------
 
-ShaderPass::ShaderPass(ID3D10Device* pDevice, ID3D10EffectPass* pPass, ID3D10InputLayout* pLayout) :
-	m_pDevice(pDevice),
+ShaderPass::ShaderPass(ID3D10EffectPass* pPass) :
 	m_pPass(pPass),
-	m_pLayout(pLayout)
+	m_id(s_maxID++)
 {
 }
 
 ShaderPass::~ShaderPass()
 {
-	SAFE_RELEASE(m_pLayout);
 }
 
 void ShaderPass::Bind()
 {
-	m_pDevice->IASetInputLayout(m_pLayout);
+	s_pCurrent = this;
 	m_pPass->Apply(0);
 }
