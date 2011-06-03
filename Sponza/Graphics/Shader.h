@@ -7,6 +7,7 @@
 #include <fstream>
 #include <vector>
 #include <array>
+#include <memory>
 
 class ShaderPass
 {
@@ -24,6 +25,17 @@ private:
 
 	static size_t		s_maxID;
 	static ShaderPass*	s_pCurrent;
+};
+
+class EffectPool : public ContentItem
+{
+public:
+	EffectPool();
+	~EffectPool();
+
+	void Load(std::istream& input);
+
+	ID3D10EffectPool*	m_pool;
 };
 
 class Shader : public ContentItem
@@ -46,6 +58,5 @@ private:
 	std::vector<ShaderPass>							m_passes;
 
 	ID3D10EffectMatrixVariable *m_pWorld, *m_pView, *m_pProjection;
-
-	static std::vector<Shader*>						s_shaderList;
+	static std::map<size_t, EffectPool*> s_effectPools;
 };

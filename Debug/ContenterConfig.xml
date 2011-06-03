@@ -13,6 +13,10 @@
 	  <FileType>*.fx</FileType>
 	</BuildTarget>
 	<BuildTarget>
+	  <Program>ShaderProcessor.exe</Program>
+	  <FileType>*.fxh</FileType>
+	</BuildTarget>
+	<BuildTarget>
 	  <Program>TextureProcessor.exe</Program>
 	  <FileType>*.tga</FileType>
 	</BuildTarget>

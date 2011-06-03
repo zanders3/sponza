@@ -19,9 +19,8 @@ void Renderer::Draw()
 
 	{
 		PIXEvent(L"Normal Pass");
-		//m_lightBuffer.BindRT();
-		//m_lightBuffer.Clear(clearColor);
-		m_frameBuffer.Clear(clearColor);
+		m_lightBuffer.BindRT();
+		m_lightBuffer.Clear(clearColor);
 
 		m_pShader->Bind(Pass::Normals);
 		m_sceneList->Draw(m_pShader);
@@ -29,24 +28,24 @@ void Renderer::Draw()
 
 	{
 		PIXEvent(L"Lights Pass");
-		//m_frameBuffer.BindRT();
-		//m_lightBuffer.Clear(clearColor);
+		m_frameBuffer.BindRT();
+		m_frameBuffer.Clear(clearColor);
 
 		m_pShader->Bind(Pass::Lights);
+		m_lightBuffer.Bind(Texture::Diffuse);
 		m_sceneList->DrawLights();
 	}
 
-	{
-		/*PIXEvent(L"Fullscreen");
+	/*{
+		PIXEvent(L"Fullscreen");
 		m_frameBuffer.BindRT();
-		m_frameBuffer.Clear(clearColor);
 
 		m_pShader->Bind(Pass::Color);
 		m_lightBuffer.Bind(Texture::Diffuse);
 		ScreenQuad::Draw(m_pDevice);
 
-		Texture::GetDiffuseDefault(m_pDevice)->Bind(Texture::Diffuse);*/
-	}
+		Texture::GetDiffuseDefault(m_pDevice)->Bind(Texture::Diffuse);
+	}*/
 }
 
 void Renderer::DrawPass(Pass pass)

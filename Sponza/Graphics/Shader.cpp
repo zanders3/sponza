@@ -1,15 +1,49 @@
 #include "stdafx.h"
 #include "Graphics/Shader.h"
+#include "Content/ContentLoader.h"
 
 using namespace std;
 
 //-------------------------------------------------
 // Statics
 //-------------------------------------------------
-
-std::vector<Shader*> Shader::s_shaderList;
-size_t				 ShaderPass::s_maxID = 0;
+std::map<size_t, EffectPool*> Shader::s_effectPools;
+size_t				ShaderPass::s_maxID = 0;
 ShaderPass*			ShaderPass::s_pCurrent = nullptr;
+
+//-------------------------------------------------
+// Effect Pool Class Implementation
+//-------------------------------------------------
+
+EffectPool::EffectPool() :
+	m_pool(nullptr)
+{
+}
+
+EffectPool::~EffectPool()
+{
+	SAFE_RELEASE(m_pool);
+}
+
+void EffectPool::Load(std::istream& input)
+{
+	//Read file into memory
+	char * data;
+	size_t length;
+	{
+		input.seekg(0, ios::end);
+		length = static_cast<size_t>(input.tellg());
+		input.seekg(0, ios::beg);
+
+		data = new char[length];
+		input.read(data, length);
+	}
+
+	//Create effect pool
+	HRESULT hr;
+	V(D3D10CreateEffectPoolFromMemory(data, length, 0, m_pDevice, &m_pool));
+	delete[] data;
+}
 
 //-------------------------------------------------
 // Shader Class Implementation
@@ -36,26 +70,41 @@ void Shader::Load(istream& input)
 		m_pEffect->Release();
 		m_passes.clear();
 	}
-	else
-	{
-		s_shaderList.push_back(this);
-	}
 
 	//Read file into memory
 	char * data;
 	size_t length;
+	size_t headerFileHash;
 	{
 		input.seekg(0, ios::end);
-		length = static_cast<size_t>(input.tellg());
+		length = static_cast<size_t>(input.tellg()) - sizeof(size_t);
 		input.seekg(0, ios::beg);
+
+		input.read((char*)&headerFileHash, sizeof(size_t));
 
 		data = new char[length];
 		input.read(data, length);
 	}
 
+	//Load the effect pool
+	UINT flags = 0;
+	ID3D10EffectPool* pPool = NULL;
+	if (headerFileHash != 0)
+	{
+		flags = D3D10_EFFECT_COMPILE_CHILD_EFFECT;
+
+		auto find = s_effectPools.find(headerFileHash);
+		if (find == s_effectPools.end())
+		{
+			EffectPool* pool = m_pContent->Get<EffectPool>((ContentID::Type)headerFileHash);
+			pPool = pool->m_pool;
+			s_effectPools.insert(std::make_pair(headerFileHash, pool));
+		}
+	}
+
 	//Create effect file
 	HRESULT hr;
-	V(D3D10CreateEffectFromMemory(data, length, 0, m_pDevice, NULL, &m_pEffect));
+	V(D3D10CreateEffectFromMemory(data, length, flags, m_pDevice, pPool, &m_pEffect));
 	delete[] data;
 
 	//Load base effect parameters
@@ -83,16 +132,16 @@ void Shader::SetWorld(const D3DXMATRIX& world)
 
 void Shader::SetView(const D3DXMATRIX& view)
 {
-	size_t size = s_shaderList.size();
+	/*size_t size = s_shaderList.size();
 	for (size_t i = 0; i<size; ++i)
-		s_shaderList[i]->m_pView->SetMatrix((float*)&view);
+		s_shaderList[i]->m_pView->SetMatrix((float*)&view);*/
 }
 
 void Shader::SetProjection(const D3DXMATRIX& projection)
 {
-	size_t size = s_shaderList.size();
+	/*size_t size = s_shaderList.size();
 	for (size_t i = 0; i<size; ++i)
-		s_shaderList[i]->m_pProjection->SetMatrix((float*)&projection);
+		s_shaderList[i]->m_pProjection->SetMatrix((float*)&projection);*/
 }
 
 //-------------------------------------------------

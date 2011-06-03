@@ -20,10 +20,10 @@ syntax: glob
 *.exp
 *.lib
 Art\*.*
-Content\*.*
-Content\textures\*.*
+Content\
 Sponza\Debug\*.*
 Sponza\Release\*.*
+
 *.opensdf
 Contenter\obj\x86\Debug\Contenter.csproj.FileListAbsolute.txt
 **\obj\x86\**

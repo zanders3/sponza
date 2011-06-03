@@ -1,7 +1,7 @@
 #pragma once
 //---------------------------------------------------------------------------
 //Auto Generated Contenter Content ID Header
-//Created At: 19.4.11 10:22 pm
+//Created At: 23.5.11 10:11 pm
 //---------------------------------------------------------------------------
 
 struct ContentID
@@ -16,6 +16,7 @@ struct ContentID
         GI_FLAG = 1136596586,
         LION = 153136435,
         LION_DDN = 1324532876,
+        SHADERHEADER = 236977356,
         SPONZA = 1651765612,
         SPONZA_ARCH_DDN = 3087663490,
         SPONZA_ARCH_DIFF = 3087663498,

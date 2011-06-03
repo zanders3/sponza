@@ -1,0 +1,24 @@
+﻿<Window x:Class="Builder.View.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:Model="clr-namespace:Builder.Model"
+        Title="Builder" Height="350" Width="525" Closing="Window_Closing">
+    <DockPanel LastChildFill="True">
+        <TabControl>
+            <TabItem Header="Game Content">
+                <TabItem.Resources>
+                    <HierarchicalDataTemplate DataType="{x:Type Model:ContentItem}" ItemsSource="{Binding Dependencies}">
+                        <TextBlock Text="{Binding ResourcePath}"/>
+                    </HierarchicalDataTemplate>
+                </TabItem.Resources>
+                <TreeView ItemsSource="{Binding Builder.RootContent}"/>
+            </TabItem>
+            <TabItem Header="Output">
+
+            </TabItem>
+            <TabItem Header="Errors">
+
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>
