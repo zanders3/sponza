@@ -5,6 +5,7 @@ using System.Text;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.ComponentModel;
+using System.Runtime.Serialization;
 
 namespace Builder.Model
 {
@@ -21,9 +22,11 @@ namespace Builder.Model
             Failed
         }
 
-        private State m_state;
+        private State m_state = State.Failed;
         [NonSerialized]
-        private BuilderItem m_builder;
+        private Builder m_builder;
+        [NonSerialized]
+        private BuilderItem m_builderItem;
         private string m_resourcePath;
         private string m_outputPath;
 
@@ -36,13 +39,18 @@ namespace Builder.Model
 
         public BuilderItem BuilderItem
         {
-            get { return m_builder; }
-            set { m_builder = value; }
+            get { return m_builderItem; }
+            set { m_builderItem = value; }
         }
 
         public string ResourcePath
         {
             get { return m_resourcePath; }
+        }
+
+        public string ResourceName
+        {
+            get { return m_builder.GetRelativePath(m_resourcePath); }
         }
 
         public string OutputPath
@@ -57,19 +65,26 @@ namespace Builder.Model
         }
         #endregion
 
-        public ContentItem(BuilderItem builder, string resourcePath, string outputPath)
+        public ContentItem(string resourcePath, string outputPath)
         {
-            m_builder = builder;
             m_resourcePath = resourcePath;
             m_outputPath = outputPath;
             Dependencies = new ObservableCollection<ContentItem>();
         }
 
-        public void Validate()
+        public bool Initialize(Builder builder)
+        {
+            m_builder = builder;
+            m_builderItem = builder.GetBuilder(m_resourcePath);
+
+            return m_builderItem != null && File.Exists(m_resourcePath);
+        }
+
+        public ContentItem Validate()
         {
             if (ContentState != State.Building)
             {
-                if (m_builder.UpToDate() &&
+                if (m_builderItem.UpToDate() &&
                     File.Exists(m_resourcePath) &&
                     File.Exists(m_outputPath) &&
                     File.GetLastWriteTime(m_resourcePath) == File.GetLastWriteTime(m_outputPath))
@@ -84,6 +99,7 @@ namespace Builder.Model
                 foreach (ContentItem child in Dependencies)
                     child.Validate();
             }
+            return this;
         }
 
         public void Build()
@@ -92,7 +108,7 @@ namespace Builder.Model
             {
                 ContentState = State.Building;
 
-                m_builder.Build(m_resourcePath, m_outputPath,
+                m_builder.BuildQueue.Build(m_builderItem, m_resourcePath, m_outputPath,
                     (succeeded, dependencies) =>
                     {
                         if (succeeded)
@@ -100,7 +116,7 @@ namespace Builder.Model
                             ContentState = State.Succeeded;
 
                             Dependencies.Clear();
-                            foreach (ContentItem item in Builder.Instance.GetContentItems(dependencies))
+                            foreach (ContentItem item in m_builder.GetContentItems(dependencies))
                             {
                                 Dependencies.Add(item);
                             }
@@ -135,7 +151,5 @@ namespace Builder.Model
         {
             return m_resourcePath.GetHashCode();
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

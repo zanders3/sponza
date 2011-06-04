@@ -28,7 +28,7 @@ namespace Builder.View
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            Model.Builder.Instance.SaveState();
+            ((MainWindowModel)DataContext).Builder.SaveState();
         }
     }
 }

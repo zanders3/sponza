@@ -35,6 +35,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <ApplicationIcon>Icon.ico</ApplicationIcon>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -49,6 +52,9 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="zlib.net">
+      <HintPath>..\..\Libs\zlib\zlib.net.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
@@ -65,8 +71,12 @@
     </Compile>
     <Compile Include="Model\BasePropertyChanged.cs" />
     <Compile Include="Model\Builder.cs" />
-    <Compile Include="Model\BuilderItem.cs" />
-    <Compile Include="Model\ContentItem.cs" />
+    <Compile Include="Model\Build\BuilderItem.cs" />
+    <Compile Include="Model\Build\BuildQueue.cs" />
+    <Compile Include="Model\Build\ContentItem.cs" />
+    <Compile Include="Model\Build\WorkQueue.cs" />
+    <Compile Include="Model\Listen\FolderListener.cs" />
+    <Compile Include="Model\Package\Packager.cs" />
     <Compile Include="ViewModel\Command.cs" />
     <Compile Include="ViewModel\MainWindowModel.cs" />
     <Compile Include="View\MainWindow.xaml.cs">
@@ -97,6 +107,9 @@
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
     <AppDesigner Include="Properties\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Icon.ico" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

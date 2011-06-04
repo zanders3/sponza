@@ -13,12 +13,14 @@ syntax: glob
 *.pdb
 *.ilk
 *.log
-*.dll
 *.sdf
 *.cache
 *.blob
 *.exp
 *.lib
+*.dat
+*.pack
+*.unsucessfulbuild
 Art\*.*
 Content\
 Sponza\Debug\*.*

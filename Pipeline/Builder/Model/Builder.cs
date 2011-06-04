@@ -42,15 +42,16 @@ namespace Builder.Model
     /// Tracks BuilderItems and their supported file extensions.
     /// Tracks the root ContentItem nodes and their dependencies.
     /// </summary>
-    public class Builder
+    public class Builder : BasePropertyChanged
     {
         public const string ConfigFile = "Config.txt";
         public const string StateFile = "State.bin";
+        public const string PackageFile = "Content.pack";
         public const string OutputPath = "\\Out";
         public const string SourcePath = "\\Source";
         public const string BuilderPath = "\\Builders";
 
-        public static readonly Builder Instance = new Builder();
+        private string m_statusText = "Idle";
 
         private string m_outputRoot;
         private string m_sourceRoot;
@@ -60,21 +61,78 @@ namespace Builder.Model
 
         private Dictionary<string, ContentItem> m_contentItems = new Dictionary<string, ContentItem>();
 
+        private Packager m_packager;
+        private ObservableCollection<ContentItem> m_rootContent = new ObservableCollection<ContentItem>();
+
+        private FolderListener m_contentFolderListener;
+        private FolderListener m_builderFolderListener;
+
         public ObservableCollection<ContentItem> RootContent
+        {
+            get { return m_rootContent; }
+            private set { m_rootContent = value; Changed("RootContent"); }
+        }
+
+        public BuildQueue BuildQueue
         {
             get;
             private set;
         }
 
+        public string StatusText
+        {
+            get { return m_statusText; }
+            private set { m_statusText = value; Changed("StatusText"); }
+        }
+
+        private bool m_isPackaging = false;
+        public bool IsPackaging
+        {
+            get { return m_isPackaging; }
+            set { m_isPackaging = value; Changed("IsPackaging"); }
+        }
+
         public Builder()
         {
+            BuildQueue = new Model.BuildQueue(
+                () =>
+                {
+                    StatusText = "Packaging...";
+                    IsPackaging = true;
+                    m_packager.Package(m_outputRoot, PackageFile);
+                });
+            m_packager = new Packager(
+                () =>
+                {
+                    StatusText = "Build and Package Complete";
+                    IsPackaging = false;
+                });
+
             m_outputRoot = Environment.CurrentDirectory + OutputPath;
             m_sourceRoot = Environment.CurrentDirectory + SourcePath;
             m_builderRoot = Environment.CurrentDirectory + BuilderPath;
 
+            m_contentFolderListener = new FolderListener(
+                m_sourceRoot,
+                content =>
+                {
+                    StatusText = "Content Folder Changed | Building...";
+                    TrawlContentItems();
+                    Build();
+                });
+            m_builderFolderListener = new FolderListener(
+                m_builderRoot,
+                content =>
+                {
+                    StatusText = "Content Builder Changed | Building...";
+                    TrawlContentItems();
+                    Build();
+                });
+
             LoadState();
             LoadBuilderConfig();
             TrawlContentItems();
+            Build();
         }
 
         private void LoadState()
@@ -88,7 +146,7 @@ namespace Builder.Model
                     m_builderPathMap.Add(builder.Path, builder);
                 }
 
-                foreach (ContentItem content in config.ContentItems)
+                foreach (ContentItem content in config.ContentItems.Where(item => item.Initialize(this)))
                 {
                     m_contentItems.Add(content.ResourcePath, content);
                 }
@@ -145,41 +203,64 @@ namespace Builder.Model
             config.Save(StateFile);
         }
 
+        public void Validate()
+        {
+            foreach (ContentItem item in RootContent)
+                item.Validate();
+        }
+
         public void Build()
         {
+            StatusText = "Building all...";
+
+            Validate();
             foreach (ContentItem item in RootContent)
                 item.Build();
         }
 
         public void Clean()
         {
+            Validate();
             foreach (ContentItem item in RootContent)
                 item.Clean();
+
+            StatusText = "Clean Completed";
         }
 
         public List<ContentItem> GetContentItems(List<string> resourcePaths)
         {
-            return resourcePaths.Select(resourcePath => GetContentItem(resourcePath)).ToList();
+            return resourcePaths.Select(resourcePath => GetContentItem(resourcePath)).Where(item => item != null).ToList();
         }
 
-        private ContentItem GetContentItem(string resourcePath)
+        public BuilderItem GetBuilder(string resourcePath)
+        {
+            BuilderItem builder = null;
+            m_builderExtensionMap.TryGetValue(Path.GetExtension(resourcePath), out builder);
+            return builder;
+        }
+
+        public ContentItem GetContentItem(string resourcePath)
         {
             resourcePath = Path.GetFullPath(resourcePath);
             ContentItem item = null;
             if (m_contentItems.TryGetValue(resourcePath, out item) == false)
             {
-                BuilderItem builder;
-                if (resourcePath.StartsWith(m_sourceRoot) && m_builderExtensionMap.TryGetValue(Path.GetExtension(resourcePath), out builder))
+                item = new ContentItem(resourcePath, GetOutputPath(resourcePath));
+                if (item.Initialize(this))
                 {
-                    item = new ContentItem(builder, resourcePath, GetOutputPath(resourcePath));
                     m_contentItems.Add(item.ResourcePath, item);
+                    return item;
+                }
+                else
+                {
+                    return null;
                 }
             }
 
             return item;
         }
 
-        private string GetRelativePath(string path)
+        public string GetRelativePath(string path)
         {
             if (path.StartsWith(m_sourceRoot))
             {
@@ -197,7 +278,7 @@ namespace Builder.Model
 
         private string GetOutputPath(string resourcePath)
         {
-            return Path.Combine(m_outputRoot, GetRelativePath(resourcePath) + ".dat");
+            return m_outputRoot + GetRelativePath(resourcePath) + ".dat";
         }
 
         private string GetResourcePath(string outputPath)

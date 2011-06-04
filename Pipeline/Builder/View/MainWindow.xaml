@@ -2,13 +2,27 @@
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:Model="clr-namespace:Builder.Model"
+        Icon="../Icon.ico"
         Title="Builder" Height="350" Width="525" Closing="Window_Closing">
+    <Window.Resources>
+        <Model:ContentStateColorConverter x:Key="stateColorConverter"/>
+    </Window.Resources>
     <DockPanel LastChildFill="True">
+        <StatusBar DockPanel.Dock="Bottom">
+            <StatusBarItem DockPanel.Dock="Right">
+                <ProgressBar Minimum="0" Maximum="100" Width="200" Height="20" Value="{Binding Builder.BuildQueue.PercentProgress}" IsIndeterminate="{Binding Builder.IsPackaging}"/>
+            </StatusBarItem>
+            <StatusBarItem Content="{Binding Builder.StatusText}"/>
+        </StatusBar>
+        
         <TabControl>
             <TabItem Header="Game Content">
                 <TabItem.Resources>
                     <HierarchicalDataTemplate DataType="{x:Type Model:ContentItem}" ItemsSource="{Binding Dependencies}">
-                        <TextBlock Text="{Binding ResourcePath}"/>
+                        <StackPanel Orientation="Horizontal">
+                            <Rectangle Width="5" Height="5" Margin="5" Fill="{Binding ContentState, Converter={StaticResource stateColorConverter}}"/>
+                            <TextBlock Text="{Binding ResourceName}"/>
+                        </StackPanel>
                     </HierarchicalDataTemplate>
                 </TabItem.Resources>
                 <TreeView ItemsSource="{Binding Builder.RootContent}"/>
