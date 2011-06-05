@@ -9,12 +9,17 @@
     </Window.Resources>
     <DockPanel LastChildFill="True">
         <StatusBar DockPanel.Dock="Bottom">
-            <StatusBarItem DockPanel.Dock="Right">
-                <ProgressBar Minimum="0" Maximum="100" Width="200" Height="20" Value="{Binding Builder.BuildQueue.PercentProgress}" IsIndeterminate="{Binding Builder.IsPackaging}"/>
-            </StatusBarItem>
             <StatusBarItem Content="{Binding Builder.StatusText}"/>
+            <StatusBarItem HorizontalAlignment="Right">
+                <ProgressBar Minimum="0" Maximum="100" Width="400" Height="20" Value="{Binding Builder.BuildQueue.PercentProgress}" IsIndeterminate="{Binding Builder.IsPackaging}"/>
+            </StatusBarItem>
         </StatusBar>
         
+        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" HorizontalAlignment="Right" Margin="0,0,0,-22">
+            <Button Margin="1,0" Padding="10,2" Click="Button_Click">Build</Button>
+            <Button Margin="1,0" Padding="10,2" Click="Button_Click_1">Clean</Button>
+        </StackPanel>
+
         <TabControl>
             <TabItem Header="Game Content">
                 <TabItem.Resources>
@@ -28,10 +33,7 @@
                 <TreeView ItemsSource="{Binding Builder.RootContent}"/>
             </TabItem>
             <TabItem Header="Output">
-
-            </TabItem>
-            <TabItem Header="Errors">
-
+                <ListBox ItemsSource="{Binding Builder.OutputText}"/>
             </TabItem>
         </TabControl>
     </DockPanel>

@@ -66,6 +66,7 @@ namespace Builder.Model
 
         private FolderListener m_contentFolderListener;
         private FolderListener m_builderFolderListener;
+        private GameConnection m_gameConnection;
 
         public ObservableCollection<ContentItem> RootContent
         {
@@ -82,7 +83,13 @@ namespace Builder.Model
         public string StatusText
         {
             get { return m_statusText; }
-            private set { m_statusText = value; Changed("StatusText"); }
+            set { m_statusText = value; Changed("StatusText"); OutputText.Add(value); }
+        }
+
+        public ObservableCollection<string> OutputText
+        {
+            get;
+            private set;
         }
 
         private bool m_isPackaging = false;
@@ -94,6 +101,8 @@ namespace Builder.Model
 
         public Builder()
         {
+            OutputText = new ObservableCollection<string>();
+
             BuildQueue = new Model.BuildQueue(
                 () =>
                 {
@@ -108,6 +117,12 @@ namespace Builder.Model
                     IsPackaging = false;
                 });
 
+            m_gameConnection = new GameConnection(
+                statusChanged =>
+                {
+                    StatusText = statusChanged;
+                });
+
             m_outputRoot = Environment.CurrentDirectory + OutputPath;
             m_sourceRoot = Environment.CurrentDirectory + SourcePath;
             m_builderRoot = Environment.CurrentDirectory + BuilderPath;
@@ -116,15 +131,17 @@ namespace Builder.Model
                 m_sourceRoot,
                 content =>
                 {
-                    StatusText = "Content Folder Changed | Building...";
-                    TrawlContentItems();
-                    Build();
+                    ContentItem item = GetContentItem(content);
+                    if (item != null)
+                    {
+                        item.Validate();
+                        item.Build();
+                    }
                 });
             m_builderFolderListener = new FolderListener(
                 m_builderRoot,
-                content =>
+                () =>
                 {
-                    StatusText = "Content Builder Changed | Building...";
                     TrawlContentItems();
                     Build();
                 });
@@ -193,7 +210,7 @@ namespace Builder.Model
                     Directory.GetFiles(m_sourceRoot, "*.*", SearchOption.TopDirectoryOnly).ToList()));
         }
 
-        public void SaveState()
+        public void Dispose()
         {
             BuilderConfig config = new BuilderConfig()
             {
@@ -201,6 +218,10 @@ namespace Builder.Model
                 ContentItems = m_contentItems.Values.ToList()
             };
             config.Save(StateFile);
+
+            m_gameConnection.Dispose();
+            m_contentFolderListener.Dispose();
+            m_builderFolderListener.Dispose();
         }
 
         public void Validate()

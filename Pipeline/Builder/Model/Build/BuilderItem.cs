@@ -39,8 +39,10 @@ namespace Builder.Model
         /// <summary>
         /// Builds content synchronously using the resource path and output path.
         /// </summary>
-        public bool Build(string resourcePath, string outputPath, ref List<string> dependencies)
+        public bool Build(string resourcePath, string outputPath, ref List<string> dependencies, ref List<string> output)
         {
+            m_builderBuiltTime = File.GetLastWriteTime(m_builderPath);
+
             using (Process process = new Process())
             {
                 process.StartInfo.FileName = m_builderPath;
@@ -55,7 +57,6 @@ namespace Builder.Model
                 process.Start();
                 process.WaitForExit();
 
-                List<string> output = new List<string>();
                 output.AddRange(process.StandardOutput.ReadToEnd().Split('\n'));
                 output.AddRange(process.StandardError.ReadToEnd().Split('\n'));
 

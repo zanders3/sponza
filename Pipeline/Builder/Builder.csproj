@@ -76,6 +76,7 @@
     <Compile Include="Model\Build\ContentItem.cs" />
     <Compile Include="Model\Build\WorkQueue.cs" />
     <Compile Include="Model\Listen\FolderListener.cs" />
+    <Compile Include="Model\Listen\GameConnection.cs" />
     <Compile Include="Model\Package\Packager.cs" />
     <Compile Include="ViewModel\Command.cs" />
     <Compile Include="ViewModel\MainWindowModel.cs" />

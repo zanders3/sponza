@@ -87,7 +87,7 @@ namespace Builder.Model
                 if (m_builderItem.UpToDate() &&
                     File.Exists(m_resourcePath) &&
                     File.Exists(m_outputPath) &&
-                    File.GetLastWriteTime(m_resourcePath) == File.GetLastWriteTime(m_outputPath))
+                    File.GetLastWriteTime(m_outputPath) >= File.GetLastWriteTime(m_resourcePath))
                 {
                     ContentState = State.Succeeded;
                 }
@@ -109,11 +109,16 @@ namespace Builder.Model
                 ContentState = State.Building;
 
                 m_builder.BuildQueue.Build(m_builderItem, m_resourcePath, m_outputPath,
-                    (succeeded, dependencies) =>
+                    (succeeded, dependencies, output) =>
                     {
+                        foreach (string outputText in output)
+                            if (outputText.Length > 0)
+                                m_builder.StatusText = outputText;
+
                         if (succeeded)
                         {
                             ContentState = State.Succeeded;
+                            m_builder.StatusText = "Built: " + Path.GetFileName(m_resourcePath);
 
                             Dependencies.Clear();
                             foreach (ContentItem item in m_builder.GetContentItems(dependencies))
@@ -123,6 +128,8 @@ namespace Builder.Model
                         }
                         else
                         {
+                            m_builder.StatusText = "Failed: " + Path.GetFileName(m_resourcePath);
+
                             ContentState = State.Failed;
                         }
                     });

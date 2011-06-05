@@ -8,7 +8,7 @@ using System.Windows;
 
 namespace Builder.Model
 {
-    public delegate void BuildCompleted(bool suceeded, List<string> dependencies);
+    public delegate void BuildCompleted(bool suceeded, List<string> dependencies, List<string> output);
 
     public class WorkItem
     {
@@ -19,6 +19,7 @@ namespace Builder.Model
         public Exception m_exception;
         public bool m_suceeded;
         public List<string> m_dependencies;
+        public List<string> m_output;
     }
 
     public class BuildQueue : WorkQueue<WorkItem>
@@ -31,7 +32,7 @@ namespace Builder.Model
         {
             try
             {
-                item.m_suceeded = item.m_builderItem.Build(item.m_resourcePath, item.m_outputPath, ref item.m_dependencies);
+                item.m_suceeded = item.m_builderItem.Build(item.m_resourcePath, item.m_outputPath, ref item.m_dependencies, ref item.m_output);
             }
             catch (Exception e)
             {
@@ -46,7 +47,7 @@ namespace Builder.Model
                 MessageBox.Show(String.Format("Exception whilst building \"{0}\":\n{1}", item.m_resourcePath, item.m_exception.Message), "Build Error");
                 item.m_suceeded = false;
             }
-            item.m_buildCompleted(item.m_suceeded, item.m_dependencies);
+            item.m_buildCompleted(item.m_suceeded, item.m_dependencies, item.m_output);
         }
 
         public void Build(BuilderItem builder, string resourcePath, string outputPath, BuildCompleted buildCompleted)
@@ -59,7 +60,8 @@ namespace Builder.Model
                 m_buildCompleted = buildCompleted,
                 m_exception = null,
                 m_suceeded = false,
-                m_dependencies = new List<string>()
+                m_dependencies = new List<string>(),
+                m_output = new List<string>()
             };
             Enqueue(item);
         }

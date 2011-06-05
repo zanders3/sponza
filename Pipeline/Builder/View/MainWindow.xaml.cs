@@ -28,7 +28,17 @@ namespace Builder.View
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
         {
-            ((MainWindowModel)DataContext).Builder.SaveState();
+            ((MainWindowModel)DataContext).Builder.Dispose();
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            ((MainWindowModel)DataContext).Builder.Build();
+        }
+
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            ((MainWindowModel)DataContext).Builder.Clean();
         }
     }
 }
