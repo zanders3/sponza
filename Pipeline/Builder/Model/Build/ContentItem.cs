@@ -124,6 +124,7 @@ namespace Builder.Model
                             foreach (ContentItem item in m_builder.GetContentItems(dependencies))
                             {
                                 Dependencies.Add(item);
+                                item.Build();
                             }
                         }
                         else

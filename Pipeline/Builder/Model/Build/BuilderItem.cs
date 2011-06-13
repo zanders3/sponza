@@ -43,6 +43,12 @@ namespace Builder.Model
         {
             m_builderBuiltTime = File.GetLastWriteTime(m_builderPath);
 
+            string outputDirectory = System.IO.Path.GetDirectoryName(outputPath);
+            if (!Directory.Exists(outputDirectory))
+            {
+                Directory.CreateDirectory(outputDirectory);
+            }
+
             using (Process process = new Process())
             {
                 process.StartInfo.FileName = m_builderPath;
@@ -60,7 +66,7 @@ namespace Builder.Model
                 output.AddRange(process.StandardOutput.ReadToEnd().Split('\n'));
                 output.AddRange(process.StandardError.ReadToEnd().Split('\n'));
 
-                dependencies.AddRange(output.Where(line => line.StartsWith("Dependency:")).Select(line => line.Substring("Dependency:".Length)));
+                dependencies.AddRange(output.Where(line => line.StartsWith("DEPENDENCY ")).Select(line => line.Substring("DEPENDENCY ".Length)));
 
                 return process.ExitCode == 0;
             }

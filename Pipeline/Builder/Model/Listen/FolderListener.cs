@@ -74,9 +74,12 @@ namespace Builder.Model
                 {
                     foreach (string file in m_changedFiles)
                         m_fileChanged(file);
-
-                    m_changedFiles.Clear();
                 }
+            }
+
+            lock (m_changedFiles)
+            {
+                m_changedFiles.Clear();
             }
         }
 

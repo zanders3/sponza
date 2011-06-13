@@ -262,7 +262,7 @@ namespace Builder.Model
 
         public ContentItem GetContentItem(string resourcePath)
         {
-            resourcePath = Path.GetFullPath(resourcePath);
+            resourcePath = Path.Combine(m_sourceRoot, resourcePath.Trim());
             ContentItem item = null;
             if (m_contentItems.TryGetValue(resourcePath, out item) == false)
             {

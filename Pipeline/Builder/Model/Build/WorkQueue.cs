@@ -47,7 +47,16 @@ namespace Builder.Model
         void m_worker_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
             DoCompletion();
-            m_workCompleted();
+
+            //The completion may have added new build items
+            if (m_pending.Count > 0)
+            {
+                m_worker.RunWorkerAsync();
+            }
+            else
+            {
+                m_workCompleted();
+            }
         }
 
         void m_worker_ProgressChanged(object sender, ProgressChangedEventArgs e)
