@@ -2,23 +2,6 @@
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "Sponza", "Sponza\Sponza.vcxproj", "{DDB6F2BF-AA17-4857-8F50-E87B00C6BF06}"
-	ProjectSection(ProjectDependencies) = postProject
-		{E540CE1B-8EB7-4B85-B20B-5F19153FC82A} = {E540CE1B-8EB7-4B85-B20B-5F19153FC82A}
-	EndProjectSection
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Contenter", "Contenter\Contenter.csproj", "{E540CE1B-8EB7-4B85-B20B-5F19153FC82A}"
-	ProjectSection(ProjectDependencies) = postProject
-		{8535A897-9F7A-477D-B218-B5DB49C874EA} = {8535A897-9F7A-477D-B218-B5DB49C874EA}
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Pipeline", "Pipeline", "{A16AC706-3195-406B-B5A0-47BEFCA6AAD7}"
-EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ContentHasher", "ContentHasher\ContentHasher.vcxproj", "{8535A897-9F7A-477D-B218-B5DB49C874EA}"
-EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ContenterUI", "ContenterUI\ContenterUI.csproj", "{04BCBB84-B249-4F7B-ABF5-FD1323530A0B}"
-	ProjectSection(ProjectDependencies) = postProject
-		{E540CE1B-8EB7-4B85-B20B-5F19153FC82A} = {E540CE1B-8EB7-4B85-B20B-5F19153FC82A}
-	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -40,40 +23,8 @@ Global
 		{DDB6F2BF-AA17-4857-8F50-E87B00C6BF06}.Release|Win32.ActiveCfg = Release|Win32
 		{DDB6F2BF-AA17-4857-8F50-E87B00C6BF06}.Release|Win32.Build.0 = Release|Win32
 		{DDB6F2BF-AA17-4857-8F50-E87B00C6BF06}.Release|x86.ActiveCfg = Release|Win32
-		{E540CE1B-8EB7-4B85-B20B-5F19153FC82A}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{E540CE1B-8EB7-4B85-B20B-5F19153FC82A}.Debug|Win32.ActiveCfg = Debug|x86
-		{E540CE1B-8EB7-4B85-B20B-5F19153FC82A}.Debug|x86.ActiveCfg = Debug|x86
-		{E540CE1B-8EB7-4B85-B20B-5F19153FC82A}.Debug|x86.Build.0 = Debug|x86
-		{E540CE1B-8EB7-4B85-B20B-5F19153FC82A}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{E540CE1B-8EB7-4B85-B20B-5F19153FC82A}.Release|Mixed Platforms.Build.0 = Release|x86
-		{E540CE1B-8EB7-4B85-B20B-5F19153FC82A}.Release|Win32.ActiveCfg = Release|x86
-		{E540CE1B-8EB7-4B85-B20B-5F19153FC82A}.Release|x86.ActiveCfg = Release|x86
-		{E540CE1B-8EB7-4B85-B20B-5F19153FC82A}.Release|x86.Build.0 = Release|x86
-		{8535A897-9F7A-477D-B218-B5DB49C874EA}.Debug|Mixed Platforms.ActiveCfg = Debug|Win32
-		{8535A897-9F7A-477D-B218-B5DB49C874EA}.Debug|Win32.ActiveCfg = Debug|Win32
-		{8535A897-9F7A-477D-B218-B5DB49C874EA}.Debug|Win32.Build.0 = Debug|Win32
-		{8535A897-9F7A-477D-B218-B5DB49C874EA}.Debug|x86.ActiveCfg = Debug|Win32
-		{8535A897-9F7A-477D-B218-B5DB49C874EA}.Release|Mixed Platforms.ActiveCfg = Release|Win32
-		{8535A897-9F7A-477D-B218-B5DB49C874EA}.Release|Mixed Platforms.Build.0 = Release|Win32
-		{8535A897-9F7A-477D-B218-B5DB49C874EA}.Release|Win32.ActiveCfg = Release|Win32
-		{8535A897-9F7A-477D-B218-B5DB49C874EA}.Release|Win32.Build.0 = Release|Win32
-		{8535A897-9F7A-477D-B218-B5DB49C874EA}.Release|x86.ActiveCfg = Release|Win32
-		{04BCBB84-B249-4F7B-ABF5-FD1323530A0B}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
-		{04BCBB84-B249-4F7B-ABF5-FD1323530A0B}.Debug|Win32.ActiveCfg = Debug|x86
-		{04BCBB84-B249-4F7B-ABF5-FD1323530A0B}.Debug|x86.ActiveCfg = Debug|x86
-		{04BCBB84-B249-4F7B-ABF5-FD1323530A0B}.Debug|x86.Build.0 = Debug|x86
-		{04BCBB84-B249-4F7B-ABF5-FD1323530A0B}.Release|Mixed Platforms.ActiveCfg = Release|x86
-		{04BCBB84-B249-4F7B-ABF5-FD1323530A0B}.Release|Mixed Platforms.Build.0 = Release|x86
-		{04BCBB84-B249-4F7B-ABF5-FD1323530A0B}.Release|Win32.ActiveCfg = Release|x86
-		{04BCBB84-B249-4F7B-ABF5-FD1323530A0B}.Release|x86.ActiveCfg = Release|x86
-		{04BCBB84-B249-4F7B-ABF5-FD1323530A0B}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{E540CE1B-8EB7-4B85-B20B-5F19153FC82A} = {A16AC706-3195-406B-B5A0-47BEFCA6AAD7}
-		{8535A897-9F7A-477D-B218-B5DB49C874EA} = {A16AC706-3195-406B-B5A0-47BEFCA6AAD7}
-		{04BCBB84-B249-4F7B-ABF5-FD1323530A0B} = {A16AC706-3195-406B-B5A0-47BEFCA6AAD7}
 	EndGlobalSection
 EndGlobal

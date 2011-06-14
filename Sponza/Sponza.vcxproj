@@ -115,12 +115,10 @@
     </CustomBuildStep>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <None Include="..\Content\BlankShader.fx" />
     <None Include="small.ico" />
     <None Include="Sponza.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Content\ContentIDs.h" />
     <ClInclude Include="Content\ContentLoader.h" />
     <ClInclude Include="Content\ContentItem.h" />
     <ClInclude Include="DXUT\Core\DXUT.h" />

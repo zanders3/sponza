@@ -37,9 +37,6 @@
     <None Include="Sponza.ico">
       <Filter>Resources</Filter>
     </None>
-    <None Include="..\Content\BlankShader.fx">
-      <Filter>Content</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DXUT\Core\DXUT.h">
@@ -57,9 +54,6 @@
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Game.h">
       <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Content\ContentIDs.h">
-      <Filter>Content</Filter>
     </ClInclude>
     <ClInclude Include="Content\ContentLoader.h">
       <Filter>Content</Filter>
