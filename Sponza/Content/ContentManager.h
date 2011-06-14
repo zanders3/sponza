@@ -1,8 +1,8 @@
 // -----------------------------------------------------------------------------
 //	Copyright Alex Parker © 2011
 //	
-//	ContentItem
-//		- Base class for all game content types.
+//	ContentLoader
+//		- Loads content items from a pack file or from disk if not found in the pack file.
 // -----------------------------------------------------------------------------
 
 #pragma once
@@ -12,8 +12,8 @@
 // -----------------------------------------------------------------------------
 #include "stdafx.h"
 
-#include <fstream>
-#include "Content/ContentReader.h"
+#include "Content/ContentItem.h"
+#include <map>
 
 // -----------------------------------------------------------------------------
 // Namespace 
@@ -22,32 +22,47 @@
 namespace content
 {
 
+class PackReader;
+
 // -----------------------------------------------------------------------------
 // Class Definition 
 // -----------------------------------------------------------------------------
 
-class ContentManager;
-
-class ContentItem
+class ContentManager
 {
-private:
-	void operator=(const ContentItem& item);
-
 public:
-	ContentItem(
-		ContentManager& pContent
-	) : m_pDevice(*GetDevice()),
-		m_pContent(pContent)
+	ContentManager(
+		const std::string& contentRoot, 
+		const std::string& packFile
+	);
+
+	template <typename T> T* Get( 
+		const std::string& name 
+	)
 	{
+		//Has the item already been loaded?
+		auto find = m_items.find(name);
+		if (find != m_items.end())
+		{
+			return static_cast<T*>(find->second.get());
+		}
+		else
+		{
+			T* newItem = new T();
+			ReadItem(name, new T());
+			return newItem;
+		}
 	}
 
-	virtual ~ContentItem() {}
+private:
+	void
+	ReadItem(
+		const std::string& name,
+		ContentItem* newItem
+	);
 
-	virtual void Load(ContentReader& reader) = 0;
-
-protected:
-	ID3D10Device&  m_pDevice;
-	ContentManager& m_pContent;
+	std::map<std::string, std::unique_ptr<ContentItem>> m_items;
+	std::unique_ptr<PackReader>							m_packReader;
 };
 
 // -----------------------------------------------------------------------------

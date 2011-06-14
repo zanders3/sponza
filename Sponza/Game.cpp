@@ -1,11 +1,22 @@
+// -----------------------------------------------------------------------------
+//	Copyright Alex Parker © 2011
+// -----------------------------------------------------------------------------
 #include "stdafx.h"
+
+// -----------------------------------------------------------------------------
+// Includes 
+// -----------------------------------------------------------------------------
 #include "Game.h"
 
-#include "Content/ContentIDs.h"
-#include "Content/ContentLoader.h"
+// -----------------------------------------------------------------------------
+// Namespace 
+// -----------------------------------------------------------------------------
+
+namespace game
+{
 
 Game::Game() :
-	m_content(".\\Content"),
+	m_content(".\\Content\\Out", ".\\Content\\Content.pack"),
 	m_camera()
 {
 	DXUTSetCallbackKeyboard(&m_camera.OnKeyboard);
@@ -18,13 +29,11 @@ Game::~Game()
 
 void Game::LoadContent( ID3D10Device* pd3dDevice, int width, int height )
 {
-	m_content.SetDevice(pd3dDevice);
-
 	m_scene = std::make_shared<SceneList>();
-	m_renderer = std::make_shared<Renderer>(pd3dDevice, m_content.Get<Shader>(ContentID::BLANKSHADER), m_scene);
+	m_renderer = std::make_shared<Renderer>(pd3dDevice, m_content.Get<Shader>("BlankShader.fx"), m_scene);
 
 	const D3DXVECTOR3 zero = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_scene->Add(m_content.Get<Model>(ContentID::SPONZA), zero);
+	m_scene->Add(m_content.Get<Model>("sponza.obj"), zero);
 
 	Light* light = m_scene->CreateLight();
 	light->SetSize(200.0f);
@@ -43,7 +52,9 @@ void Game::Render( ID3D10Device* pd3dDevice, double fTime, float fElapsedTime )
 
 void Game::Update( double fTime, float fElapsedTime )
 {
-#ifdef _DEBUG
+/*#ifdef _DEBUG
 	m_content.ReloadContent();
-#endif
+#endif*/
 }
+
+}//namespace game

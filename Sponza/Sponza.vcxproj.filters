@@ -1,119 +1,33 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="DXUT">
-      <UniqueIdentifier>{a5f39f0d-0b86-4290-b8db-dfe4ae8b8b98}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Resources">
-      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
-      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
-    </Filter>
-    <Filter Include="Game">
-      <UniqueIdentifier>{6f54915f-f760-4a1a-85f4-4e6e7c12574a}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Content">
-      <UniqueIdentifier>{7a858e05-cb34-4dd9-9b87-7557533d202f}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Graphics">
-      <UniqueIdentifier>{9fa401e3-15d8-451f-9af0-f84385848fa7}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Net">
-      <UniqueIdentifier>{ecaba79b-a956-4610-a9ea-c171cd2195e8}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Thread">
-      <UniqueIdentifier>{3cb34e06-3d7d-4c5a-b2ad-27c955f556f1}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Scene">
-      <UniqueIdentifier>{41aa920e-a115-4f05-9625-46e735303d06}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Graphics\Particles">
-      <UniqueIdentifier>{1ee50e93-fb87-4dbf-b61f-7f7ce4cfe5f2}</UniqueIdentifier>
-    </Filter>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="small.ico">
-      <Filter>Resources</Filter>
-    </None>
-    <None Include="Sponza.ico">
-      <Filter>Resources</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="DXUT\Core\DXUT.h">
-      <Filter>DXUT</Filter>
-    </ClInclude>
-    <ClInclude Include="DXUT\Core\DXUTmisc.h">
-      <Filter>DXUT</Filter>
-    </ClInclude>
-    <ClInclude Include="DXUT\Core\DXUTenum.h">
-      <Filter>DXUT</Filter>
-    </ClInclude>
-    <ClInclude Include="Resource.h">
-      <Filter>Resources</Filter>
-    </ClInclude>
-    <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Game.h">
-      <Filter>Game</Filter>
-    </ClInclude>
-    <ClInclude Include="Content\ContentLoader.h">
-      <Filter>Content</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Model.h">
+    <ClCompile Include="Game.cpp" />
+    <ClCompile Include="main.cpp" />
+    <ClCompile Include="stdafx.cpp" />
+    <ClCompile Include="Graphics\DepthTexture.cpp">
       <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Content\ContentItem.h">
-      <Filter>Content</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Shader.h">
+    </ClCompile>
+    <ClCompile Include="Graphics\Lights.cpp">
       <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Camera.h">
+    </ClCompile>
+    <ClCompile Include="Graphics\InputLayout.cpp">
       <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Net\Socket.h">
-      <Filter>Net</Filter>
-    </ClInclude>
-    <ClInclude Include="Thread\Mutex.h">
-      <Filter>Thread</Filter>
-    </ClInclude>
-    <ClInclude Include="Thread\Thread.h">
-      <Filter>Thread</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Texture.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Material.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\RenderTexture.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene\Renderer.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene\SceneList.h">
-      <Filter>Scene</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\DepthTexture.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\ScreenQuad.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\InputLayout.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Particles\Billboard.h">
+    </ClCompile>
+    <ClCompile Include="Graphics\Particles\Billboard.cpp">
       <Filter>Graphics\Particles</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Lights.h">
-      <Filter>Graphics\Particles</Filter>
-    </ClInclude>
-    <ClInclude Include="Content\PackReader.h" />
-    <ClInclude Include="Content\GameConnection.h" />
-    <ClInclude Include="Content\ContentReader.h" />
-  </ItemGroup>
-  <ItemGroup>
+    </ClCompile>
+    <ClCompile Include="Graphics\Model.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Material.cpp">
+      <Filter>Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\ContentManager.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="Content\ContentReader.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
     <ClCompile Include="DXUT\Core\DXUT.cpp">
       <Filter>DXUT</Filter>
     </ClCompile>
@@ -123,33 +37,19 @@
     <ClCompile Include="DXUT\Core\DXUTmisc.cpp">
       <Filter>DXUT</Filter>
     </ClCompile>
-    <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="main.cpp" />
-    <ClCompile Include="Game.cpp">
-      <Filter>Game</Filter>
-    </ClCompile>
-    <ClCompile Include="Content\ContentLoader.cpp">
+    <ClCompile Include="Content\GameConnection.cpp">
       <Filter>Content</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Model.cpp">
+    <ClCompile Include="Content\PackReader.cpp">
+      <Filter>Content</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\RenderTexture.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Shader.cpp">
+    <ClCompile Include="Graphics\ScreenQuad.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Camera.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Net\Socket.cpp">
-      <Filter>Net</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Texture.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Material.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\RenderTexture.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
     <ClCompile Include="Scene\SceneList.cpp">
@@ -158,27 +58,121 @@
     <ClCompile Include="Scene\Renderer.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\DepthTexture.cpp">
+    <ClCompile Include="Net\Socket.cpp">
+      <Filter>Net</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Texture.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\ScreenQuad.cpp">
+    <ClCompile Include="Graphics\Shader.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\InputLayout.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Particles\Billboard.cpp">
-      <Filter>Graphics\Particles</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Lights.cpp">
-      <Filter>Graphics\Particles</Filter>
-    </ClCompile>
-    <ClCompile Include="Content\ContentReader.cpp" />
-    <ClCompile Include="Content\PackReader.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ResourceCompile Include="Sponza.rc">
-      <Filter>Resources</Filter>
-    </ResourceCompile>
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="Game.h" />
+    <ClInclude Include="stdafx.h" />
+    <ClInclude Include="Graphics\DepthTexture.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Lights.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\InputLayout.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Particles\Billboard.h">
+      <Filter>Graphics\Particles</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Material.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Model.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\ContentItem.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\ContentManager.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\ContentReader.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="DXUT\Core\DXUTmisc.h">
+      <Filter>DXUT</Filter>
+    </ClInclude>
+    <ClInclude Include="DXUT\Core\DXUT.h">
+      <Filter>DXUT</Filter>
+    </ClInclude>
+    <ClInclude Include="DXUT\Core\DXUTenum.h">
+      <Filter>DXUT</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\GameConnection.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="Content\PackReader.h">
+      <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\RenderTexture.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\ScreenQuad.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Camera.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneList.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Renderer.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Net\Socket.h">
+      <Filter>Net</Filter>
+    </ClInclude>
+    <ClInclude Include="Thread\Thread.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="Thread\Mutex.h">
+      <Filter>Thread</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Texture.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Shader.h">
+      <Filter>Graphics</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="Sponza.rc" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="small.ico" />
+    <None Include="Sponza.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="Graphics">
+      <UniqueIdentifier>{d65328c3-73d1-4277-8674-a3c6a2d6402f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Particles">
+      <UniqueIdentifier>{854651b5-6529-412f-8604-970c337e2d20}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Content">
+      <UniqueIdentifier>{d5824d4c-edc8-407d-88ec-e7e838fa2d74}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DXUT">
+      <UniqueIdentifier>{2832dd86-8bfc-49f1-bc76-ef2da2e36ddc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Scene">
+      <UniqueIdentifier>{8f9b09ff-4bcf-4290-8729-c5017c7381d7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Net">
+      <UniqueIdentifier>{7f935708-7c5b-47cc-b990-23798f0b561e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Thread">
+      <UniqueIdentifier>{6a134dfb-b7cd-49af-842b-042477f65501}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
 </Project>

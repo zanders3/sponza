@@ -4,7 +4,7 @@
 #include "Content/ContentItem.h"
 #include <fstream>
 
-class Texture : public ContentItem
+class Texture : public content::ContentItem
 {
 public:
 	enum BindType

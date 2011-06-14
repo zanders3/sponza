@@ -125,7 +125,7 @@
     <None Include="Sponza.ico" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Content\ContentLoader.h" />
+    <ClInclude Include="Content\ContentManager.h" />
     <ClInclude Include="Content\ContentItem.h" />
     <ClInclude Include="Content\ContentReader.h" />
     <ClInclude Include="Content\GameConnection.h" />
@@ -154,8 +154,9 @@
     <ClInclude Include="Thread\Thread.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Content\ContentLoader.cpp" />
+    <ClCompile Include="Content\ContentManager.cpp" />
     <ClCompile Include="Content\ContentReader.cpp" />
+    <ClCompile Include="Content\GameConnection.cpp" />
     <ClCompile Include="Content\PackReader.cpp" />
     <ClCompile Include="DXUT\Core\DXUT.cpp" />
     <ClCompile Include="DXUT\Core\DXUTenum.cpp" />

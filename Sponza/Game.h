@@ -1,12 +1,31 @@
+// -----------------------------------------------------------------------------
+//	Copyright Alex Parker © 2011
+//	
+//	Game
+//		- Main Game class that wraps DXUT.
+// -----------------------------------------------------------------------------
+
 #pragma once
 
+// -----------------------------------------------------------------------------
+// Includes 
+// -----------------------------------------------------------------------------
+#include "stdafx.h"
+
 #include "resource.h"
-#include "Content\ContentLoader.h"
+#include "Content\ContentManager.h"
 #include "Graphics\Model.h"
 #include "Graphics\Shader.h"
 #include "Graphics\Camera.h"
 #include "Scene\Renderer.h"
 #include "Scene\SceneList.h"
+
+// -----------------------------------------------------------------------------
+// Namespace 
+// -----------------------------------------------------------------------------
+
+namespace game
+{
 
 class Game
 {
@@ -19,9 +38,13 @@ public:
 	void Update( double fTime, float fElapsedTime ); 
 
 private:
-	ContentLoader	m_content;
-	Camera			m_camera;
+	content::ContentManager  m_content;
+	Camera					 m_camera;
 
-	SceneListPtr	m_scene;
-	RendererPtr		m_renderer;
+	SceneListPtr			m_scene;
+	RendererPtr				m_renderer;
 };
+
+// -----------------------------------------------------------------------------
+
+}//namespace game
