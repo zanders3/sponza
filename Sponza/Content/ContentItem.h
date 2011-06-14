@@ -35,10 +35,14 @@ private:
 
 public:
 	ContentItem(
-		ContentManager& pContent
-	) : m_pDevice(*GetDevice()),
-		m_pContent(pContent)
+	) : m_pDevice(GetDevice())
 	{
+	}
+
+	void
+	SetContent(ContentManager* content)
+	{
+		m_pContent = content;
 	}
 
 	virtual ~ContentItem() {}
@@ -46,8 +50,8 @@ public:
 	virtual void Load(ContentReader& reader) = 0;
 
 protected:
-	ID3D10Device&  m_pDevice;
-	ContentManager& m_pContent;
+	ID3D10Device*   m_pDevice;
+	ContentManager* m_pContent;
 };
 
 // -----------------------------------------------------------------------------

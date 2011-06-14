@@ -1,50 +1,57 @@
 // -----------------------------------------------------------------------------
 //	Copyright Alex Parker © 2011
+//	
+//	Model
+//		- Loads and handles models and associated materials.
 // -----------------------------------------------------------------------------
-#include "stdafx.h"
+
+#pragma once
 
 // -----------------------------------------------------------------------------
 // Includes 
 // -----------------------------------------------------------------------------
-#include "Content/ContentManager.h"
-#include "Content/PackReader.h"
+#include "stdafx.h"
+#include "Graphics/Model/Model.h"
+#include "Graphics/Model/Material.h"
+#include "Graphics/Model/Mesh.h"
+#include "Content/ContentItem.h"
 
 // -----------------------------------------------------------------------------
 // Namespace 
 // -----------------------------------------------------------------------------
 
-namespace content
+namespace graphics
+{
+namespace model
 {
 
 // -----------------------------------------------------------------------------
 // Class Definition 
 // -----------------------------------------------------------------------------
 
-ContentManager::ContentManager(
-	const std::string& contentRoot, 
-	const std::string& packFile
-) : m_items(),
-	m_packReader()
+class Model : public content::ContentItem
 {
-	m_packReader.reset(new PackReader(packFile));
-}
+public:
+	Model();
+	~Model();
+
+public:
+	virtual void 
+	Load(
+		content::ContentReader& reader
+	);
+
+	void 
+	Draw();
+
+private:
+	std::vector<Material>	m_materials;
+	std::vector<Mesh>		m_meshes;
+
+	static D3D10_INPUT_ELEMENT_DESC	s_layoutDesc[5];
+};
 
 // -----------------------------------------------------------------------------
 
-void
-ContentManager::ReadItem(
-	const std::string& name,
-	ContentItem*	   newItem
-)
-{
-	//Load the content from the pack file
-	ContentReader reader = m_packReader->Get(name);
-	newItem->SetContent(this);
-	newItem->Load(reader);
-
-	m_items.insert(std::make_pair(name, std::unique_ptr<ContentItem>(newItem)));
-}
-
-// -----------------------------------------------------------------------------
-
-}//namespace content
+}//namespace model
+}//namespace graphics

@@ -68,9 +68,14 @@ public:
     
     template <typename T> T* ReadArray()
     {
-        u32 size = Read<u32>();
+        u32 size = *Read<u32>();
         return Read<T>(size);
     }
+
+	u32 Size()
+	{
+		return m_end - m_buffer;
+	}
     
 private:
     char*   m_buffer;

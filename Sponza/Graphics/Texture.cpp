@@ -1,21 +1,43 @@
+// -----------------------------------------------------------------------------
+//	Copyright Alex Parker © 2011
+// -----------------------------------------------------------------------------
 #include "stdafx.h"
+
+// -----------------------------------------------------------------------------
+// Includes 
+// -----------------------------------------------------------------------------
 #include "Graphics/Texture.h"
+
+// -----------------------------------------------------------------------------
+// Namespace 
+// -----------------------------------------------------------------------------
 
 using namespace std;
 
-Texture::Texture() :
-	m_pTextureView(nullptr),
+namespace graphics
+{
+
+// -----------------------------------------------------------------------------
+// Class Definition 
+// -----------------------------------------------------------------------------
+
+Texture::Texture(
+) : m_pTextureView(nullptr),
 	m_pTexture(nullptr)
 {
 }
 
-Texture::Texture(ID3D10Device* pDevice, D3DCOLOR pixel) :
-	m_pTextureView(nullptr),
+//----------------------------------------------------------------------------------------
+
+Texture::Texture(
+	D3DCOLOR pixel
+) : m_pTextureView(nullptr),
 	m_pTexture(nullptr)
 {
-	m_pDevice = pDevice;
 	CreatePixelTexture(pixel);
 }
+
+//----------------------------------------------------------------------------------------
 
 Texture::~Texture()
 {
@@ -23,15 +45,16 @@ Texture::~Texture()
 	SAFE_RELEASE(m_pTextureView);
 }
 
-void Texture::Load(istream& input)
-{
-	//Read data into memory
-	input.seekg(0, ios::end);
-	int length = static_cast<int>(input.tellg());
-	input.seekg(0, ios::beg);
+//----------------------------------------------------------------------------------------
 
-	char * data = new char[length];
-	input.read(data, length);
+void 
+Texture::Load(
+	content::ContentReader& reader
+)
+{
+	//Read data
+	u32 length = reader.Size();
+	char * data = reader.Read<char>(length);
 
 	//Create texture
 	HRESULT hr;
@@ -43,11 +66,14 @@ void Texture::Load(istream& input)
 		NULL,
 		&m_pTextureView,
 		NULL));
-
-	delete[] data;
 }
 
-void Texture::CreatePixelTexture(D3DCOLOR color)
+//----------------------------------------------------------------------------------------
+
+void
+Texture::CreatePixelTexture(
+	D3DCOLOR color
+)
 {
 	HRESULT hr;
 	//Create the texture
@@ -87,23 +113,36 @@ void Texture::CreatePixelTexture(D3DCOLOR color)
 	V(m_pDevice->CreateShaderResourceView( pTexture, &srDesc, &m_pTextureView ));
 }
 
-void Texture::Bind(const BindType& type)
+//----------------------------------------------------------------------------------------
+
+void 
+Texture::Bind(
+	const BindType& type
+)
 {
 	m_pDevice->PSSetShaderResources((UINT)type, 1, &m_pTextureView);
 }
 
 //----------------------------------------------------------------------------------------
 
-Texture* Texture::GetDiffuseDefault(ID3D10Device* pDevice)
+Texture* 
+Texture::GetDiffuseDefault()
 {
-	static Texture texture(pDevice, D3DCOLOR_ARGB(255, 255, 0, 255));
+	static Texture texture(D3DCOLOR_ARGB(255, 255, 0, 255));
 
 	return &texture;
 }
 
-Texture* Texture::GetNormalDefault(ID3D10Device* pDevice)
+//----------------------------------------------------------------------------------------
+
+Texture* 
+Texture::GetNormalDefault()
 {
-	static Texture texture(pDevice, D3DCOLOR_RGBA(255, 128, 128, 255));
+	static Texture texture(D3DCOLOR_RGBA(255, 128, 128, 255));
 
 	return &texture;
 }
+
+//----------------------------------------------------------------------------------------
+
+}//namespace graphics

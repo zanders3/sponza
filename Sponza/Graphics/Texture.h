@@ -1,8 +1,29 @@
+// -----------------------------------------------------------------------------
+//	Copyright Alex Parker © 2011
+//	
+//	Texture
+//		- Base class for all textures!
+// -----------------------------------------------------------------------------
+
 #pragma once
+
+// -----------------------------------------------------------------------------
+// Includes 
+// -----------------------------------------------------------------------------
 #include "stdafx.h"
 
 #include "Content/ContentItem.h"
-#include <fstream>
+
+// -----------------------------------------------------------------------------
+// Namespace 
+// -----------------------------------------------------------------------------
+
+namespace graphics
+{
+
+// -----------------------------------------------------------------------------
+// Class Definition 
+// -----------------------------------------------------------------------------
 
 class Texture : public content::ContentItem
 {
@@ -14,14 +35,24 @@ public:
 	};
 
 	Texture();
-	Texture(ID3D10Device* pDevice, D3DCOLOR pixel);
-	virtual ~Texture();
+	Texture(
+		D3DCOLOR pixel
+	);
 
-	void Load(std::istream& input);
+	virtual 
+	~Texture();
+
+	virtual void Load(
+		content::ContentReader& reader
+	);
+
 	void Bind(const BindType& type);
 
-	static Texture* GetDiffuseDefault(ID3D10Device* pDevice);
-	static Texture* GetNormalDefault(ID3D10Device* pDevice);
+	static Texture* 
+	GetDiffuseDefault();
+
+	static Texture* 
+	GetNormalDefault();
 
 protected:
 	void CreatePixelTexture(D3DCOLOR color);
@@ -29,3 +60,7 @@ protected:
 	ID3D10ShaderResourceView* m_pTextureView;
 	ID3D10Texture2D*		  m_pTexture;
 };
+
+// -----------------------------------------------------------------------------
+
+}//namespace graphics

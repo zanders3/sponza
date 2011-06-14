@@ -137,8 +137,8 @@
     <ClInclude Include="Graphics\DepthTexture.h" />
     <ClInclude Include="Graphics\InputLayout.h" />
     <ClInclude Include="Graphics\Lights.h" />
-    <ClInclude Include="Graphics\Material.h" />
-    <ClInclude Include="Graphics\Model.h" />
+    <ClInclude Include="Graphics\Model\Material.h" />
+    <ClInclude Include="Graphics\Model\Model.h" />
     <ClInclude Include="Graphics\Particles\Billboard.h" />
     <ClInclude Include="Graphics\RenderTexture.h" />
     <ClInclude Include="Graphics\ScreenQuad.h" />
@@ -166,8 +166,8 @@
     <ClCompile Include="Graphics\DepthTexture.cpp" />
     <ClCompile Include="Graphics\InputLayout.cpp" />
     <ClCompile Include="Graphics\Lights.cpp" />
-    <ClCompile Include="Graphics\Material.cpp" />
-    <ClCompile Include="Graphics\Model.cpp" />
+    <ClCompile Include="Graphics\Model\Material.cpp" />
+    <ClCompile Include="Graphics\Model\Model.cpp" />
     <ClCompile Include="Graphics\Particles\Billboard.cpp" />
     <ClCompile Include="Graphics\RenderTexture.cpp" />
     <ClCompile Include="Graphics\ScreenQuad.cpp" />

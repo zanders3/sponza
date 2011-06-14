@@ -16,12 +16,6 @@
     <ClCompile Include="Graphics\Particles\Billboard.cpp">
       <Filter>Graphics\Particles</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\Model.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Material.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Content\ContentManager.cpp">
       <Filter>Content</Filter>
     </ClCompile>
@@ -67,6 +61,12 @@
     <ClCompile Include="Graphics\Shader.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\Model\Material.cpp">
+      <Filter>Graphics\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Model\Model.cpp">
+      <Filter>Graphics\Model</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h" />
@@ -83,12 +83,6 @@
     </ClInclude>
     <ClInclude Include="Graphics\Particles\Billboard.h">
       <Filter>Graphics\Particles</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Material.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Model.h">
-      <Filter>Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Content\ContentItem.h">
       <Filter>Content</Filter>
@@ -144,6 +138,12 @@
     <ClInclude Include="Graphics\Shader.h">
       <Filter>Graphics</Filter>
     </ClInclude>
+    <ClInclude Include="Graphics\Model\Material.h">
+      <Filter>Graphics\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Model\Model.h">
+      <Filter>Graphics\Model</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Sponza.rc" />
@@ -173,6 +173,9 @@
     </Filter>
     <Filter Include="Thread">
       <UniqueIdentifier>{6a134dfb-b7cd-49af-842b-042477f65501}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Model">
+      <UniqueIdentifier>{2838b460-9378-408a-b622-a7dc5cf24bf4}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>
