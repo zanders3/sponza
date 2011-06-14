@@ -40,3 +40,6 @@ public:
 #endif
 
 ID3D10Device* GetDevice();
+
+typedef unsigned long int u64;
+typedef unsigned int u32;

@@ -109,6 +109,9 @@
     <ClInclude Include="Graphics\Lights.h">
       <Filter>Graphics\Particles</Filter>
     </ClInclude>
+    <ClInclude Include="Content\PackReader.h" />
+    <ClInclude Include="Content\GameConnection.h" />
+    <ClInclude Include="Content\ContentReader.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="DXUT\Core\DXUT.cpp">
@@ -170,6 +173,8 @@
     <ClCompile Include="Graphics\Lights.cpp">
       <Filter>Graphics\Particles</Filter>
     </ClCompile>
+    <ClCompile Include="Content\ContentReader.cpp" />
+    <ClCompile Include="Content\PackReader.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Sponza.rc">

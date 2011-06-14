@@ -39,15 +39,17 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
-    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
     <CustomBuildBeforeTargets>BuildCompile</CustomBuildBeforeTargets>
     <PostBuildEventUseInBuild>false</PostBuildEventUseInBuild>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Configuration)\</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
-    <PreBuildEventUseInBuild>true</PreBuildEventUseInBuild>
     <CustomBuildBeforeTargets>
     </CustomBuildBeforeTargets>
+    <OutDir>$(SolutionDir)bin\$(Configuration)\</OutDir>
+    <IntDir>$(SolutionDir)obj\$(Configuration)\</IntDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -64,8 +66,10 @@
       <AdditionalLibraryDirectories>%(AdditionalLibraryDirectories);</AdditionalLibraryDirectories>
     </Link>
     <PreBuildEvent>
-      <Command>"$(OutDir)Contenter.exe" Build</Command>
-      <Message>Building Content</Message>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
     </PreBuildEvent>
     <CustomBuildStep>
       <Command>
@@ -100,8 +104,10 @@
       <AdditionalDependencies>ws2_32.lib;d3d10.lib;dxerr.lib;dxguid.lib;d3dx9.lib;d3d9.lib;winmm.lib;comctl32.lib;d3dx10.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <PreBuildEvent>
-      <Command>"$(OutDir)Contenter.exe" Build</Command>
-      <Message>Building Content</Message>
+      <Command>
+      </Command>
+      <Message>
+      </Message>
     </PreBuildEvent>
     <CustomBuildStep>
       <Command>
@@ -121,6 +127,9 @@
   <ItemGroup>
     <ClInclude Include="Content\ContentLoader.h" />
     <ClInclude Include="Content\ContentItem.h" />
+    <ClInclude Include="Content\ContentReader.h" />
+    <ClInclude Include="Content\GameConnection.h" />
+    <ClInclude Include="Content\PackReader.h" />
     <ClInclude Include="DXUT\Core\DXUT.h" />
     <ClInclude Include="DXUT\Core\DXUTenum.h" />
     <ClInclude Include="DXUT\Core\DXUTmisc.h" />
@@ -146,6 +155,8 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\ContentLoader.cpp" />
+    <ClCompile Include="Content\ContentReader.cpp" />
+    <ClCompile Include="Content\PackReader.cpp" />
     <ClCompile Include="DXUT\Core\DXUT.cpp" />
     <ClCompile Include="DXUT\Core\DXUTenum.cpp" />
     <ClCompile Include="DXUT\Core\DXUTmisc.cpp" />

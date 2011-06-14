@@ -1,0 +1,120 @@
+<?xml version="1.0"?>
+<BuilderXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <ContentItems>
+    <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\BlankShader.fx" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\BlankShader.fx.dat">
+      <Dependencies />
+    </ContentItemXML>
+    <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\ShaderHeader.fxh" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\ShaderHeader.fxh.dat">
+      <Dependencies />
+    </ContentItemXML>
+    <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\sponza.obj" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\sponza.obj.dat">
+      <Dependencies>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\sponza_thorn_diff.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\sponza_thorn_diff.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\sponza_thorn_ddn.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\sponza_thorn_ddn.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\vase_round.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\vase_round.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\vase_round_ddn.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\vase_round_ddn.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\vase_plant.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\vase_plant.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\background.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\background.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\background_ddn.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\background_ddn.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\gi_flag.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\gi_flag.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\sponza_bricks_a_diff.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\sponza_bricks_a_diff.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\sponza_bricks_a_ddn.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\sponza_bricks_a_ddn.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\sponza_arch_diff.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\sponza_arch_diff.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\sponza_arch_ddn.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\sponza_arch_ddn.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\sponza_ceiling_a_diff.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\sponza_ceiling_a_diff.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\sponza_column_a_diff.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\sponza_column_a_diff.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\sponza_column_a_ddn.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\sponza_column_a_ddn.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\sponza_floor_a_diff.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\sponza_floor_a_diff.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\sponza_column_c_diff.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\sponza_column_c_diff.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\sponza_column_c_ddn.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\sponza_column_c_ddn.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\sponza_details_diff.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\sponza_details_diff.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\sponza_column_b_diff.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\sponza_column_b_diff.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\sponza_column_b_ddn.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\sponza_column_b_ddn.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\sponza_flagpole_diff.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\sponza_flagpole_diff.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\sponza_fabric_green_diff.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\sponza_fabric_green_diff.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\sponza_fabric_blue_diff.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\sponza_fabric_blue_diff.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\sponza_fabric_diff.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\sponza_fabric_diff.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\sponza_curtain_blue_diff.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\sponza_curtain_blue_diff.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\sponza_curtain_diff.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\sponza_curtain_diff.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\sponza_curtain_green_diff.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\sponza_curtain_green_diff.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\chain_texture.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\chain_texture.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\chain_texture_ddn.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\chain_texture_ddn.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\vase_hanging.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\vase_hanging.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\vase_dif.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\vase_dif.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\lion.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\lion.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\lion_ddn.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\lion_ddn.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\sponza_roof_diff.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\sponza_roof_diff.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+      </Dependencies>
+    </ContentItemXML>
+  </ContentItems>
+</BuilderXML>

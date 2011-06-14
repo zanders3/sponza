@@ -1,5 +1,15 @@
+// -----------------------------------------------------------------------------
+//	Copyright Alex Parker © 2011
+//	
+//	ContentLoader
+//		- Loads content items from a pack file or from disk if not found in the pack file.
+// -----------------------------------------------------------------------------
+
 #pragma once
 
+// -----------------------------------------------------------------------------
+// Includes 
+// -----------------------------------------------------------------------------
 #include "stdafx.h"
 
 #include "Content/ContentItem.h"
@@ -11,63 +21,24 @@
 #include <vector>
 #include <map>
 
-#ifdef _DEBUG
-#include "Net/Socket.h"
-#include "Thread/Thread.h"
-#include "Thread/Mutex.h"
+// -----------------------------------------------------------------------------
+// Namespace 
+// -----------------------------------------------------------------------------
 
-class ContentLoader;
-
-class ContentReloader
+namespace content
 {
-public:
-	ContentReloader();
-	~ContentReloader();
 
-	void Run(int);
-
-	void SetLoader(ContentLoader* pLoader) { m_pLoader = pLoader; }
-	void ReloadContent();
-
-private:
-	void HandleCommand(const std::string& name, const std::string& data);
-
-	bool						 m_threadRunning;
-	std::unique_ptr<Socket>		 m_socket;
-	ContentLoader*				 m_pLoader;
-
-	std::vector<std::string>	 m_reloadList;
-	Thread<ContentReloader, int> m_thread;
-	Mutex						 m_mutex;
-};
-#endif
-
-struct ContentState
-{
-	bool		 m_loaded;
-	std::string  m_path;
-	ContentItem* m_data;
-};
+// -----------------------------------------------------------------------------
+// Class Definition 
+// -----------------------------------------------------------------------------
 
 class ContentLoader
 {
 public:
-	friend class ContentReloader;
-
-	ContentLoader(const std::string& contentRoot);
+	ContentLoader(const std::string& contentRoot, const std::string& packFile);
 	~ContentLoader();
 
-	inline void SetDevice(ID3D10Device* pDevice)
-	{
-		m_pDevice = pDevice;
-	}
-
-	inline ID3D10Device* GetDevice()
-	{
-		return m_pDevice;
-	}
-
-	template <typename T> T* Get( ContentID::Type contentID )
+	template <typename T> T* Get( const std::string& name )
 	{
 		auto iter = m_pContent.find(contentID);
 
@@ -108,13 +79,9 @@ public:
 	}
 
 private:
-	std::map<size_t, ContentState>	m_pContent;
-	ID3D10Device*					m_pDevice;
-
-#ifdef _DEBUG
-	ContentReloader m_reloader;
-
-public:
-	void ReloadContent() { m_reloader.ReloadContent(); }
-#endif
+	
 };
+
+// -----------------------------------------------------------------------------
+
+}//namespace content

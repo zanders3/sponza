@@ -103,7 +103,6 @@ namespace Builder.Model
             int len;
             while ((len = input.Read(buffer, 0, 2000)) > 0)
             {
-                //m_backgroundWorker.ReportProgress((int)(input.Position * 100 / input.Length));
                 output.Write(buffer, 0, len);
             }
             output.Flush();

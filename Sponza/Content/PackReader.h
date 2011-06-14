@@ -1,8 +1,8 @@
 // -----------------------------------------------------------------------------
 //	Copyright Alex Parker © 2011
 //	
-//	ContentItem
-//		- Base class for all game content types.
+//	PackReader
+//		- Reads the content pack file into a block of memory to speed loading.
 // -----------------------------------------------------------------------------
 
 #pragma once
@@ -12,7 +12,8 @@
 // -----------------------------------------------------------------------------
 #include "stdafx.h"
 
-#include <fstream>
+#include <vector>
+#include <exception>
 #include "Content/ContentReader.h"
 
 // -----------------------------------------------------------------------------
@@ -21,30 +22,29 @@
 
 namespace content
 {
-
 // -----------------------------------------------------------------------------
 // Class Definition 
 // -----------------------------------------------------------------------------
-
-class ContentLoader;
-
-class ContentItem
+struct PackInfo
 {
-private:
-	ContentItem(const ContentItem& item) {}
-	void operator=(const ContentItem& item) {}
+    std::string m_file;
+    u64         m_offset;
+    u32         m_size;
+};
 
+class PackReader
+{
 public:
-	ContentItem() {}
-	virtual ~ContentItem() {}
+    PackReader(
+        const std::string& packFile
+    );
 
-	virtual void Load(ContentReader& reader) = 0;
-
-protected:
-	ID3D10Device*  m_pDevice;
-	ContentLoader* m_pContent;
+    ContentReader Get(const std::string& fileName);
+private:
+    ContentReader               m_reader;
+    std::vector<PackInfo>       m_packInfo;
 };
 
 // -----------------------------------------------------------------------------
 
-}//namespace content
+} //namespace content
