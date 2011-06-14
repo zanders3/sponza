@@ -6,6 +6,7 @@ using System.IO;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Threading;
+using System.Xml.Serialization;
 
 namespace Builder.Model
 {
@@ -13,7 +14,6 @@ namespace Builder.Model
     /// Represents a Builder Plugin.
     /// Builds ContentItems and tracks plugin write changes.
     /// </summary>
-    [Serializable]
     public class BuilderItem
     {
         private string m_builderPath;
@@ -23,6 +23,20 @@ namespace Builder.Model
 
         public BuilderItem()
         {
+        }
+
+        [XmlAttribute("Path")]
+        public string BuilderPath
+        {
+            get { return m_builderPath; }
+            set { m_builderPath = value; }
+        }
+
+        [XmlAttribute("LastBuiltTime")]
+        public DateTime LastBuildTime
+        {
+            get { return m_builderBuiltTime; }
+            set { m_builderBuiltTime = value; }
         }
 
         public BuilderItem(string builderPath)

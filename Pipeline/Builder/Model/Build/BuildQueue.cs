@@ -24,7 +24,7 @@ namespace Builder.Model
 
     public class BuildQueue : WorkQueue<WorkItem>
     {
-        public BuildQueue(Action buildCompleted) : base(buildCompleted)
+        public BuildQueue(Action<int> progress, Action buildCompleted) : base(progress, buildCompleted)
         {
         }
 

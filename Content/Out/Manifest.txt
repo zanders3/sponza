@@ -1,2 +1,0 @@
-\BlankShader.blob,1352622501
-\sponza_atrium.blob,1131486756

@@ -22,8 +22,15 @@ namespace Builder.View
     {
         public MainWindow()
         {
-            InitializeComponent();
-            DataContext = new MainWindowModel();
+            try
+            {
+                InitializeComponent();
+                DataContext = new MainWindowModel();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Failed to start: " + e.Message);
+            }
         }
 
         private void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
@@ -39,6 +46,20 @@ namespace Builder.View
         private void Button_Click_1(object sender, RoutedEventArgs e)
         {
             ((MainWindowModel)DataContext).Builder.Clean();
+        }
+
+        private void MenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            ContentItem item = (ContentItem)((MenuItem)sender).DataContext;
+            item.Validate();
+            item.Build();
+        }
+
+        private void MenuItem_Click_1(object sender, RoutedEventArgs e)
+        {
+            ContentItem item = (ContentItem)((MenuItem)sender).DataContext;
+            item.Clean();
+            item.Validate();
         }
     }
 }

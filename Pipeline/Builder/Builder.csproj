@@ -71,6 +71,7 @@
     </Compile>
     <Compile Include="Model\BasePropertyChanged.cs" />
     <Compile Include="Model\Builder.cs" />
+    <Compile Include="Model\BuilderXML.cs" />
     <Compile Include="Model\Build\BuilderItem.cs" />
     <Compile Include="Model\Build\BuildQueue.cs" />
     <Compile Include="Model\Build\ContentItem.cs" />

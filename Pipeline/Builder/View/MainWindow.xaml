@@ -5,13 +5,27 @@
         Icon="../Icon.ico"
         Title="Builder" Height="350" Width="525" Closing="Window_Closing">
     <Window.Resources>
+ 
         <Model:ContentStateColorConverter x:Key="stateColorConverter"/>
+        
+        <ContextMenu x:Key="contentItemContextMenu">
+            <MenuItem Click="MenuItem_Click" Header="Build"/>
+            <MenuItem Click="MenuItem_Click_1" Header="Clean"/>
+        </ContextMenu>
+
+        <HierarchicalDataTemplate DataType="{x:Type Model:ContentItem}" ItemsSource="{Binding Dependencies}">
+            <StackPanel Orientation="Horizontal" ContextMenu="{StaticResource contentItemContextMenu}">
+                <Rectangle Width="5" Height="5" Margin="5" Fill="{Binding ContentState, Converter={StaticResource stateColorConverter}}"/>
+                <TextBlock Text="{Binding ResourceName}"/>
+            </StackPanel>
+        </HierarchicalDataTemplate>
+
     </Window.Resources>
     <DockPanel LastChildFill="True">
         <StatusBar DockPanel.Dock="Bottom">
-            <StatusBarItem Content="{Binding Builder.StatusText}"/>
+            <StatusBarItem Content="{Binding Builder.StatusText}" Width="150"/>
             <StatusBarItem HorizontalAlignment="Right">
-                <ProgressBar Minimum="0" Maximum="100" Width="400" Height="20" Value="{Binding Builder.BuildQueue.PercentProgress}" IsIndeterminate="{Binding Builder.IsPackaging}"/>
+                <ProgressBar Minimum="0" Maximum="100" Width="400" Height="20" Value="{Binding Builder.Progress}"/>
             </StatusBarItem>
         </StatusBar>
         
@@ -22,14 +36,6 @@
 
         <TabControl>
             <TabItem Header="Game Content">
-                <TabItem.Resources>
-                    <HierarchicalDataTemplate DataType="{x:Type Model:ContentItem}" ItemsSource="{Binding Dependencies}">
-                        <StackPanel Orientation="Horizontal">
-                            <Rectangle Width="5" Height="5" Margin="5" Fill="{Binding ContentState, Converter={StaticResource stateColorConverter}}"/>
-                            <TextBlock Text="{Binding ResourceName}"/>
-                        </StackPanel>
-                    </HierarchicalDataTemplate>
-                </TabItem.Resources>
                 <TreeView ItemsSource="{Binding Builder.RootContent}"/>
             </TabItem>
             <TabItem Header="Output">

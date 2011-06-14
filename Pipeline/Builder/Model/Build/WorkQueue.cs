@@ -9,6 +9,8 @@ namespace Builder.Model
     public abstract class WorkQueue<T> : BasePropertyChanged where T : class
     {
         private Action m_workCompleted;
+        private Action<int> m_progressChanged;
+
         private BackgroundWorker m_worker;
         private Queue<T> m_pending = new Queue<T>();
         private Queue<T> m_completed = new Queue<T>();
@@ -16,25 +18,9 @@ namespace Builder.Model
         private int m_totalPending = 0;
         private int m_totalCompleted = 0;
 
-        public int PercentProgress
+        public WorkQueue(Action<int> progressChanged, Action workCompleted)
         {
-            get 
-            {
-                int totalComplete = m_totalCompleted;
-                int totalPending = m_totalPending;
-
-                if (totalPending != totalComplete)
-                    return (int)(((float)totalComplete / (float)totalPending) * 100.0f);
-                else
-                    return 0;
-            }
-            set { }
-        }
-
-        public bool InProgress { get { return m_worker.IsBusy; } }
-
-        public WorkQueue(Action workCompleted)
-        {
+            m_progressChanged = progressChanged;
             m_workCompleted = workCompleted;
 
             m_worker = new BackgroundWorker();
@@ -80,8 +66,16 @@ namespace Builder.Model
 
         private void DoCompletion()
         {
-            Changed("PercentProgress");
+            //Update total progress
+            int totalComplete = m_totalCompleted;
+            int totalPending = m_totalPending;
 
+            if (totalPending != totalComplete)
+                m_progressChanged((int)(((float)totalComplete / (float)totalPending) * 100.0f));
+            else
+                m_progressChanged(0);
+
+            //Notify item completion
             T item;
             while (PopCompleted(out item))
             {

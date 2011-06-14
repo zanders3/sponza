@@ -6,13 +6,13 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.ComponentModel;
 using System.Runtime.Serialization;
+using System.Xml.Serialization;
 
 namespace Builder.Model
 {
     /// <summary>
     /// Represents a single build stage which outputs a file and it's dependencies.
     /// </summary>
-    [Serializable]
     public class ContentItem : BasePropertyChanged
     {
         public enum State
@@ -23,12 +23,12 @@ namespace Builder.Model
         }
 
         private State m_state = State.Failed;
-        [NonSerialized]
         private Builder m_builder;
-        [NonSerialized]
         private BuilderItem m_builderItem;
         private string m_resourcePath;
         private string m_outputPath;
+
+        private ObservableCollection<ContentItem> m_dependencies;
 
         #region Properties
         public State ContentState
@@ -46,6 +46,7 @@ namespace Builder.Model
         public string ResourcePath
         {
             get { return m_resourcePath; }
+            set { m_resourcePath = value; }
         }
 
         public string ResourceName
@@ -56,20 +57,25 @@ namespace Builder.Model
         public string OutputPath
         {
             get { return m_outputPath; }
+            set { m_outputPath = value; }
         }
 
         public ObservableCollection<ContentItem> Dependencies
         {
-            get;
-            private set;
+            get { return m_dependencies; }
         }
+
         #endregion
 
-        public ContentItem(string resourcePath, string outputPath)
+        public ContentItem(string resourcePath, string outputPath, IEnumerable<ContentItem> dependencies = null)
         {
             m_resourcePath = resourcePath;
             m_outputPath = outputPath;
-            Dependencies = new ObservableCollection<ContentItem>();
+
+            if (dependencies != null)
+                m_dependencies = new ObservableCollection<ContentItem>(dependencies);
+            else
+                m_dependencies = new ObservableCollection<ContentItem>();
         }
 
         public bool Initialize(Builder builder)
@@ -135,6 +141,9 @@ namespace Builder.Model
                         }
                     });
             }
+
+            foreach (ContentItem item in Dependencies)
+                item.Build();
         }
 
         public void Clean()

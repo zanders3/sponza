@@ -45,5 +45,25 @@ namespace Builder.Model
             get;
             private set;
         }
+
+        public Command BuildItem
+        {
+            get
+            {
+                return new Command(item =>
+                    {
+                    });
+            }
+        }
+
+        public Command CleanItem
+        {
+            get
+            {
+                return new Command(item =>
+                {
+                });
+            }
+        }
     }
 }

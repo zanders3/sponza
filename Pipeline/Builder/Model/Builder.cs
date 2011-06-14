@@ -7,37 +7,11 @@ using System.Windows;
 using System.Collections.ObjectModel;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using System.Xml.Serialization;
+using Builder.Model.XML;
 
 namespace Builder.Model
 {
-    /// <summary>
-    /// Stores and loads Builder data.
-    /// </summary>
-    [Serializable]
-    public class BuilderConfig
-    {
-        public List<BuilderItem> BuilderState;
-        public List<ContentItem> ContentItems;
-
-        private static IFormatter m_formatter = new BinaryFormatter();
-
-        public void Save(string file)
-        {
-            using (Stream stream = File.Create(file))
-            {
-                m_formatter.Serialize(stream, this);
-            }
-        }
-
-        public static BuilderConfig Load(string file)
-        {
-            using (Stream stream = File.Open(file, FileMode.Open))
-            {
-                return (BuilderConfig)m_formatter.Deserialize(stream);
-            }
-        }
-    }
-
     /// <summary>
     /// Tracks BuilderItems and their supported file extensions.
     /// Tracks the root ContentItem nodes and their dependencies.
@@ -45,7 +19,7 @@ namespace Builder.Model
     public class Builder : BasePropertyChanged
     {
         public const string ConfigFile = "Config.txt";
-        public const string StateFile = "State.bin";
+        public const string StateFile = "State.xml";
         public const string PackageFile = "Content.pack";
         public const string OutputPath = "\\Out";
         public const string SourcePath = "\\Source";
@@ -92,11 +66,18 @@ namespace Builder.Model
             private set;
         }
 
-        private bool m_isPackaging = false;
-        public bool IsPackaging
+        private int m_progress = 0;
+        public int Progress
         {
-            get { return m_isPackaging; }
-            set { m_isPackaging = value; Changed("IsPackaging"); }
+            get
+            {
+                return m_progress;
+            }
+            set
+            {
+                m_progress = value;
+                Changed("Progress");
+            }
         }
 
         public Builder()
@@ -104,17 +85,25 @@ namespace Builder.Model
             OutputText = new ObservableCollection<string>();
 
             BuildQueue = new Model.BuildQueue(
+                progress =>
+                {
+                    this.Progress = progress;
+                },
                 () =>
                 {
                     StatusText = "Packaging...";
-                    IsPackaging = true;
+                    Progress = 0;
                     m_packager.Package(m_outputRoot, PackageFile);
                 });
             m_packager = new Packager(
+                progress =>
+                {
+                    this.Progress = progress;
+                },
                 () =>
                 {
                     StatusText = "Build and Package Complete";
-                    IsPackaging = false;
+                    Progress = 0;
                 });
 
             m_gameConnection = new GameConnection(
@@ -146,8 +135,8 @@ namespace Builder.Model
                     Build();
                 });
 
-            LoadState();
             LoadBuilderConfig();
+            LoadState();
             TrawlContentItems();
             Build();
         }
@@ -156,17 +145,18 @@ namespace Builder.Model
         {
             if (File.Exists(StateFile))
             {
-                BuilderConfig config = BuilderConfig.Load(StateFile);
+                BuilderXML config = BuilderXML.Load(StateFile);
 
-                foreach (BuilderItem builder in config.BuilderState)
-                {
-                    m_builderPathMap.Add(builder.Path, builder);
-                }
+                SetupItems(config.ContentItems.Select(item => item.ToContentItem()));
+            }
+        }
 
-                foreach (ContentItem content in config.ContentItems.Where(item => item.Initialize(this)))
-                {
-                    m_contentItems.Add(content.ResourcePath, content);
-                }
+        private void SetupItems(IEnumerable<ContentItem> items)
+        {
+            foreach (ContentItem content in items.Where(item => item.Initialize(this)))
+            {
+                m_contentItems.Add(content.ResourcePath, content);
+                SetupItems(content.Dependencies);
             }
         }
 
@@ -212,16 +202,18 @@ namespace Builder.Model
 
         public void Dispose()
         {
-            BuilderConfig config = new BuilderConfig()
+            try
             {
-                BuilderState = m_builderPathMap.Values.ToList(),
-                ContentItems = m_contentItems.Values.ToList()
-            };
-            config.Save(StateFile);
+                new BuilderXML(RootContent).Save(StateFile);
 
-            m_gameConnection.Dispose();
-            m_contentFolderListener.Dispose();
-            m_builderFolderListener.Dispose();
+                m_gameConnection.Dispose();
+                m_contentFolderListener.Dispose();
+                m_builderFolderListener.Dispose();
+            }
+            catch (Exception e)
+            {
+                MessageBox.Show("Failed to save clean up properly: " + e.Message);
+            }
         }
 
         public void Validate()
@@ -232,8 +224,6 @@ namespace Builder.Model
 
         public void Build()
         {
-            StatusText = "Building all...";
-
             Validate();
             foreach (ContentItem item in RootContent)
                 item.Build();
