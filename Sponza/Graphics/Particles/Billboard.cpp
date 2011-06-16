@@ -1,9 +1,28 @@
-#pragma once
+// -----------------------------------------------------------------------------
+//	Copyright Alex Parker © 2011
+// -----------------------------------------------------------------------------
 #include "stdafx.h"
-#include "Graphics/Particles/Billboard.h"
 
+// -----------------------------------------------------------------------------
+// Includes 
+// -----------------------------------------------------------------------------
+#include "Graphics/Particles/Billboard.h"
 #include "Graphics/InputLayout.h"
 
+// -----------------------------------------------------------------------------
+// Namespace 
+// -----------------------------------------------------------------------------
+
+using namespace std;
+
+namespace graphics
+{
+namespace particles
+{
+
+// -----------------------------------------------------------------------------
+// Static Data
+// -----------------------------------------------------------------------------
 D3D10_INPUT_ELEMENT_DESC Billboard::s_layout[] =
 {
 	{ "TEXCOORD",	0,	DXGI_FORMAT_R32G32_FLOAT,		0,	0,	D3D10_INPUT_PER_VERTEX_DATA,	0 },
@@ -12,8 +31,14 @@ D3D10_INPUT_ELEMENT_DESC Billboard::s_layout[] =
 	{ "NORMAL",		0,	DXGI_FORMAT_R32_FLOAT,			1,	16,	D3D10_INPUT_PER_INSTANCE_DATA,	1 }
 };
 
-Billboard::Billboard(bool useCircle, size_t maxCount) :
-	m_maxCount(maxCount)
+// -----------------------------------------------------------------------------
+// Class Implementation
+// -----------------------------------------------------------------------------
+
+Billboard::Billboard(
+	bool useCircle, 
+	size_t maxCount
+) : m_maxCount(maxCount)
 {
 	if (useCircle)
 	{
@@ -78,12 +103,16 @@ Billboard::Billboard(bool useCircle, size_t maxCount) :
 	V(GetDevice()->CreateBuffer( &bd, NULL, &m_pInstBuffer));
 }
 
+//----------------------------------------------------------------------------------------
+
 Billboard::~Billboard()
 {
 	SAFE_RELEASE(m_pVertexBuffer);
 	SAFE_RELEASE(m_pIndexBuffer);
 	SAFE_RELEASE(m_pInstBuffer);
 }
+
+//----------------------------------------------------------------------------------------
 
 void Billboard::Create(BillboardVertex* vertices, size_t vCount, size_t* indices, size_t iCount)
 {
@@ -109,6 +138,8 @@ void Billboard::Create(BillboardVertex* vertices, size_t vCount, size_t* indices
 	m_indexCount = iCount;
 }
 
+//----------------------------------------------------------------------------------------
+
 void Billboard::Draw()
 {
 	static InputLayout layout((D3D10_INPUT_ELEMENT_DESC*)&s_layout, 4);
@@ -123,6 +154,8 @@ void Billboard::Draw()
 	GetDevice()->DrawIndexedInstanced(m_indexCount, m_instanceCount, 0, 0, 0);
 }
 
+//----------------------------------------------------------------------------------------
+
 void Billboard::SetBillboards(BillboardInst* pInstances, size_t count)
 {
 	m_instanceCount = min(count, m_maxCount);
@@ -135,3 +168,8 @@ void Billboard::SetBillboards(BillboardInst* pInstances, size_t count)
 
 	m_pInstBuffer->Unmap();
 }
+
+//----------------------------------------------------------------------------------------
+
+}//namespace particles
+}//namespace graphics

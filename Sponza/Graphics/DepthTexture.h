@@ -1,13 +1,33 @@
+// -----------------------------------------------------------------------------
+//	Copyright Alex Parker © 2011
+//	
+//	Model
+//		- Loads and handles models and associated materials.
+// -----------------------------------------------------------------------------
+
 #pragma once
 
+// -----------------------------------------------------------------------------
+// Includes 
+// -----------------------------------------------------------------------------
+#include "stdafx.h"
 #include "Graphics/Texture.h"
 
-class RenderTexture;
+// -----------------------------------------------------------------------------
+// Namespace 
+// -----------------------------------------------------------------------------
+
+namespace graphics
+{
+
+// -----------------------------------------------------------------------------
+// Class Definition 
+// -----------------------------------------------------------------------------
 
 class DepthTexture : public Texture
 {
 public:
-	friend RenderTexture;//to permit access to m_pDepthStencilView
+	friend class RenderTexture;//to permit access to m_pDepthStencilView
 
 	DepthTexture(ID3D10Device* pDevice);
 	//DepthTexture(ID3D10Device* pDevice, int width, int height);
@@ -19,3 +39,7 @@ private:
 	bool					m_isDXUTDepthStencil;
 	ID3D10DepthStencilView* m_pDepthStencilView;
 };
+
+// -----------------------------------------------------------------------------
+
+}//namespace graphics

@@ -136,7 +136,6 @@
     <ClInclude Include="Graphics\Camera.h" />
     <ClInclude Include="Graphics\DepthTexture.h" />
     <ClInclude Include="Graphics\InputLayout.h" />
-    <ClInclude Include="Graphics\Lights.h" />
     <ClInclude Include="Graphics\Model\Material.h" />
     <ClInclude Include="Graphics\Model\Mesh.h" />
     <ClInclude Include="Graphics\Model\Model.h" />
@@ -148,6 +147,7 @@
     <ClInclude Include="Net\Socket.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="Scene\Lights.h" />
     <ClInclude Include="Scene\Renderer.h" />
     <ClInclude Include="Scene\SceneList.h" />
     <ClInclude Include="stdafx.h" />
@@ -166,7 +166,6 @@
     <ClCompile Include="Graphics\Camera.cpp" />
     <ClCompile Include="Graphics\DepthTexture.cpp" />
     <ClCompile Include="Graphics\InputLayout.cpp" />
-    <ClCompile Include="Graphics\Lights.cpp" />
     <ClCompile Include="Graphics\Model\Material.cpp" />
     <ClCompile Include="Graphics\Model\Mesh.cpp" />
     <ClCompile Include="Graphics\Model\Model.cpp" />
@@ -177,6 +176,7 @@
     <ClCompile Include="Graphics\Texture.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Net\Socket.cpp" />
+    <ClCompile Include="Scene\Lights.cpp" />
     <ClCompile Include="Scene\Renderer.cpp" />
     <ClCompile Include="Scene\SceneList.cpp" />
     <ClCompile Include="stdafx.cpp">
