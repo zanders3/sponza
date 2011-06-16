@@ -26,7 +26,7 @@ namespace game
 
 
 Game::Game() :
-	m_content(".\\Content\\Out", ".\\Content\\Content.pack"),
+	m_content(".\\..\\Content\\Out", ".\\..\\Content\\Content.pack"),
 	m_camera()
 {
 	DXUTSetCallbackKeyboard(&m_camera.OnKeyboard);
@@ -47,7 +47,7 @@ void Game::LoadContent( ID3D10Device* pd3dDevice, int width, int height )
 	m_renderer = std::make_shared<Renderer>(pd3dDevice, m_content.Get<Shader>("BlankShader.fx"), m_scene);
 
 	const D3DXVECTOR3 zero = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_scene->Add(m_content.Get<Model>("sponza.obj"), zero);
+	//m_scene->Add(m_content.Get<Model>("sponza.obj"), zero);
 
 	Light* light = m_scene->CreateLight();
 	light->SetSize(200.0f);

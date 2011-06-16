@@ -124,7 +124,7 @@ Shader::Load(
 		ID3D10EffectTechnique* pTechnique = m_pEffect->GetTechniqueByIndex(0);
 		D3D10_TECHNIQUE_DESC desc;
 		pTechnique->GetDesc(&desc);
-
+		
 		m_passes.reserve(desc.Passes);
 		for (size_t i = 0; i<desc.Passes; ++i)
 		{

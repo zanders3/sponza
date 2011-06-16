@@ -28,8 +28,9 @@ namespace content
 struct PackInfo
 {
     std::string m_file;
-    u64         m_offset;
-    u32         m_size;
+    char*       m_start;
+    char*       m_end;
+	u64			m_fileSize;
 };
 
 class PackReader
@@ -41,6 +42,9 @@ public:
 
     ContentReader Get(const std::string& fileName);
 private:
+	char*						m_front;
+	char*						m_end;
+
     ContentReader               m_reader;
     std::vector<PackInfo>       m_packInfo;
 };

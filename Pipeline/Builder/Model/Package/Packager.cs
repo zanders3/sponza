@@ -45,12 +45,14 @@ namespace Builder.Model
 
         class FileEntry
         {
-            public FileEntry(string file)
+            public FileEntry(string file, string folder)
             {
-                FilePath = file;
+                FullPath = file;
+                FilePath = file.Substring(folder.Length + 1, file.Length - folder.Length - 5);
                 FileSize = new FileInfo(file).Length;
             }
 
+            public string FullPath;
             public string FilePath;
             public long FileSize;
         }
@@ -62,28 +64,27 @@ namespace Builder.Model
                 string[] files = Directory.GetFiles(m_folder, "*.dat", SearchOption.AllDirectories);
 
                 //Read in all file data in parallel.
-                FileEntry[] fileData = files.AsParallel().Select(filePath => new FileEntry(filePath)).ToArray();
+                FileEntry[] fileData = files.AsParallel().Select(filePath => new FileEntry(filePath, m_folder)).ToArray();
 
                 //Create the pack file in memory
                 using (Stream packFile = new FileStream(m_packageFile, FileMode.Create))
                 {
                     BinaryWriter writer = new BinaryWriter(packFile);
+                    writer.Write(fileData.Length);
 
                     //Create the header information
-                    long fileOffset = 0;
                     foreach (FileEntry entry in fileData)
                     {
-                        writer.Write(entry.FilePath.Length);
+                        writer.Write(entry.FilePath.Length + 1);
                         writer.Write(entry.FilePath.ToArray());
-                        writer.Write(fileOffset);
-
-                        fileOffset += entry.FileSize;
+                        writer.Write('\0');
+                        writer.Write(entry.FileSize);
                     }
 
                     //Append file data
                     foreach (FileEntry entry in fileData)
                     {
-                        using (FileStream fileStream = new FileStream(entry.FilePath, FileMode.Open))
+                        using (FileStream fileStream = new FileStream(entry.FullPath, FileMode.Open))
                         {
                             CopyStream(fileStream, packFile);
                         }

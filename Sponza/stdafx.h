@@ -41,5 +41,15 @@ public:
 
 ID3D10Device* GetDevice();
 
-typedef unsigned long int u64;
+typedef unsigned long long u64;
 typedef unsigned int u32;
+
+#if defined(DEBUG) || defined(_DEBUG)
+
+#define _assert(condition) { if (!(condition)) { DXUTTrace(__FILE__, __LINE__, 1, L#condition , true); } }
+
+#else
+
+#define _assert(condition, expr) __noop
+
+#endif

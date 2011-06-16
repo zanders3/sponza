@@ -56,12 +56,9 @@ public:
     template <typename T> T* Read(u32 count = 1)
     {
         T* item = reinterpret_cast<T*>(m_current);
-        m_current += sizeof(T);
+        m_current += sizeof(T) * count;
         
-        if (m_current > m_end)
-        {
-            throw std::exception("Read beyond the end of file!");
-        }
+        _assert(m_current <= m_end);
         
         return item;
     }
@@ -74,11 +71,12 @@ public:
 
 	u32 Size()
 	{
-		return m_end - m_buffer;
+		return m_end - m_start;
 	}
     
 private:
     char*   m_buffer;
+	char*	m_start;
     char*   m_current;
     char*   m_end;
 };

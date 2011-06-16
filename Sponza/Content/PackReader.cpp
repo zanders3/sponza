@@ -26,16 +26,40 @@ PackReader::PackReader(
 {
     u32 numFiles = *m_reader.Read<u32>();
     m_packInfo.reserve(numFiles);
+
+	u64 offset = 0;
     for (u32 i = 0; i<numFiles; ++i)
     {
+		char* filePath = m_reader.ReadArray<char>();
+		u64 fileSize = *m_reader.Read<u64>();
+
         PackInfo info =
         {
-            m_reader.ReadArray<char>(),
-            *m_reader.Read<u64>(),
-            *m_reader.Read<u32>()
+            filePath,
+			nullptr,
+			nullptr,
+			fileSize
         };
         m_packInfo.push_back(info);
     }
+
+	m_front = m_reader.m_current;
+	m_end = m_reader.m_end;
+
+	char* current = m_front;
+	for (u32 i = 0; i<numFiles; ++i)
+	{
+		PackInfo& info = m_packInfo[i];
+
+		info.m_start = current;
+		current += info.m_fileSize;
+		info.m_end = current;
+
+		//Do some sanity checks
+		_assert(info.m_start >= m_front);
+		_assert(info.m_end >= info.m_start);
+		_assert(info.m_end <= m_end);
+	}
 }
 
 // -----------------------------------------------------------------------------
@@ -49,7 +73,7 @@ PackReader::Get(
     {
         if (iter->m_file == fileName)
         {
-            return ContentReader(m_reader.m_buffer + iter->m_offset, m_reader.m_buffer + iter->m_offset + iter->m_size);
+			return ContentReader(iter->m_start, iter->m_end);
         }
     }
     
