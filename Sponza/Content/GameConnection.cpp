@@ -1,3 +1,4 @@
+#include "stdafx.h"
 /*#ifdef _DEBUG
 ContentReloader::ContentReloader() :
 	m_threadRunning(true)

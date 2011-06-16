@@ -14,7 +14,7 @@
 
 #include "resource.h"
 #include "Content\ContentManager.h"
-#include "Graphics\Model.h"
+#include "Graphics\Model\Model.h"
 #include "Graphics\Shader.h"
 #include "Graphics\Camera.h"
 #include "Scene\Renderer.h"

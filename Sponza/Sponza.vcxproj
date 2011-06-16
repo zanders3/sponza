@@ -138,6 +138,7 @@
     <ClInclude Include="Graphics\InputLayout.h" />
     <ClInclude Include="Graphics\Lights.h" />
     <ClInclude Include="Graphics\Model\Material.h" />
+    <ClInclude Include="Graphics\Model\Mesh.h" />
     <ClInclude Include="Graphics\Model\Model.h" />
     <ClInclude Include="Graphics\Particles\Billboard.h" />
     <ClInclude Include="Graphics\RenderTexture.h" />
@@ -167,6 +168,7 @@
     <ClCompile Include="Graphics\InputLayout.cpp" />
     <ClCompile Include="Graphics\Lights.cpp" />
     <ClCompile Include="Graphics\Model\Material.cpp" />
+    <ClCompile Include="Graphics\Model\Mesh.cpp" />
     <ClCompile Include="Graphics\Model\Model.cpp" />
     <ClCompile Include="Graphics\Particles\Billboard.cpp" />
     <ClCompile Include="Graphics\RenderTexture.cpp" />

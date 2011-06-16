@@ -47,7 +47,8 @@ public:
 
 	virtual ~ContentItem() {}
 
-	virtual void Load(ContentReader& reader) = 0;
+	virtual void 
+	Load(ContentReader& reader) = 0;
 
 protected:
 	ID3D10Device*   m_pDevice;

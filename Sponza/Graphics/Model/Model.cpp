@@ -61,7 +61,7 @@ Model::Load(
 	m_materials.assign(numMaterials, Material());
 	for (size_t i = 0; i<numMaterials; ++i)
 	{
-		m_materials[i].Load(reader, m_pContent);
+		m_materials[i].Load(*m_pContent, reader);
 	}
 
 	size_t numMeshes = *reader.Read<size_t>();

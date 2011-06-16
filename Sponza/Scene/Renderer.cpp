@@ -26,7 +26,7 @@ void Renderer::Draw()
 		m_sceneList->Draw(m_pShader);
 	}
 
-	{
+	/*{
 		PIXEvent(L"Lights Pass");
 		m_frameBuffer.BindRT();
 		m_frameBuffer.Clear(clearColor);
@@ -34,7 +34,7 @@ void Renderer::Draw()
 		m_pShader->Bind(Pass::Lights);
 		m_lightBuffer.Bind(Texture::Diffuse);
 		m_sceneList->DrawLights();
-	}
+	}*/
 
 	/*{
 		PIXEvent(L"Fullscreen");

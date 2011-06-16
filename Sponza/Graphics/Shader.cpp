@@ -1,55 +1,67 @@
+// -----------------------------------------------------------------------------
+//	Copyright Alex Parker © 2011
+// -----------------------------------------------------------------------------
 #include "stdafx.h"
+
+// -----------------------------------------------------------------------------
+// Includes 
+// -----------------------------------------------------------------------------
 #include "Graphics/Shader.h"
-#include "Content/ContentLoader.h"
+#include "Content/ContentReader.h"
+
+// -----------------------------------------------------------------------------
+// Namespace 
+// -----------------------------------------------------------------------------
 
 using namespace std;
 
-//-------------------------------------------------
-// Statics
-//-------------------------------------------------
+namespace graphics
+{
+
+//----------------------------------------------------------------------------------------
+// Static Data
+//----------------------------------------------------------------------------------------
 std::map<size_t, EffectPool*> Shader::s_effectPools;
 size_t				ShaderPass::s_maxID = 0;
 ShaderPass*			ShaderPass::s_pCurrent = nullptr;
 
-//-------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Effect Pool Class Implementation
-//-------------------------------------------------
+//----------------------------------------------------------------------------------------
 
-EffectPool::EffectPool() :
-	m_pool(nullptr)
+EffectPool::EffectPool(
+) : m_pool(nullptr)
 {
 }
+
+//----------------------------------------------------------------------------------------
 
 EffectPool::~EffectPool()
 {
 	SAFE_RELEASE(m_pool);
 }
 
-void EffectPool::Load(std::istream& input)
+//----------------------------------------------------------------------------------------
+
+void 
+EffectPool::Load(
+	content::ContentReader& reader
+)
 {
 	//Read file into memory
-	char * data;
-	size_t length;
-	{
-		input.seekg(0, ios::end);
-		length = static_cast<size_t>(input.tellg());
-		input.seekg(0, ios::beg);
-
-		data = new char[length];
-		input.read(data, length);
-	}
+	char * data = reader.Read<char>(reader.Size());
 
 	//Create effect pool
 	HRESULT hr;
 	V(D3D10CreateEffectPoolFromMemory(data, length, 0, m_pDevice, &m_pool));
-	delete[] data;
 }
 
-//-------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Shader Class Implementation
-//-------------------------------------------------
+//----------------------------------------------------------------------------------------
 
-Shader::Shader() :
+Shader::Shader(
+) :
 	m_pEffect(nullptr),
 	m_pWorld(nullptr),
 	m_pView(nullptr),
@@ -57,12 +69,19 @@ Shader::Shader() :
 {
 }
 
+//----------------------------------------------------------------------------------------
+
 Shader::~Shader()
 {
 	SAFE_RELEASE(m_pEffect);
 }
 
-void Shader::Load(istream& input)
+//----------------------------------------------------------------------------------------
+
+void 
+Shader::Load(
+	content::ContentReader& reader
+)
 {
 	//Clean up the effect if it's being reloaded
 	if (m_pEffect != nullptr)
@@ -72,24 +91,13 @@ void Shader::Load(istream& input)
 	}
 
 	//Read file into memory
-	char * data;
-	size_t length;
-	size_t headerFileHash;
-	{
-		input.seekg(0, ios::end);
-		length = static_cast<size_t>(input.tellg()) - sizeof(size_t);
-		input.seekg(0, ios::beg);
-
-		input.read((char*)&headerFileHash, sizeof(size_t));
-
-		data = new char[length];
-		input.read(data, length);
-	}
+	char * data = reader.Read<char>(reader.Size());
 
 	//Load the effect pool
 	UINT flags = 0;
 	ID3D10EffectPool* pPool = NULL;
-	if (headerFileHash != 0)
+	//TODO: finish effect pooling stuff. :(
+	/*if (headerFileHash != 0)
 	{
 		flags = D3D10_EFFECT_COMPILE_CHILD_EFFECT;
 
@@ -100,7 +108,7 @@ void Shader::Load(istream& input)
 			pPool = pool->m_pool;
 			s_effectPools.insert(std::make_pair(headerFileHash, pool));
 		}
-	}
+	}*/
 
 	//Create effect file
 	HRESULT hr;
@@ -118,6 +126,7 @@ void Shader::Load(istream& input)
 		D3D10_TECHNIQUE_DESC desc;
 		pTechnique->GetDesc(&desc);
 
+		m_passes.reserve(desc.Passes);
 		for (size_t i = 0; i<desc.Passes; ++i)
 		{
 			m_passes.push_back(ShaderPass(pTechnique->GetPassByIndex(i)));
@@ -125,10 +134,14 @@ void Shader::Load(istream& input)
 	}
 }
 
+//----------------------------------------------------------------------------------------
+
 void Shader::SetWorld(const D3DXMATRIX& world)
 {
 	m_pWorld->SetMatrix((float*)&world);
 }
+
+//----------------------------------------------------------------------------------------
 
 void Shader::SetView(const D3DXMATRIX& view)
 {
@@ -137,6 +150,8 @@ void Shader::SetView(const D3DXMATRIX& view)
 		s_shaderList[i]->m_pView->SetMatrix((float*)&view);*/
 }
 
+//----------------------------------------------------------------------------------------
+
 void Shader::SetProjection(const D3DXMATRIX& projection)
 {
 	/*size_t size = s_shaderList.size();
@@ -144,9 +159,9 @@ void Shader::SetProjection(const D3DXMATRIX& projection)
 		s_shaderList[i]->m_pProjection->SetMatrix((float*)&projection);*/
 }
 
-//-------------------------------------------------
+//----------------------------------------------------------------------------------------
 // Shader Pass Class Implementation
-//-------------------------------------------------
+//----------------------------------------------------------------------------------------
 
 ShaderPass::ShaderPass(ID3D10EffectPass* pPass) :
 	m_pPass(pPass),
@@ -154,12 +169,20 @@ ShaderPass::ShaderPass(ID3D10EffectPass* pPass) :
 {
 }
 
+//----------------------------------------------------------------------------------------
+
 ShaderPass::~ShaderPass()
 {
 }
+
+//----------------------------------------------------------------------------------------
 
 void ShaderPass::Bind()
 {
 	s_pCurrent = this;
 	m_pPass->Apply(0);
 }
+
+//----------------------------------------------------------------------------------------
+
+}//namespace graphics

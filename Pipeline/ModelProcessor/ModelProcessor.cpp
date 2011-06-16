@@ -26,7 +26,7 @@ struct Vertex
 	aiVector2D mTexCoord;
 };
 
-size_t LoadTexture(aiMaterial* pMat, aiTextureType type)
+std::string LoadTexture(aiMaterial* pMat, aiTextureType type)
 {
 	aiString path;
 	if (pMat->GetTexture(type, 0, &path) == aiReturn_SUCCESS)
@@ -42,14 +42,11 @@ size_t LoadTexture(aiMaterial* pMat, aiTextureType type)
 
 		++fileNameStart;
 
-		std::string fileName = pathStr.substr(fileNameStart, fileNameEnd - fileNameStart);
-
-		static const std::hash<std::string> hasher;
-		return hasher(fileName);
+		return pathStr.substr(fileNameStart, fileNameEnd - fileNameStart);
 	}
 	else
 	{
-		return 0;
+		return std::string();
 	}
 }
 
@@ -107,14 +104,22 @@ int main(int argc, char ** argv)
 			{
 				aiMaterial* pMat = scene->mMaterials[i];
 				
-				size_t diffuse = LoadTexture(pMat, aiTextureType_DIFFUSE);
-				fs.write((char*)&diffuse, sizeof(size_t));
+				std::string diffuse = LoadTexture(pMat, aiTextureType_DIFFUSE);
+				size_t difSize = diffuse.size();
 
-				size_t normal = LoadTexture(pMat, aiTextureType_NORMALS);
-				if (normal == 0)
+				fs.write((char*)&difSize, sizeof(size_t));
+				if (!diffuse.empty())
+					fs.write(diffuse.c_str(), sizeof(char)*diffuse.size());
+
+				std::string normal = LoadTexture(pMat, aiTextureType_NORMALS);
+				
+				if (normal.empty())
 					normal = LoadTexture(pMat, aiTextureType_HEIGHT);
 
-				fs.write((char*)&normal, sizeof(size_t));
+				size_t normSize = normal.size();
+				fs.write((char*)&normSize, sizeof(size_t));
+				if (!normal.empty())
+					fs.write(normal.c_str(), sizeof(char)*diffuse.size());
 			}
 
 			//---------------------------------------------------

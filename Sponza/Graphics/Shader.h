@@ -1,13 +1,37 @@
-#pragma once
-#include "stdafx.h"
+// -----------------------------------------------------------------------------
+//	Copyright Alex Parker © 2011
+//	
+//	Shader
+//		- Handles shader effects
+// -----------------------------------------------------------------------------
 
+#pragma once
+
+// -----------------------------------------------------------------------------
+// Includes 
+// -----------------------------------------------------------------------------
+#include "stdafx.h"
 #include "Content/ContentItem.h"
 #include "Graphics/InputLayout.h"
-
-#include <fstream>
 #include <vector>
 #include <array>
 #include <memory>
+
+// -----------------------------------------------------------------------------
+// Namespace 
+// -----------------------------------------------------------------------------
+
+namespace content
+{
+	class ContentReader;
+}
+
+namespace graphics
+{
+
+// -----------------------------------------------------------------------------
+// Class Definition 
+// -----------------------------------------------------------------------------
 
 class ShaderPass
 {
@@ -27,27 +51,46 @@ private:
 	static ShaderPass*	s_pCurrent;
 };
 
-class EffectPool : public ContentItem
+// -----------------------------------------------------------------------------
+
+class EffectPool : public content::ContentItem
 {
 public:
 	EffectPool();
 	~EffectPool();
 
-	void Load(std::istream& input);
+	virtual void 
+	Load(
+		content::ContentReader& reader
+	);
 
 	ID3D10EffectPool*	m_pool;
 };
 
-class Shader : public ContentItem
+// -----------------------------------------------------------------------------
+
+class Shader : public content::ContentItem
 {
 public:
 	Shader();
 	~Shader();
 
-	void Load(std::istream& input);
+	virtual void 
+	Load(
+		content::ContentReader& reader
+	);
 
-	inline void Bind(int pass) { m_passes[pass].Bind(); }
-	inline int  NumPasses()	   { return m_passes.size(); }
+	void 
+	Bind(int pass) 
+	{ 
+		m_passes[pass].Bind(); 
+	}
+
+	int 
+	NumPasses()	   
+	{ 
+		return m_passes.size(); 
+	}
 
 	void SetWorld(const D3DXMATRIX& world);
 	static void SetView(const D3DXMATRIX& view);
@@ -60,3 +103,7 @@ private:
 	ID3D10EffectMatrixVariable *m_pWorld, *m_pView, *m_pProjection;
 	static std::map<size_t, EffectPool*> s_effectPools;
 };
+
+// -----------------------------------------------------------------------------
+
+}//namespace graphics
