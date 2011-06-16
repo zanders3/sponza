@@ -6,6 +6,7 @@ syntax: glob
 *.sdf
 *.opensdf
 *.pack
+*.unsuccessfulbuild
 **Content\Out\**
 **Content\Source\**
 **obj\**
