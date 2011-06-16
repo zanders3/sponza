@@ -1,8 +1,11 @@
-// Sponza.cpp : Defines the entry point for the application.
+// main.cpp : Defines the entry point for the application.
 //
 
 #include "stdafx.h"
 #include "Game.h"
+
+namespace game
+{
 
 Game* game;
 ID3D10Device* pDevice;
@@ -74,3 +77,5 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 
 	return DXUTGetExitCode();
 }
+
+}//namespace game

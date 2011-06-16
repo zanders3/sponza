@@ -1,8 +1,8 @@
 // -----------------------------------------------------------------------------
 //	Copyright Alex Parker © 2011
 //	
-//	Model
-//		- Loads and handles models and associated materials.
+//	SceneList
+//		- Represents the visual scene graph of models (for now).
 // -----------------------------------------------------------------------------
 
 #pragma once
@@ -24,12 +24,13 @@ namespace graphics
 	{
 		class Model;
 	}
+
+	class Shader;
 }
 
 namespace scene
 {
 	class Light;
-	class Shader;
 	class SceneList;
 	class SceneInst;
 
@@ -61,7 +62,7 @@ public:
 	SceneInstWeak Add(graphics::model::Model* pModel, const D3DXVECTOR3& position);
 	Light* CreateLight();
 
-	void Draw(Shader* pShader);
+	void Draw(graphics::Shader* pShader);
 	void DrawLights();
 
 	void Clear();

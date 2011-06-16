@@ -1,8 +1,29 @@
+// -----------------------------------------------------------------------------
+//	Copyright Alex Parker © 2011
+// -----------------------------------------------------------------------------
 #include "stdafx.h"
+
+// -----------------------------------------------------------------------------
+// Includes 
+// -----------------------------------------------------------------------------
 #include "Scene/Renderer.h"
 #include "Graphics/ScreenQuad.h"
+#include "Graphics/Shader.h"
 
-Renderer::Renderer(ID3D10Device* pDevice, Shader* pShader, SceneListPtr sceneList) :
+// -----------------------------------------------------------------------------
+// Namespace 
+// -----------------------------------------------------------------------------
+
+using namespace std;
+
+namespace scene
+{
+
+// -----------------------------------------------------------------------------
+// Class Implementation
+// -----------------------------------------------------------------------------
+
+Renderer::Renderer(ID3D10Device* pDevice, graphics::Shader* pShader, SceneListPtr sceneList) :
 	m_pDevice(pDevice),
 	m_pShader(pShader),
 	m_frameDepth(pDevice),
@@ -12,6 +33,8 @@ Renderer::Renderer(ID3D10Device* pDevice, Shader* pShader, SceneListPtr sceneLis
 	m_sceneList(sceneList)
 {
 }
+
+//----------------------------------------------------------------------------------------
 
 void Renderer::Draw()
 {
@@ -48,7 +71,13 @@ void Renderer::Draw()
 	}*/
 }
 
+//----------------------------------------------------------------------------------------
+
 void Renderer::DrawPass(Pass pass)
 {
 	
 }
+
+//----------------------------------------------------------------------------------------
+
+}//namespace scene

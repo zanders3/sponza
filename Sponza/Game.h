@@ -38,11 +38,11 @@ public:
 	void Update( double fTime, float fElapsedTime ); 
 
 private:
-	content::ContentManager  m_content;
-	Camera					 m_camera;
+	content::ContentManager m_content;
+	Camera					m_camera;
 
-	SceneListPtr			m_scene;
-	RendererPtr				m_renderer;
+	scene::SceneListPtr		m_scene;
+	scene::RendererPtr		m_renderer;
 };
 
 // -----------------------------------------------------------------------------

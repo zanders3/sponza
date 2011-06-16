@@ -1,9 +1,31 @@
+// -----------------------------------------------------------------------------
+//	Copyright Alex Parker © 2011
+// -----------------------------------------------------------------------------
 #include "stdafx.h"
+
+// -----------------------------------------------------------------------------
+// Includes 
+// -----------------------------------------------------------------------------
 #include "Graphics/RenderTexture.h"
+#include "Graphics/DepthTexture.h"
+
+// -----------------------------------------------------------------------------
+// Namespace 
+// -----------------------------------------------------------------------------
 
 using namespace std;
 
-RenderTexture::RenderTexture(ID3D10Device* pDevice, DepthTexture* pDepth)
+namespace graphics
+{
+
+// -----------------------------------------------------------------------------
+// Class Implementation
+// -----------------------------------------------------------------------------
+
+RenderTexture::RenderTexture(
+	ID3D10Device* pDevice, 
+	DepthTexture* pDepth
+)
 {
 	m_pDepthTexture = pDepth;
 
@@ -11,6 +33,8 @@ RenderTexture::RenderTexture(ID3D10Device* pDevice, DepthTexture* pDepth)
 	m_pRenderTargetView = DXUTGetD3D10RenderTargetView();
 	m_isBaseRenderView = true;
 }
+
+//----------------------------------------------------------------------------------------
 
 RenderTexture::RenderTexture(ID3D10Device* pDevice, DepthTexture* pDepth, DXGI_FORMAT format, int width, int height)
 {
@@ -51,6 +75,8 @@ RenderTexture::RenderTexture(ID3D10Device* pDevice, DepthTexture* pDepth, DXGI_F
 	V(pDevice->CreateShaderResourceView( m_pTexture, &srDesc, &m_pTextureView ));
 }
 
+//----------------------------------------------------------------------------------------
+
 RenderTexture::~RenderTexture()
 {
 	if (!m_isBaseRenderView)
@@ -59,13 +85,23 @@ RenderTexture::~RenderTexture()
 	}
 }
 
+//----------------------------------------------------------------------------------------
+
 void RenderTexture::BindRT()
 {
 	m_pDevice->OMSetRenderTargets( 1, &m_pRenderTargetView, m_pDepthTexture->m_pDepthStencilView );
 }
 
-void RenderTexture::Clear(const D3DXVECTOR4& color)
+//----------------------------------------------------------------------------------------
+
+void RenderTexture::Clear(
+	const D3DXVECTOR4& color
+)
 {
 	m_pDevice->ClearRenderTargetView( m_pRenderTargetView, (float*)&color );
 	m_pDepthTexture->Clear();
 }
+
+//----------------------------------------------------------------------------------------
+
+}//namespace graphics
