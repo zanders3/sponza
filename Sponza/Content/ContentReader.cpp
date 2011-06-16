@@ -33,8 +33,9 @@ ContentReader::ContentReader(
 ContentReader::ContentReader(
     const std::string& file)
 {
-    FILE* pFile = fopen(file.c_str(), "rb");
-        
+    FILE* pFile;
+	fopen_s(&pFile, file.c_str(), "rb");
+
     fseek(pFile, 0, SEEK_END);
     long size = ftell(pFile);
     fseek(pFile, 0, SEEK_SET);

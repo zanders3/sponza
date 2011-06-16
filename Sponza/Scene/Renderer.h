@@ -40,11 +40,14 @@ typedef std::shared_ptr<Renderer> RendererPtr;
 class Renderer
 {
 public:
-	enum Pass
+	struct Pass
 	{
-		Normals,
-		Lights,
-		Color
+		enum Enum
+		{
+			Normals,
+			Lights,
+			Color
+		};
 	};
 
 	Renderer(ID3D10Device* pDevice, graphics::Shader* pShader, SceneListPtr sceneList);

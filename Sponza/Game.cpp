@@ -7,13 +7,23 @@
 // Includes 
 // -----------------------------------------------------------------------------
 #include "Game.h"
+#include "Content\PackReader.h"
 
 // -----------------------------------------------------------------------------
 // Namespace 
 // -----------------------------------------------------------------------------
 
+using namespace scene;
+using namespace graphics;
+using namespace graphics::model;
+
 namespace game
 {
+
+// -----------------------------------------------------------------------------
+// Class Implementation
+// -----------------------------------------------------------------------------
+
 
 Game::Game() :
 	m_content(".\\Content\\Out", ".\\Content\\Content.pack"),
@@ -23,9 +33,13 @@ Game::Game() :
 	DXUTSetCallbackMouse(&m_camera.OnMouse, true);
 }
 
+// -----------------------------------------------------------------------------
+
 Game::~Game()
 {
 }
+
+// -----------------------------------------------------------------------------
 
 void Game::LoadContent( ID3D10Device* pd3dDevice, int width, int height )
 {
@@ -41,6 +55,8 @@ void Game::LoadContent( ID3D10Device* pd3dDevice, int width, int height )
 	light->SetColor(D3DCOLOR_ARGB(255,255,255,255));
 }
 
+// -----------------------------------------------------------------------------
+
 void Game::Render( ID3D10Device* pd3dDevice, double fTime, float fElapsedTime )
 {
 	m_camera.Update(fElapsedTime);
@@ -50,11 +66,15 @@ void Game::Render( ID3D10Device* pd3dDevice, double fTime, float fElapsedTime )
 	m_renderer->Draw();
 }
 
+// -----------------------------------------------------------------------------
+
 void Game::Update( double fTime, float fElapsedTime )
 {
 /*#ifdef _DEBUG
 	m_content.ReloadContent();
 #endif*/
 }
+
+// -----------------------------------------------------------------------------
 
 }//namespace game

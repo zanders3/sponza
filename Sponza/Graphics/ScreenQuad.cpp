@@ -1,10 +1,30 @@
+// -----------------------------------------------------------------------------
+//	Copyright Alex Parker © 2011
+// -----------------------------------------------------------------------------
 #include "stdafx.h"
+
+// -----------------------------------------------------------------------------
+// Includes 
+// -----------------------------------------------------------------------------
 #include "Graphics\ScreenQuad.h"
 
-ScreenQuad::ScreenQuad(ID3D10Device* pDevice)
+// -----------------------------------------------------------------------------
+// Namespace 
+// -----------------------------------------------------------------------------
+
+using namespace std;
+
+namespace graphics
+{
+
+// -----------------------------------------------------------------------------
+// Class Implementation
+// -----------------------------------------------------------------------------
+
+ScreenQuad::ScreenQuad()
 {
 	const D3DXVECTOR3 zero = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	Vertex vertices[] =
+	model::Vertex vertices[] =
 	{
 		{
 			D3DXVECTOR3(-1.0f, -1.0f, 0.0f),
@@ -42,13 +62,19 @@ ScreenQuad::ScreenQuad(ID3D10Device* pDevice)
 		1, 2, 3
 	};
 
-	Create((Vertex*)&vertices, 4, (size_t*)&indices, 6, pDevice);
+	Create((model::Vertex*)&vertices, 4, (size_t*)&indices, 6, GetDevice());
 }
 
-void ScreenQuad::Draw(ID3D10Device* pDevice)
+// -----------------------------------------------------------------------------
+
+void ScreenQuad::Draw()
 {
-	static ScreenQuad quad(pDevice);
+	static ScreenQuad quad;
 
-	pDevice->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-	quad.Mesh::Draw(pDevice);
+	GetDevice()->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
+	quad.Mesh::Draw();
 }
+
+//----------------------------------------------------------------------------------------
+
+}//namespace graphics

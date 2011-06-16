@@ -53,7 +53,7 @@ EffectPool::Load(
 
 	//Create effect pool
 	HRESULT hr;
-	V(D3D10CreateEffectPoolFromMemory(data, length, 0, m_pDevice, &m_pool));
+	V(D3D10CreateEffectPoolFromMemory(data, reader.Size(), 0, m_pDevice, &m_pool));
 }
 
 //----------------------------------------------------------------------------------------
@@ -90,9 +90,6 @@ Shader::Load(
 		m_passes.clear();
 	}
 
-	//Read file into memory
-	char * data = reader.Read<char>(reader.Size());
-
 	//Load the effect pool
 	UINT flags = 0;
 	ID3D10EffectPool* pPool = NULL;
@@ -110,10 +107,12 @@ Shader::Load(
 		}
 	}*/
 
+	//Read file into memory
+	char * data = reader.Read<char>(reader.Size());
+
 	//Create effect file
 	HRESULT hr;
-	V(D3D10CreateEffectFromMemory(data, length, flags, m_pDevice, pPool, &m_pEffect));
-	delete[] data;
+	V(D3D10CreateEffectFromMemory(data, reader.Size(), flags, m_pDevice, pPool, &m_pEffect));
 
 	//Load base effect parameters
 	m_pWorld =		m_pEffect->GetVariableByName("World")->AsMatrix();

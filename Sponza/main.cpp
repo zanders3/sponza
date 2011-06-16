@@ -4,10 +4,7 @@
 #include "stdafx.h"
 #include "Game.h"
 
-namespace game
-{
-
-Game* game;
+game::Game* pGame;
 ID3D10Device* pDevice;
 
 bool CALLBACK IsD3D10DeviceAcceptable( UINT Adapter, UINT Output, D3D10_DRIVER_TYPE DeviceType,
@@ -20,19 +17,19 @@ HRESULT CALLBACK OnD3D10CreateDevice( ID3D10Device* pd3dDevice, const DXGI_SURFA
                                       void* pUserContext )
 {
 	pDevice = pd3dDevice;
-	game->LoadContent(pd3dDevice, pBufferSurfaceDesc->Width, pBufferSurfaceDesc->Height);
+	pGame->LoadContent(pd3dDevice, pBufferSurfaceDesc->Width, pBufferSurfaceDesc->Height);
 
 	return S_OK;
 }
 
 void CALLBACK OnD3D10FrameRender( ID3D10Device* pd3dDevice, double fTime, float fElapsedTime, void* pUserContext )
 {
-	game->Render( pd3dDevice, fTime, fElapsedTime );
+	pGame->Render( pd3dDevice, fTime, fElapsedTime );
 }
 
 void CALLBACK OnFrameMove( double fTime, float fElapsedTime, void* pUserContext )
 {
-	game->Update( fTime, fElapsedTime );
+	pGame->Update( fTime, fElapsedTime );
 }
 
 HRESULT CALLBACK OnD3D10Resized( ID3D10Device* pd3dDevice, IDXGISwapChain *pSwapChain, const DXGI_SURFACE_DESC* pBackBufferSurfaceDesc, void* pUserContext )
@@ -60,14 +57,14 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 
 	try
 	{
-		game = new Game();
+		pGame = new game::Game();
 	
 		DXUTInit();
 		DXUTCreateWindow(L"Sponza");
 		DXUTCreateDevice( true, 640, 480 );
 		DXUTMainLoop();
 
-		delete game;
+		delete pGame;
 	}
 	catch (std::exception excp)
 	{
@@ -77,5 +74,3 @@ int WINAPI wWinMain( HINSTANCE hInstance, HINSTANCE hPrevInstance, LPWSTR lpCmdL
 
 	return DXUTGetExitCode();
 }
-
-}//namespace game
