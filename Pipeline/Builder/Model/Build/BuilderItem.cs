@@ -69,20 +69,40 @@ namespace Builder.Model
                 process.StartInfo.Arguments = resourcePath + " " + outputPath;
                 process.StartInfo.ErrorDialog = false;
                 process.StartInfo.CreateNoWindow = true;
+                process.StartInfo.UseShellExecute = false;
                 process.StartInfo.RedirectStandardError = true;
                 process.StartInfo.RedirectStandardOutput = true;
                 process.StartInfo.RedirectStandardInput = true;
                 process.StartInfo.UseShellExecute = false;
 
+                List<string> outputItems = new List<string>();
+                Action<object, DataReceivedEventArgs> dataRecieved = new Action<object,DataReceivedEventArgs>
+                (
+                    (sender, e) =>
+                    {
+                        if (e.Data != null)
+                        {
+                            outputItems.Add(e.Data);
+                        }
+                    }
+                );
+
+                process.OutputDataReceived += new DataReceivedEventHandler(dataRecieved);
+                process.ErrorDataReceived += new DataReceivedEventHandler(dataRecieved);
+
                 process.Start();
+                process.BeginOutputReadLine();
+                process.BeginErrorReadLine();
                 process.WaitForExit();
 
-                output.AddRange(process.StandardOutput.ReadToEnd().Split('\n'));
-                output.AddRange(process.StandardError.ReadToEnd().Split('\n'));
+                int exitCode = process.ExitCode;
 
+                process.Close();
+
+                output.AddRange(outputItems);
                 dependencies.AddRange(output.Where(line => line.StartsWith("DEPENDENCY ")).Select(line => line.Substring("DEPENDENCY ".Length)));
 
-                return process.ExitCode == 0;
+                return exitCode == 0;
             }
         }
     }

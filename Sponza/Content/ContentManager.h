@@ -49,7 +49,7 @@ public:
 		else
 		{
 			T* newItem = new T();
-			ReadItem(name, new T());
+			ReadItem(name, newItem);
 			return newItem;
 		}
 	}

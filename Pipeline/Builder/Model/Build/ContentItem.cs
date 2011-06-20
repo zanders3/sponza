@@ -118,7 +118,7 @@ namespace Builder.Model
                     (succeeded, dependencies, output) =>
                     {
                         foreach (string outputText in output)
-                            if (outputText.Length > 0)
+                            if (outputText != null && outputText.Length > 0)
                                 m_builder.StatusText = outputText;
 
                         if (succeeded)

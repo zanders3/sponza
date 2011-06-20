@@ -8,6 +8,7 @@
 // -----------------------------------------------------------------------------
 #include "Graphics/Shader.h"
 #include "Content/ContentReader.h"
+#include "Content/ContentManager.h"
 
 // -----------------------------------------------------------------------------
 // Namespace 
@@ -91,28 +92,16 @@ Shader::Load(
 	}
 
 	//Load the effect pool
-	UINT flags = 0;
-	ID3D10EffectPool* pPool = NULL;
-	//TODO: finish effect pooling stuff. :(
-	/*if (headerFileHash != 0)
-	{
-		flags = D3D10_EFFECT_COMPILE_CHILD_EFFECT;
-
-		auto find = s_effectPools.find(headerFileHash);
-		if (find == s_effectPools.end())
-		{
-			EffectPool* pool = m_pContent->Get<EffectPool>((ContentID::Type)headerFileHash);
-			pPool = pool->m_pool;
-			s_effectPools.insert(std::make_pair(headerFileHash, pool));
-		}
-	}*/
+	UINT flags = 0;//D3D10_EFFECT_COMPILE_CHILD_EFFECT;
+	//EffectPool* pool = m_pContent->Get<EffectPool>("ShaderHeader.fxh");
 
 	//Read file into memory
-	char * data = reader.Read<char>(reader.Size());
+	u32 size = reader.Size();
+	char * data = reader.Read<char>(size);
 
 	//Create effect file
 	HRESULT hr;
-	V(D3D10CreateEffectFromMemory(data, reader.Size(), flags, m_pDevice, pPool, &m_pEffect));
+	V(D3D10CreateEffectFromMemory(data, size, flags, m_pDevice, nullptr/*pool->m_pool*/, &m_pEffect));
 
 	//Load base effect parameters
 	m_pWorld =		m_pEffect->GetVariableByName("World")->AsMatrix();
