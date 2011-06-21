@@ -129,6 +129,7 @@
   <ItemGroup>
     <ClInclude Include="Content\ContentManager.h" />
     <ClInclude Include="Content\ContentItem.h" />
+    <ClInclude Include="Content\ContentQueue.h" />
     <ClInclude Include="Content\ContentReader.h" />
     <ClInclude Include="Content\GameConnection.h" />
     <ClInclude Include="Content\PackReader.h" />
@@ -154,10 +155,12 @@
     <ClInclude Include="Scene\SceneList.h" />
     <ClInclude Include="stdafx.h" />
     <ClInclude Include="Thread\Mutex.h" />
+    <ClInclude Include="Thread\Queue.h" />
     <ClInclude Include="Thread\Thread.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Content\ContentManager.cpp" />
+    <ClCompile Include="Content\ContentQueue.cpp" />
     <ClCompile Include="Content\ContentReader.cpp" />
     <ClCompile Include="Content\GameConnection.cpp" />
     <ClCompile Include="Content\PackReader.cpp" />
@@ -185,6 +188,7 @@
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">Create</PrecompiledHeader>
     </ClCompile>
+    <ClCompile Include="Thread\Thread.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Sponza.rc" />

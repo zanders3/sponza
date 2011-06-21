@@ -1,15 +1,19 @@
 // -----------------------------------------------------------------------------
 //	Copyright Alex Parker © 2011
 //	
-//	Mutex
-//		- Represents a mutable object that can be locked for threading stuff.
+//	ContentQueue
+//		- Loads content items asynchronously.
 // -----------------------------------------------------------------------------
+
 #pragma once
 
 // -----------------------------------------------------------------------------
 // Includes 
 // -----------------------------------------------------------------------------
 #include "stdafx.h"
+#include <functional>
+#include "Thread/Queue.h"
+#include <memory>
 
 // -----------------------------------------------------------------------------
 // Namespace 
@@ -17,47 +21,57 @@
 
 namespace thread
 {
-	
+	class Thread;
+}
+
+namespace content
+{
+
+class ContentItem;
+class ContentManager;
+
+typedef std::function<void (ContentItem*)> ContentLoadedCallback;
+
 // -----------------------------------------------------------------------------
 // Class Definition 
 // -----------------------------------------------------------------------------
 
-class Mutex
+struct ContentWorkItem
 {
-public:
-	friend class Lock;
-
-	Mutex()
-	{
-		m_handle = CreateMutex(NULL, FALSE, NULL);
-	}
-	~Mutex()
-	{
-		CloseHandle(m_handle);
-	}
-
-private:
-	HANDLE m_handle;
+	std::string				name;
+	ContentItem*			item;
+	ContentLoadedCallback	callback;
 };
 
 // -----------------------------------------------------------------------------
 
-class Lock
+class ContentQueue
 {
 public:
-	Lock(const Mutex& mutex) : m_mutex(mutex)
-	{
-		WaitForSingleObject(m_mutex.m_handle, INFINITE);
-	}
-	~Lock()
-	{
-		ReleaseMutex(m_mutex.m_handle);
-	}
+	ContentQueue(
+		ContentManager& manager
+	);
+
+	void
+	Update();
+
+	void
+	PushWork(
+		const std::string&		name,
+		ContentItem*			newItem,
+		ContentLoadedCallback&	callback
+	);
 
 private:
-	const Mutex& m_mutex;
+	void
+	RunContentThread();
+
+	ContentManager&					m_manager;
+	std::unique_ptr<thread::Thread>	m_contentThread;
+	thread::Queue<ContentWorkItem*>	m_pendingQueue;
+	thread::Queue<ContentWorkItem*>	m_completedQueue;
 };
 
 // -----------------------------------------------------------------------------
 
-} //namespace thread
+}//namespace content

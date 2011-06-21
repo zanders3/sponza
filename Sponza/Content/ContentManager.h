@@ -14,6 +14,8 @@
 
 #include "Content/ContentItem.h"
 #include <map>
+#include <functional>
+#include <memory>
 
 // -----------------------------------------------------------------------------
 // Namespace 
@@ -23,6 +25,9 @@ namespace content
 {
 
 class PackReader;
+class ContentQueue;
+
+typedef std::function<void (ContentItem*)> ContentLoadedCallback;
 
 // -----------------------------------------------------------------------------
 // Class Definition 
@@ -31,12 +36,16 @@ class PackReader;
 class ContentManager
 {
 public:
+	friend class ContentQueue;
+
 	ContentManager(
 		const std::string& contentRoot, 
 		const std::string& packFile
 	);
 
-	template <typename T> T* Get( 
+	~ContentManager();
+
+	template <typename T> T* GetContent( 
 		const std::string& name 
 	)
 	{
@@ -54,6 +63,27 @@ public:
 		}
 	}
 
+	template <typename T> void GetContentAsync(
+		const std::string&		name,
+		ContentLoadedCallback	callback
+	)
+	{
+		//Has the item already been loaded?
+		auto find = m_items.find(name);
+		if (find != m_items.end())
+		{
+			callback(find->second.get());
+		}
+		else
+		{
+			T* newItem = new T();
+			ReadItemAsync(name, newItem, callback);
+		}
+	}
+
+	void
+	Update();
+
 private:
 	void
 	ReadItem(
@@ -61,8 +91,17 @@ private:
 		ContentItem* newItem
 	);
 
+	void
+	ReadItemAsync(
+		const std::string&		name,
+		ContentItem*			newItem,
+		ContentLoadedCallback&	callback
+	);
+
 	std::map<std::string, std::unique_ptr<ContentItem>> m_items;
 	std::unique_ptr<PackReader>							m_packReader;
+
+	std::unique_ptr<ContentQueue>						m_contentQueue;
 };
 
 // -----------------------------------------------------------------------------

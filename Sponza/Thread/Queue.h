@@ -1,15 +1,18 @@
 // -----------------------------------------------------------------------------
 //	Copyright Alex Parker © 2011
 //	
-//	Mutex
-//		- Represents a mutable object that can be locked for threading stuff.
+//	Queue
+//		- A thread safe Queue
 // -----------------------------------------------------------------------------
+
 #pragma once
 
 // -----------------------------------------------------------------------------
 // Includes 
 // -----------------------------------------------------------------------------
 #include "stdafx.h"
+#include <queue>
+#include "Thread/Mutex.h"
 
 // -----------------------------------------------------------------------------
 // Namespace 
@@ -17,47 +20,53 @@
 
 namespace thread
 {
-	
+
 // -----------------------------------------------------------------------------
 // Class Definition 
 // -----------------------------------------------------------------------------
 
-class Mutex
+template <typename T>
+class Queue
 {
 public:
-	friend class Lock;
-
-	Mutex()
+	void 
+	Push(
+		T& item
+	)
 	{
-		m_handle = CreateMutex(NULL, FALSE, NULL);
+		Lock lock(m_mutex);
+		m_queue.push(item);
 	}
-	~Mutex()
+
+	bool 
+	Dequeue(
+		T& item
+	)
 	{
-		CloseHandle(m_handle);
+		Lock lock(m_mutex);
+
+		if (m_queue.empty())
+			return false;
+
+		item = m_queue.front();
+		m_queue.pop();
+
+		return true;
+	}
+
+	size_t
+	Size()
+	{
+		Lock lock(m_mutex);
+
+		return m_queue.size();
 	}
 
 private:
-	HANDLE m_handle;
+	Mutex			m_mutex;
+	std::queue<T>	m_queue;
 };
 
 // -----------------------------------------------------------------------------
 
-class Lock
-{
-public:
-	Lock(const Mutex& mutex) : m_mutex(mutex)
-	{
-		WaitForSingleObject(m_mutex.m_handle, INFINITE);
-	}
-	~Lock()
-	{
-		ReleaseMutex(m_mutex.m_handle);
-	}
-
-private:
-	const Mutex& m_mutex;
-};
-
-// -----------------------------------------------------------------------------
-
-} //namespace thread
+}//namespace thread

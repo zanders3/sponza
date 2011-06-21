@@ -6,9 +6,8 @@
 // -----------------------------------------------------------------------------
 // Includes 
 // -----------------------------------------------------------------------------
-#include "Content/ContentManager.h"
-#include "Content/PackReader.h"
 #include "Content/ContentQueue.h"
+#include "Content/ContentManager.h"
 #include "Thread/Thread.h"
 
 // -----------------------------------------------------------------------------
@@ -22,56 +21,63 @@ namespace content
 // Class Definition 
 // -----------------------------------------------------------------------------
 
-ContentManager::ContentManager(
-	const std::string& contentRoot, 
-	const std::string& packFile
-) : m_items(),
-	m_packReader()
+ContentQueue::ContentQueue(
+	ContentManager& manager
+) : m_manager(manager)
 {
-	m_contentQueue.reset(new ContentQueue(*this));
-	m_packReader.reset(new PackReader(packFile));
-}
-
-// -----------------------------------------------------------------------------
-
-ContentManager::~ContentManager()
-{
+	m_contentThread.reset(new thread::Thread(
+		[=]()
+		{
+			this->RunContentThread();
+		}));
 }
 
 // -----------------------------------------------------------------------------
 
 void
-ContentManager::Update()
+ContentQueue::Update()
 {
-	m_contentQueue->Update();
+	ContentWorkItem* item;
+	while (m_completedQueue.Dequeue(item))
+	{
+		item->callback(item->item);
+		delete item;
+	}
 }
 
 // -----------------------------------------------------------------------------
 
 void
-ContentManager::ReadItem(
-	const std::string& name,
-	ContentItem*	   newItem
-)
-{
-	//Load the content from the pack file
-	ContentReader reader = m_packReader->Get(name);
-	newItem->SetContent(this);
-	newItem->Load(reader);
-
-	m_items.insert(std::make_pair(name, std::unique_ptr<ContentItem>(newItem)));
-}
-
-// -----------------------------------------------------------------------------
-
-void
-ContentManager::ReadItemAsync(
+ContentQueue::PushWork(
 	const std::string&		name,
 	ContentItem*			newItem,
 	ContentLoadedCallback&	callback
 )
 {
-	m_contentQueue->PushWork(name, newItem, callback);
+	ContentWorkItem* item = new ContentWorkItem();
+	item->name = name;
+	item->item = newItem;
+	item->callback = callback;
+	m_pendingQueue.Push(item);
+
+	if (!m_contentThread->IsRunning())
+	{
+		m_contentThread->Run();
+	}
+}
+
+// -----------------------------------------------------------------------------
+
+void
+ContentQueue::RunContentThread()
+{
+	ContentWorkItem* item;
+	while (m_pendingQueue.Dequeue(item))
+	{
+		m_manager.ReadItem(item->name, item->item);
+
+		m_completedQueue.Push(item);
+	}
 }
 
 // -----------------------------------------------------------------------------

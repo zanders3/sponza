@@ -44,10 +44,10 @@ Game::~Game()
 void Game::LoadContent( ID3D10Device* pd3dDevice, int width, int height )
 {
 	m_scene = std::make_shared<SceneList>();
-	m_renderer = std::make_shared<Renderer>(pd3dDevice, m_content.Get<Shader>("BlankShader.fx"), m_scene);
+	m_renderer = std::make_shared<Renderer>(pd3dDevice, m_content.GetContent<Shader>("BlankShader.fx"), m_scene);
 
 	const D3DXVECTOR3 zero = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_scene->Add(m_content.Get<Model>("sponza.obj"), zero);
+	m_scene->Add(m_content.GetContent<Model>("sponza.obj"), zero);
 
 	Light* light = m_scene->CreateLight();
 	light->SetSize(200.0f);
@@ -61,7 +61,7 @@ void Game::Render( ID3D10Device* pd3dDevice, double fTime, float fElapsedTime )
 {
 	m_camera.Update(fElapsedTime);
 
-	Shader* shader = m_content.Get<Shader>("BlankShader.fx");
+	Shader* shader = m_content.GetContent<Shader>("BlankShader.fx");
 	shader->SetView(m_camera.m_View);
 	shader->SetProjection(m_camera.m_Projection);
 
@@ -72,6 +72,7 @@ void Game::Render( ID3D10Device* pd3dDevice, double fTime, float fElapsedTime )
 
 void Game::Update( double fTime, float fElapsedTime )
 {
+	m_content.Update();
 /*#ifdef _DEBUG
 	m_content.ReloadContent();
 #endif*/

@@ -32,8 +32,27 @@ Material::Load(
 	char* diffusePath = reader.ReadArray<char>();
 	char* normalPath = reader.ReadArray<char>();
 
-	mDiffuse = *diffusePath	== 0 ? Texture::GetDiffuseDefault()	: manager.Get<Texture>(std::string(diffusePath));
-	mNormal  = *normalPath	== 0 ? Texture::GetNormalDefault()	: manager.Get<Texture>(std::string(normalPath));
+	mDiffuse = Texture::GetDiffuseDefault();
+	mNormal  = Texture::GetNormalDefault();
+
+	if (*diffusePath)
+	{
+		manager.GetContentAsync<Texture>(
+			diffusePath, 
+			[=](content::ContentItem* item)
+			{
+				mDiffuse = dynamic_cast<Texture*>(item);
+			});
+	}
+	if (*normalPath)
+	{
+		manager.GetContentAsync<Texture>(
+			normalPath,
+			[=](content::ContentItem* item)
+			{
+				mNormal = dynamic_cast<Texture*>(item);
+			});
+	}
 }
 
 //----------------------------------------------------------------------------------------
