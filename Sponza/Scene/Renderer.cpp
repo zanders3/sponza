@@ -42,8 +42,9 @@ void Renderer::Draw()
 
 	{
 		PIXEvent(L"Normal Pass");
-		m_lightBuffer.BindRT();
-		m_lightBuffer.Clear(clearColor);
+		m_frameBuffer.Clear(clearColor);
+		//m_lightBuffer.BindRT();
+		//m_lightBuffer.Clear(clearColor);
 
 		m_pShader->Bind(Pass::Normals);
 		m_sceneList->Draw(m_pShader);

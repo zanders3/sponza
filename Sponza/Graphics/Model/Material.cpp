@@ -32,8 +32,8 @@ Material::Load(
 	char* diffusePath = reader.ReadArray<char>();
 	char* normalPath = reader.ReadArray<char>();
 
-	mDiffuse = manager.Get<Texture>(std::string(diffusePath));
-	mNormal  = manager.Get<Texture>(std::string(normalPath));
+	mDiffuse = *diffusePath	== 0 ? Texture::GetDiffuseDefault()	: manager.Get<Texture>(std::string(diffusePath));
+	mNormal  = *normalPath	== 0 ? Texture::GetNormalDefault()	: manager.Get<Texture>(std::string(normalPath));
 }
 
 //----------------------------------------------------------------------------------------

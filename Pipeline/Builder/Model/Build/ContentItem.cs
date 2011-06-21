@@ -113,6 +113,7 @@ namespace Builder.Model
             if (ContentState == State.Failed)
             {
                 ContentState = State.Building;
+                m_builder.StatusText = "Building: " + Path.GetFileName(m_resourcePath);
 
                 m_builder.BuildQueue.Build(m_builderItem, m_resourcePath, m_outputPath,
                     (succeeded, dependencies, output) =>

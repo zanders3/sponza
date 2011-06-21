@@ -82,12 +82,14 @@ namespace Builder.Model
                     }
 
                     //Append file data
-                    foreach (FileEntry entry in fileData)
+                    for (int i = 0; i<fileData.Length; ++i)
                     {
-                        using (FileStream fileStream = new FileStream(entry.FullPath, FileMode.Open))
+                        using (FileStream fileStream = new FileStream(fileData[i].FullPath, FileMode.Open))
                         {
                             CopyStream(fileStream, packFile);
                         }
+
+                        m_backgroundWorker.ReportProgress((i * 100) / fileData.Length);
                     }
                 }
             }

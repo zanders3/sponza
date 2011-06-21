@@ -133,18 +133,14 @@ void Shader::SetWorld(const D3DXMATRIX& world)
 
 void Shader::SetView(const D3DXMATRIX& view)
 {
-	/*size_t size = s_shaderList.size();
-	for (size_t i = 0; i<size; ++i)
-		s_shaderList[i]->m_pView->SetMatrix((float*)&view);*/
+	m_pView->SetMatrix((float*)&view);
 }
 
 //----------------------------------------------------------------------------------------
 
 void Shader::SetProjection(const D3DXMATRIX& projection)
 {
-	/*size_t size = s_shaderList.size();
-	for (size_t i = 0; i<size; ++i)
-		s_shaderList[i]->m_pProjection->SetMatrix((float*)&projection);*/
+	m_pProjection->SetMatrix((float*)&projection);
 }
 
 //----------------------------------------------------------------------------------------

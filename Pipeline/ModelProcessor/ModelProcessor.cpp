@@ -35,19 +35,22 @@ std::string LoadTexture(aiMaterial* pMat, aiTextureType type)
 
 		cout << "DEPENDENCY " << pathStr << endl;
 
-		int fileNameStart = pathStr.find_last_of('\\');
-		int fileNameEnd = pathStr.find_last_of('.');
-
-		if (fileNameStart == -1 || fileNameEnd == -1) return 0;
-
-		++fileNameStart;
-
-		return pathStr.substr(fileNameStart, fileNameEnd - fileNameStart);
+		return pathStr;
 	}
 	else
 	{
 		return std::string();
 	}
+}
+
+void WriteString(std::ofstream& fs, std::string& str)
+{
+	size_t size = str.size() + 1;
+	fs.write((char*)&size, sizeof(size_t));
+	fs.write(str.c_str(), sizeof(char)*str.size());
+	
+	static const char end = '\0';
+	fs.write(&end, 1);
 }
 
 int main(int argc, char ** argv)
@@ -105,21 +108,14 @@ int main(int argc, char ** argv)
 				aiMaterial* pMat = scene->mMaterials[i];
 				
 				std::string diffuse = LoadTexture(pMat, aiTextureType_DIFFUSE);
-				size_t difSize = diffuse.size();
-
-				fs.write((char*)&difSize, sizeof(size_t));
-				if (!diffuse.empty())
-					fs.write(diffuse.c_str(), sizeof(char)*diffuse.size());
+				WriteString(fs, diffuse);
 
 				std::string normal = LoadTexture(pMat, aiTextureType_NORMALS);
 				
 				if (normal.empty())
 					normal = LoadTexture(pMat, aiTextureType_HEIGHT);
 
-				size_t normSize = normal.size();
-				fs.write((char*)&normSize, sizeof(size_t));
-				if (!normal.empty())
-					fs.write(normal.c_str(), sizeof(char)*diffuse.size());
+				WriteString(fs, normal);
 			}
 
 			//---------------------------------------------------

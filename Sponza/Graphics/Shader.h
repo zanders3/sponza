@@ -93,8 +93,8 @@ public:
 	}
 
 	void SetWorld(const D3DXMATRIX& world);
-	static void SetView(const D3DXMATRIX& view);
-	static void SetProjection(const D3DXMATRIX& projection);
+	void SetView(const D3DXMATRIX& view);
+	void SetProjection(const D3DXMATRIX& projection);
 
 private:
 	ID3D10Effect*									m_pEffect;
