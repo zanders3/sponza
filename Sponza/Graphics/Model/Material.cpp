@@ -8,8 +8,10 @@
 // -----------------------------------------------------------------------------
 #include "Graphics/Model/Material.h"
 #include "Graphics/Texture.h"
+#include "Graphics/Shader.h"
 #include "Content/ContentReader.h"
 #include "Content/ContentManager.h"
+#include "Graphics/Shader/ShaderParams.h"
 
 // -----------------------------------------------------------------------------
 // Namespace 
@@ -23,17 +25,43 @@ namespace model
 // Class Definition 
 // -----------------------------------------------------------------------------
 
+Material::Material(
+) : m_shader(nullptr)
+{
+}
+
+// -----------------------------------------------------------------------------
+
+Material::~Material()
+{
+}
+
+// -----------------------------------------------------------------------------
+
+Material::Material(
+	Material&& other
+)
+{
+	m_params.swap(other.m_params);
+	m_shader = other.m_shader;
+}
+
+// -----------------------------------------------------------------------------
+
 void 
 Material::Load(
 	content::ContentManager& manager,
 	content::ContentReader& reader
 )
 {
+	m_shader = manager.GetContent<Shader>("BlankShader.fx");
+	m_params.reset(new ShaderParams(*m_shader));
+
 	char* diffusePath = reader.ReadArray<char>();
 	char* normalPath = reader.ReadArray<char>();
 
-	mDiffuse = Texture::GetDiffuseDefault();
-	mNormal  = Texture::GetNormalDefault();
+	m_params->SetValue("Diffuse", Texture::GetDiffuseDefault());
+	m_params->SetValue("Normal", Texture::GetNormalDefault());
 
 	if (*diffusePath)
 	{
@@ -41,7 +69,8 @@ Material::Load(
 			diffusePath, 
 			[=](content::ContentItem* item)
 			{
-				mDiffuse = dynamic_cast<Texture*>(item);
+				Texture* diffuse = dynamic_cast<Texture*>(item);
+				m_params->SetValue("Diffuse", diffuse);
 			});
 	}
 	if (*normalPath)
@@ -50,7 +79,8 @@ Material::Load(
 			normalPath,
 			[=](content::ContentItem* item)
 			{
-				mNormal = dynamic_cast<Texture*>(item);
+				Texture* normal = dynamic_cast<Texture*>(item);
+				m_params->SetValue("Normal", normal);
 			});
 	}
 }
@@ -60,8 +90,8 @@ Material::Load(
 void 
 Material::Bind()
 {
-	mDiffuse->Bind(Texture::Diffuse);
-	mNormal->Bind(Texture::Normal);
+	m_params->Apply();
+	m_shader->Bind(0);
 }
 
 //----------------------------------------------------------------------------------------

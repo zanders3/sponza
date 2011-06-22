@@ -13,7 +13,7 @@
 #include "stdafx.h"
 
 #include "Content/ContentItem.h"
-#include <map>
+#include <unordered_map>
 #include <functional>
 #include <memory>
 
@@ -98,10 +98,10 @@ private:
 		ContentLoadedCallback&	callback
 	);
 
-	std::map<std::string, std::unique_ptr<ContentItem>> m_items;
-	std::unique_ptr<PackReader>							m_packReader;
+	std::unordered_map<std::string, std::unique_ptr<ContentItem>>	m_items;
+	std::unique_ptr<PackReader>										m_packReader;
 
-	std::unique_ptr<ContentQueue>						m_contentQueue;
+	std::unique_ptr<ContentQueue>									m_contentQueue;
 };
 
 // -----------------------------------------------------------------------------

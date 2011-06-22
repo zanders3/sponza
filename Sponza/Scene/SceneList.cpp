@@ -31,7 +31,7 @@ void SceneList::Draw(
 	auto end = m_list.end();
 	for (auto iter = m_list.begin(); iter != end; ++iter)
 	{
-		pShader->SetWorld((*iter)->m_world);
+		//pShader->SetWorld((*iter)->m_world);
 		(*iter)->m_pModel->Draw();
 	}
 }

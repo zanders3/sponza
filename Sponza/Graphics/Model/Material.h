@@ -1,8 +1,8 @@
 // -----------------------------------------------------------------------------
 //	Copyright Alex Parker © 2011
 //	
-//	Model
-//		- Loads and handles models and associated materials.
+//	Material
+//		- Handles material values, shaders and textures.
 // -----------------------------------------------------------------------------
 
 #pragma once
@@ -11,6 +11,7 @@
 // Includes 
 // -----------------------------------------------------------------------------
 #include "stdafx.h"
+#include <memory>
 
 // -----------------------------------------------------------------------------
 // Namespace 
@@ -25,10 +26,11 @@ namespace content
 namespace graphics
 {
 	class Texture;
+	class ShaderParams;
+	class Shader;
 
 namespace model
 {
-	class Material;
 
 // -----------------------------------------------------------------------------
 // Class Definition 
@@ -37,17 +39,24 @@ namespace model
 class Material
 {
 public:
+	Material();
+	~Material();
+	Material(Material&& other);
+
 	void 
 	Load(
 		content::ContentManager&	manager,
 		content::ContentReader&		reader
 	);
 
-	Texture* mDiffuse;
-	Texture* mNormal;
-
-	// Binds the textures to the device
+	//Binds the current material
 	void Bind();
+
+private:
+	Material(const Material& other);
+
+	std::unique_ptr<ShaderParams>	m_params;
+	Shader*							m_shader;
 };
 
 // -----------------------------------------------------------------------------

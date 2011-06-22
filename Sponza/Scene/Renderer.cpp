@@ -46,7 +46,7 @@ void Renderer::Draw()
 		//m_lightBuffer.BindRT();
 		//m_lightBuffer.Clear(clearColor);
 
-		m_pShader->Bind(Pass::Normals);
+		//m_pShader->Bind(Pass::Normals);
 		m_sceneList->Draw(m_pShader);
 	}
 

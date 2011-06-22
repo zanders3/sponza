@@ -39,7 +39,7 @@
                 <TreeView ItemsSource="{Binding Builder.RootContent}"/>
             </TabItem>
             <TabItem Header="Output">
-                <ListBox ItemsSource="{Binding Builder.OutputText}" IsHitTestVisible="False"/>
+                <ListBox ItemsSource="{Binding Builder.OutputText}"/>
             </TabItem>
         </TabControl>
     </DockPanel>

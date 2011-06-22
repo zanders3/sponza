@@ -53,25 +53,11 @@ private:
 
 // -----------------------------------------------------------------------------
 
-class EffectPool : public content::ContentItem
-{
-public:
-	EffectPool();
-	~EffectPool();
-
-	virtual void 
-	Load(
-		content::ContentReader& reader
-	);
-
-	ID3D10EffectPool*	m_pool;
-};
-
-// -----------------------------------------------------------------------------
-
 class Shader : public content::ContentItem
 {
 public:
+	friend class ShaderParams;
+
 	Shader();
 	~Shader();
 
@@ -92,16 +78,9 @@ public:
 		return m_passes.size(); 
 	}
 
-	void SetWorld(const D3DXMATRIX& world);
-	void SetView(const D3DXMATRIX& view);
-	void SetProjection(const D3DXMATRIX& projection);
-
 private:
 	ID3D10Effect*									m_pEffect;
 	std::vector<ShaderPass>							m_passes;
-
-	ID3D10EffectMatrixVariable *m_pWorld, *m_pView, *m_pProjection;
-	static std::map<size_t, EffectPool*> s_effectPools;
 };
 
 // -----------------------------------------------------------------------------

@@ -7,6 +7,7 @@
 // Includes 
 // -----------------------------------------------------------------------------
 #include "Graphics/Shader.h"
+#include "Graphics/Shader/ShaderParams.h"
 #include "Content/ContentReader.h"
 #include "Content/ContentManager.h"
 
@@ -22,40 +23,8 @@ namespace graphics
 //----------------------------------------------------------------------------------------
 // Static Data
 //----------------------------------------------------------------------------------------
-std::map<size_t, EffectPool*> Shader::s_effectPools;
 size_t				ShaderPass::s_maxID = 0;
 ShaderPass*			ShaderPass::s_pCurrent = nullptr;
-
-//----------------------------------------------------------------------------------------
-// Effect Pool Class Implementation
-//----------------------------------------------------------------------------------------
-
-EffectPool::EffectPool(
-) : m_pool(nullptr)
-{
-}
-
-//----------------------------------------------------------------------------------------
-
-EffectPool::~EffectPool()
-{
-	SAFE_RELEASE(m_pool);
-}
-
-//----------------------------------------------------------------------------------------
-
-void 
-EffectPool::Load(
-	content::ContentReader& reader
-)
-{
-	//Read file into memory
-	char * data = reader.Read<char>(reader.Size());
-
-	//Create effect pool
-	HRESULT hr;
-	V(D3D10CreateEffectPoolFromMemory(data, reader.Size(), 0, m_pDevice, &m_pool));
-}
 
 //----------------------------------------------------------------------------------------
 // Shader Class Implementation
@@ -63,10 +32,7 @@ EffectPool::Load(
 
 Shader::Shader(
 ) :
-	m_pEffect(nullptr),
-	m_pWorld(nullptr),
-	m_pView(nullptr),
-	m_pProjection(nullptr)
+	m_pEffect(nullptr)
 {
 }
 
@@ -91,22 +57,16 @@ Shader::Load(
 		m_passes.clear();
 	}
 
-	//Load the effect pool
-	UINT flags = 0;//D3D10_EFFECT_COMPILE_CHILD_EFFECT;
-	//EffectPool* pool = m_pContent->Get<EffectPool>("ShaderHeader.fxh");
-
 	//Read file into memory
 	u32 size = reader.Size();
 	char * data = reader.Read<char>(size);
 
 	//Create effect file
 	HRESULT hr;
-	V(D3D10CreateEffectFromMemory(data, size, flags, m_pDevice, nullptr/*pool->m_pool*/, &m_pEffect));
+	V(D3D10CreateEffectFromMemory(data, size, 0, m_pDevice,/* pool->m_pool*/nullptr, &m_pEffect));
 
-	//Load base effect parameters
-	m_pWorld =		m_pEffect->GetVariableByName("World")->AsMatrix();
-	m_pView =		m_pEffect->GetVariableByName("View")->AsMatrix();
-	m_pProjection = m_pEffect->GetVariableByName("Projection")->AsMatrix();
+	//Register with the global shader params
+	GlobalShaderParams::RegisterShader(this);
 
 	//Load effect passes
 	{
@@ -120,27 +80,6 @@ Shader::Load(
 			m_passes.push_back(ShaderPass(pTechnique->GetPassByIndex(i)));
 		}
 	}
-}
-
-//----------------------------------------------------------------------------------------
-
-void Shader::SetWorld(const D3DXMATRIX& world)
-{
-	m_pWorld->SetMatrix((float*)&world);
-}
-
-//----------------------------------------------------------------------------------------
-
-void Shader::SetView(const D3DXMATRIX& view)
-{
-	m_pView->SetMatrix((float*)&view);
-}
-
-//----------------------------------------------------------------------------------------
-
-void Shader::SetProjection(const D3DXMATRIX& projection)
-{
-	m_pProjection->SetMatrix((float*)&projection);
 }
 
 //----------------------------------------------------------------------------------------

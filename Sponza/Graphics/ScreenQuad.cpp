@@ -72,7 +72,7 @@ void ScreenQuad::Draw()
 	static ScreenQuad quad;
 
 	GetDevice()->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-	quad.Mesh::Draw();
+	//quad.Mesh::Draw();
 }
 
 //----------------------------------------------------------------------------------------

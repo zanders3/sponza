@@ -146,6 +146,7 @@
     <ClInclude Include="Graphics\RenderTexture.h" />
     <ClInclude Include="Graphics\ScreenQuad.h" />
     <ClInclude Include="Graphics\Shader.h" />
+    <ClInclude Include="Graphics\Shader\ShaderParams.h" />
     <ClInclude Include="Graphics\Texture.h" />
     <ClInclude Include="Net\Socket.h" />
     <ClInclude Include="Resource.h" />
@@ -178,6 +179,7 @@
     <ClCompile Include="Graphics\RenderTexture.cpp" />
     <ClCompile Include="Graphics\ScreenQuad.cpp" />
     <ClCompile Include="Graphics\Shader.cpp" />
+    <ClCompile Include="Graphics\Shader\ShaderParams.cpp" />
     <ClCompile Include="Graphics\Texture.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Net\Socket.cpp" />

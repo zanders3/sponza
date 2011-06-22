@@ -7,6 +7,7 @@
 // Includes 
 // -----------------------------------------------------------------------------
 #include "Graphics/Model/Mesh.h"
+#include "Graphics/InputLayout.h"
 
 #include "Graphics/Model/Material.h"
 #include "Content/ContentReader.h"
@@ -97,9 +98,11 @@ Mesh::Create(
 // -----------------------------------------------------------------------------
 
 void 
-Mesh::Draw()
+Mesh::Draw(
+	InputLayout& layout)
 {
-	if (mMaterial) mMaterial->Bind();
+	mMaterial->Bind();
+	layout.Bind();
 
 	GetDevice()->IASetIndexBuffer(mIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
 	UINT stride = sizeof(Vertex);

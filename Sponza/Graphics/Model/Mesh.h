@@ -25,6 +25,8 @@ namespace content
 
 namespace graphics
 {
+	class InputLayout;
+
 namespace model
 {
 
@@ -64,7 +66,7 @@ public:
 		std::vector<Material>&	materials
 	);
 
-	void Draw();
+	void Draw(InputLayout& layout);
 
 private:
 	ID3D10Buffer* mVertexBuffer;

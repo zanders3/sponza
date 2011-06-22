@@ -4,12 +4,6 @@
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="stdafx.cpp" />
-    <ClCompile Include="Graphics\DepthTexture.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\InputLayout.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\Particles\Billboard.cpp">
       <Filter>Graphics\Particles</Filter>
     </ClCompile>
@@ -34,9 +28,6 @@
     <ClCompile Include="Content\PackReader.cpp">
       <Filter>Content</Filter>
     </ClCompile>
-    <ClCompile Include="Graphics\RenderTexture.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
     <ClCompile Include="Graphics\ScreenQuad.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
@@ -51,15 +42,6 @@
     </ClCompile>
     <ClCompile Include="Net\Socket.cpp">
       <Filter>Net</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Texture.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Shader.cpp">
-      <Filter>Graphics</Filter>
-    </ClCompile>
-    <ClCompile Include="Graphics\Model\Material.cpp">
-      <Filter>Graphics\Model</Filter>
     </ClCompile>
     <ClCompile Include="Graphics\Model\Model.cpp">
       <Filter>Graphics\Model</Filter>
@@ -76,17 +58,32 @@
     <ClCompile Include="Content\ContentQueue.cpp">
       <Filter>Content</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\DepthTexture.cpp">
+      <Filter>Graphics\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\RenderTexture.cpp">
+      <Filter>Graphics\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Texture.cpp">
+      <Filter>Graphics\Texture</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Shader\ShaderParams.cpp">
+      <Filter>Graphics\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\InputLayout.cpp">
+      <Filter>Graphics\Model</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Model\Material.cpp">
+      <Filter>Graphics\Shader</Filter>
+    </ClCompile>
+    <ClCompile Include="Graphics\Shader.cpp">
+      <Filter>Graphics\Shader</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="stdafx.h" />
-    <ClInclude Include="Graphics\DepthTexture.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\InputLayout.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Particles\Billboard.h">
       <Filter>Graphics\Particles</Filter>
     </ClInclude>
@@ -114,9 +111,6 @@
     <ClInclude Include="Content\PackReader.h">
       <Filter>Content</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\RenderTexture.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\ScreenQuad.h">
       <Filter>Graphics</Filter>
     </ClInclude>
@@ -138,15 +132,6 @@
     <ClInclude Include="Thread\Mutex.h">
       <Filter>Thread</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Texture.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Shader.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Graphics\Model\Material.h">
-      <Filter>Graphics\Model</Filter>
-    </ClInclude>
     <ClInclude Include="Graphics\Model\Model.h">
       <Filter>Graphics\Model</Filter>
     </ClInclude>
@@ -161,6 +146,27 @@
     </ClInclude>
     <ClInclude Include="Content\ContentQueue.h">
       <Filter>Content</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\DepthTexture.h">
+      <Filter>Graphics\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\RenderTexture.h">
+      <Filter>Graphics\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Texture.h">
+      <Filter>Graphics\Texture</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Shader\ShaderParams.h">
+      <Filter>Graphics\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\InputLayout.h">
+      <Filter>Graphics\Model</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Model\Material.h">
+      <Filter>Graphics\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Shader.h">
+      <Filter>Graphics\Shader</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -194,6 +200,12 @@
     </Filter>
     <Filter Include="Graphics\Model">
       <UniqueIdentifier>{2838b460-9378-408a-b622-a7dc5cf24bf4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Texture">
+      <UniqueIdentifier>{708099ac-bde0-4af0-aabc-2bdfd9e98937}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Graphics\Shader">
+      <UniqueIdentifier>{ba01668c-5ec8-44f0-8aa1-3eb43cb0a90f}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

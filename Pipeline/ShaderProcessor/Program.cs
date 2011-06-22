@@ -14,11 +14,16 @@ namespace ShaderProcessor
             {
                 string resourcePath = args[0];
                 string destinationPath = args[1];
-                string parameters = string.Empty; //args[0].EndsWith(".fx") ? "/Gch" : string.Empty;
+
+                bool isChildEffect = resourcePath.EndsWith(".fx");
+
+                Console.WriteLine("Is Child Effect: " + isChildEffect);
+
+                string parameters = string.Empty;//isChildEffect ? "/Gch" : string.Empty;
 
                 Process process = new Process();
                 process.StartInfo.FileName = "fxc";
-                process.StartInfo.Arguments = string.Format("{0} /T fx_4_0 \"{1}\" /Fo \"{2}\"", parameters, resourcePath, destinationPath);
+                process.StartInfo.Arguments = string.Format("/nologo /Zi /T fx_4_0 \"{1}\" /Fo \"{2}\" {0}", parameters, resourcePath, destinationPath);
                 process.StartInfo.RedirectStandardOutput = true;
                 process.StartInfo.RedirectStandardError = true;
                 process.StartInfo.ErrorDialog = false;

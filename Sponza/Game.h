@@ -43,6 +43,7 @@ private:
 
 	scene::SceneListPtr		m_scene;
 	scene::RendererPtr		m_renderer;
+	D3DXMATRIX				m_world;
 };
 
 // -----------------------------------------------------------------------------

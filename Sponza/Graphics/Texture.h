@@ -28,6 +28,8 @@ namespace graphics
 class Texture : public content::ContentItem
 {
 public:
+	friend struct ShaderParam;
+
 	enum BindType
 	{
 		Diffuse,

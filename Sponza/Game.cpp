@@ -7,7 +7,8 @@
 // Includes 
 // -----------------------------------------------------------------------------
 #include "Game.h"
-#include "Content\PackReader.h"
+#include "Content/PackReader.h"
+#include "Graphics/Shader/ShaderParams.h"
 
 // -----------------------------------------------------------------------------
 // Namespace 
@@ -53,6 +54,12 @@ void Game::LoadContent( ID3D10Device* pd3dDevice, int width, int height )
 	light->SetSize(200.0f);
 	light->SetPosition(D3DXVECTOR3(0.0f, 20.0f, 0.0f));
 	light->SetColor(D3DCOLOR_ARGB(255,255,255,255));
+
+	D3DXMatrixIdentity(&m_world);
+	graphics::GlobalShaderParams::SetValue("Projection", &m_camera.m_Projection);
+
+	D3DXVECTOR2 screenSize(640.0f, 480.0f);
+	graphics::GlobalShaderParams::SetValue<D3DXVECTOR2&>("ScreenSize", screenSize);
 }
 
 // -----------------------------------------------------------------------------
@@ -61,9 +68,9 @@ void Game::Render( ID3D10Device* pd3dDevice, double fTime, float fElapsedTime )
 {
 	m_camera.Update(fElapsedTime);
 
-	Shader* shader = m_content.GetContent<Shader>("BlankShader.fx");
-	shader->SetView(m_camera.m_View);
-	shader->SetProjection(m_camera.m_Projection);
+	graphics::GlobalShaderParams::SetValue("View", &m_camera.m_View);
+	graphics::GlobalShaderParams::SetValue("World", &m_world);
+	graphics::GlobalShaderParams::Apply();
 
 	m_renderer->Draw();
 }
@@ -73,9 +80,6 @@ void Game::Render( ID3D10Device* pd3dDevice, double fTime, float fElapsedTime )
 void Game::Update( double fTime, float fElapsedTime )
 {
 	m_content.Update();
-/*#ifdef _DEBUG
-	m_content.ReloadContent();
-#endif*/
 }
 
 // -----------------------------------------------------------------------------
