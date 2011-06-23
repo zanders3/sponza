@@ -1,8 +1,8 @@
 // -----------------------------------------------------------------------------
 //	Copyright Alex Parker © 2011
 //	
-//	SceneList
-//		- Represents the visual scene graph of models (for now).
+//	Renderer
+//		- Renders effects! (will be replaced eventually by scripting... somehow).
 // -----------------------------------------------------------------------------
 
 #pragma once
@@ -10,9 +10,10 @@
 // -----------------------------------------------------------------------------
 // Includes 
 // -----------------------------------------------------------------------------
-#include <vector>
+#include "stdafx.h"
+#include "Content/ContentItem.h"
 #include <memory>
-#include "Scene/Lights.h"
+#include <vector>
 
 // -----------------------------------------------------------------------------
 // Namespace 
@@ -20,56 +21,58 @@
 
 namespace graphics
 {
-	namespace model
-	{
-		class Model;
-	}
-
-	class Shader;
+	class Mesh;
+	class Material;
 }
 
 namespace scene
 {
-	class Light;
-	class SceneList;
-	class SceneInst;
-
-	typedef std::shared_ptr<SceneInst>	SceneInstPtr;
-	typedef std::weak_ptr<SceneInst>	SceneInstWeak;
-	typedef std::shared_ptr<SceneList>	SceneListPtr;
-
 // -----------------------------------------------------------------------------
 // Class Definition 
 // -----------------------------------------------------------------------------
 
-class SceneInst
+struct MeshQueueItem
 {
-public:
-	friend SceneList;
+	MeshQueueItem(
+		D3DXMATRIX&		world,
+		graphics::Mesh&	mesh
+	);
 
-	SceneInst(const D3DXVECTOR3& position, graphics::model::Model* pModel);
-	void SetPosition(const D3DXVECTOR3& position);
-
-private:
-	//Only accessible by SceneList to do rendering
-	D3DXMATRIX	m_world;
-	graphics::model::Model*		m_pModel;
+	D3DXMATRIX&		world;
+	graphics::Mesh& mesh;
 };
 
-class SceneList
+// -----------------------------------------------------------------------------
+
+struct MaterialList
+{
+	MaterialList(
+		graphics::Material& material
+	);
+
+	graphics::Material&			material;
+	std::vector<MeshQueueItem>	meshList;
+};
+
+// -----------------------------------------------------------------------------
+
+class MeshQueue
 {
 public:
-	SceneInstWeak Add(graphics::model::Model* pModel, const D3DXVECTOR3& position);
-	Light* CreateLight();
+	MeshQueue();
+	~MeshQueue();
 
-	void Draw(graphics::Shader* pShader);
-	void DrawLights();
+	void
+	Push(
+		D3DXMATRIX&		world,
+		graphics::Mesh&	mesh
+	);
 
-	void Clear();
+	void
+	Draw();
 
 private:
-	std::vector<SceneInstPtr> m_list;
-	LightList				  m_lights;
+	std::vector<std::unique_ptr<MaterialList>> m_queue;
 };
 
 // -----------------------------------------------------------------------------

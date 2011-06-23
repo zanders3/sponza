@@ -25,10 +25,7 @@ namespace content
 
 namespace graphics
 {
-	class InputLayout;
-
-namespace model
-{
+class InputLayout;
 
 class Material;
 
@@ -61,12 +58,16 @@ public:
 		ID3D10Device*	pDevice
 	);
 
+	Material&
+	GetMaterial();
+
 	void Load(
 		content::ContentReader&	reader, 
 		std::vector<Material>&	materials
 	);
 
-	void Draw(InputLayout& layout);
+
+	void Draw();
 
 private:
 	ID3D10Buffer* mVertexBuffer;
@@ -77,5 +78,4 @@ private:
 
 // -----------------------------------------------------------------------------
 
-}//namespace model
 }//namespace graphics

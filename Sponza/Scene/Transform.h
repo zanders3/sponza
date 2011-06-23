@@ -1,8 +1,8 @@
 // -----------------------------------------------------------------------------
 //	Copyright Alex Parker © 2011
 //	
-//	Model
-//		- Loads and handles models and associated materials.
+//	Transform
+//		- Represents a scene node transform.
 // -----------------------------------------------------------------------------
 
 #pragma once
@@ -12,30 +12,49 @@
 // -----------------------------------------------------------------------------
 #include "stdafx.h"
 
-#include "Graphics\Model\Model.h"
-
 // -----------------------------------------------------------------------------
 // Namespace 
 // -----------------------------------------------------------------------------
 
-namespace graphics
+namespace scene
 {
-
 // -----------------------------------------------------------------------------
 // Class Definition 
 // -----------------------------------------------------------------------------
 
-class ScreenQuad : Mesh
+class Transform
 {
 public:
-	static void Draw();
+	Transform();
+
+	void SetTransform(
+		const D3DXMATRIX& transform
+	);
+
+	void SetPosition(
+		const D3DXVECTOR3& position
+	);
+
+	void SetForward(
+		const D3DXVECTOR3& forward
+	);
+
+	const D3DXMATRIX&
+	GetTransform() const;
+
+	const D3DXVECTOR3&
+	GetPosition() const;
+
+	const D3DXVECTOR3&
+	GetForward() const;
 
 private:
-	ScreenQuad();
-
-	ID3D10Buffer*		m_pQuad;
+	D3DXVECTOR3 m_position;
+	D3DXVECTOR3 m_forward;
+	D3DXMATRIX	m_transform;
+	bool		m_dirty;
 };
 
 // -----------------------------------------------------------------------------
 
-}//namespace graphics
+}//namespace scene

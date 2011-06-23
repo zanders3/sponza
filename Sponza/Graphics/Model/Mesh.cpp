@@ -8,9 +8,23 @@
 // -----------------------------------------------------------------------------
 #include "Graphics/Model/Mesh.h"
 #include "Graphics/InputLayout.h"
-
-#include "Graphics/Model/Material.h"
 #include "Content/ContentReader.h"
+
+// -----------------------------------------------------------------------------
+// Static Data
+// -----------------------------------------------------------------------------
+
+namespace
+{
+	D3D10_INPUT_ELEMENT_DESC layoutDesc[] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,  D3D10_INPUT_PER_VERTEX_DATA, 0 },
+		{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D10_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TANGENT",  0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 24, D3D10_INPUT_PER_VERTEX_DATA, 0 },
+		{ "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 36, D3D10_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,	  0, 48, D3D10_INPUT_PER_VERTEX_DATA, 0 }
+	};
+}
 
 // -----------------------------------------------------------------------------
 // Namespace 
@@ -19,8 +33,6 @@
 using namespace std;
 
 namespace graphics
-{
-namespace model
 {
 
 // -----------------------------------------------------------------------------
@@ -98,10 +110,11 @@ Mesh::Create(
 // -----------------------------------------------------------------------------
 
 void 
-Mesh::Draw(
-	InputLayout& layout)
+Mesh::Draw()
 {
-	mMaterial->Bind();
+	GetDevice()->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST);
+
+	static InputLayout layout(reinterpret_cast<D3D10_INPUT_ELEMENT_DESC*>(&layoutDesc), 5);
 	layout.Bind();
 
 	GetDevice()->IASetIndexBuffer(mIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
@@ -115,5 +128,4 @@ Mesh::Draw(
 
 // -----------------------------------------------------------------------------
 
-}//namespace model
 }//namespace graphics

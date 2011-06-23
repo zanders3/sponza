@@ -22,8 +22,6 @@
 
 namespace graphics
 {
-namespace model
-{
 
 // -----------------------------------------------------------------------------
 // Class Definition 
@@ -41,17 +39,11 @@ public:
 		content::ContentReader& reader
 	);
 
-	void 
-	Draw();
-
 private:
 	std::vector<Material>	m_materials;
 	std::vector<Mesh>		m_meshes;
-
-	static D3D10_INPUT_ELEMENT_DESC	s_layoutDesc[5];
 };
 
 // -----------------------------------------------------------------------------
 
-}//namespace model
 }//namespace graphics

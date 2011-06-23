@@ -68,6 +68,8 @@ Shader::Load(
 	//Register with the global shader params
 	GlobalShaderParams::RegisterShader(this);
 
+	m_pWorld = m_pEffect->GetVariableByName("Position")->AsMatrix();
+
 	//Load effect passes
 	{
 		ID3D10EffectTechnique* pTechnique = m_pEffect->GetTechniqueByIndex(0);
@@ -80,6 +82,16 @@ Shader::Load(
 			m_passes.push_back(ShaderPass(pTechnique->GetPassByIndex(i)));
 		}
 	}
+}
+
+//----------------------------------------------------------------------------------------
+
+void
+Shader::SetWorld(
+	D3DXMATRIX& world
+)
+{
+	m_pWorld->SetMatrix((float*)world);
 }
 
 //----------------------------------------------------------------------------------------

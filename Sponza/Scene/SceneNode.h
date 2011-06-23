@@ -1,8 +1,8 @@
 // -----------------------------------------------------------------------------
 //	Copyright Alex Parker © 2011
 //	
-//	Model
-//		- Loads and handles models and associated materials.
+//	SceneNode
+//		- Represents a scene graph tree which can be loaded in parts for models.
 // -----------------------------------------------------------------------------
 
 #pragma once
@@ -11,31 +11,62 @@
 // Includes 
 // -----------------------------------------------------------------------------
 #include "stdafx.h"
+#include "Graphics/Model/Mesh.h"
+#include "Graphics/Model/Material.h"
+#include <memory>
+#include <vector>
 
-#include "Graphics\Model\Model.h"
+#include "Scene/Transform.h"
 
 // -----------------------------------------------------------------------------
 // Namespace 
 // -----------------------------------------------------------------------------
 
-namespace graphics
+namespace content
 {
+	class ContentReader;
+}
+
+namespace scene
+{
+	class MeshQueue;
+
+	class Component;
+	typedef std::shared_ptr<Component> ComponentPtr;
+
+	class SceneNode;
+	typedef std::shared_ptr<SceneNode> SceneNodePtr;
 
 // -----------------------------------------------------------------------------
 // Class Definition 
 // -----------------------------------------------------------------------------
 
-class ScreenQuad : Mesh
+class SceneNode
 {
 public:
-	static void Draw();
+	SceneNode();
+	~SceneNode();
+
+	void 
+	Load(
+		content::ContentReader&				reader, 
+		std::vector<graphics::Material>&	materialList
+	);
+
+	void
+	CullIntoMeshQueue(
+		D3DXMATRIX	transform,
+		MeshQueue&	meshQueue
+	);
 
 private:
-	ScreenQuad();
+	Transform					m_transform;
+	D3DXMATRIX					m_rootTransform;
 
-	ID3D10Buffer*		m_pQuad;
+	std::vector<graphics::Mesh>	m_meshList;
+	std::vector<SceneNode>		m_children;
 };
 
 // -----------------------------------------------------------------------------
 
-}//namespace graphics
+}//namespace scene

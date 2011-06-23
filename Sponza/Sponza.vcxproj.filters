@@ -34,9 +34,6 @@
     <ClCompile Include="Graphics\Camera.cpp">
       <Filter>Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="Scene\SceneList.cpp">
-      <Filter>Scene</Filter>
-    </ClCompile>
     <ClCompile Include="Scene\Renderer.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
@@ -79,6 +76,9 @@
     <ClCompile Include="Graphics\Shader.cpp">
       <Filter>Graphics\Shader</Filter>
     </ClCompile>
+    <ClCompile Include="Scene\MeshQueue.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h" />
@@ -116,9 +116,6 @@
     </ClInclude>
     <ClInclude Include="Graphics\Camera.h">
       <Filter>Graphics</Filter>
-    </ClInclude>
-    <ClInclude Include="Scene\SceneList.h">
-      <Filter>Scene</Filter>
     </ClInclude>
     <ClInclude Include="Scene\Renderer.h">
       <Filter>Scene</Filter>
@@ -167,6 +164,15 @@
     </ClInclude>
     <ClInclude Include="Graphics\Shader.h">
       <Filter>Graphics\Shader</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\SceneNode.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\MeshQueue.h">
+      <Filter>Scene</Filter>
+    </ClInclude>
+    <ClInclude Include="Scene\Transform.h">
+      <Filter>Scene</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
