@@ -7,8 +7,7 @@
 // Includes 
 // -----------------------------------------------------------------------------
 #include "Graphics/Model/Model.h"
-
-#include "Graphics/Shader.h"
+#include "Scene/SceneNode.h"
 
 // -----------------------------------------------------------------------------
 // Namespace 
@@ -20,17 +19,10 @@ namespace graphics
 {
 
 // -----------------------------------------------------------------------------
-// Static Data
-// -----------------------------------------------------------------------------
-
-
-
-// -----------------------------------------------------------------------------
 // Class Definition 
 // -----------------------------------------------------------------------------
 
 Model::Model() :
-	m_meshes(),
 	m_materials()
 {
 }
@@ -52,16 +44,27 @@ Model::Load(
 	m_materials.reserve(numMaterials);
 	for (size_t i = 0; i<numMaterials; ++i)
 	{
-		//m_materials.push_back(Material());
-		//m_materials[i].Load(*m_pContent, reader);
+		m_materials.push_back(Material());
+		m_materials[i].Load(*m_pContent, reader);
 	}
 
+	m_rootNode = std::make_shared<scene::SceneNode>();
+
 	size_t numMeshes = *reader.Read<size_t>();
-	m_meshes.assign(numMeshes, Mesh());
 	for (size_t i = 0; i<numMeshes; ++i)
 	{
-		m_meshes[i].Load(reader, m_materials);
+		Mesh mesh;
+		mesh.Load(reader, m_materials);
+		m_rootNode->AddMesh(mesh);
 	}
+}
+
+//----------------------------------------------------------------------------------------
+
+scene::SceneNodePtr&
+Model::GetModelRoot()
+{
+	return m_rootNode;
 }
 
 //----------------------------------------------------------------------------------------

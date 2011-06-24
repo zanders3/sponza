@@ -34,6 +34,25 @@ ContentQueue::ContentQueue(
 
 // -----------------------------------------------------------------------------
 
+ContentQueue::~ContentQueue()
+{
+	//Clear the queue without doing any work
+	ContentWorkItem* item;
+	while (m_pendingQueue.Dequeue(item))
+	{
+		delete item;
+	}
+
+	while (m_contentThread->IsRunning());
+
+	while (m_completedQueue.Dequeue(item))
+	{
+		delete item;
+	}
+}
+
+// -----------------------------------------------------------------------------
+
 void
 ContentQueue::Update()
 {

@@ -51,6 +51,7 @@ public:
 	ContentQueue(
 		ContentManager& manager
 	);
+	~ContentQueue();
 
 	void
 	Update();

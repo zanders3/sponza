@@ -34,12 +34,12 @@ namespace scene
 struct MeshQueueItem
 {
 	MeshQueueItem(
-		D3DXMATRIX&		world,
-		graphics::Mesh&	mesh
+		D3DXMATRIX*		world,
+		graphics::Mesh*	mesh
 	);
 
-	D3DXMATRIX&		world;
-	graphics::Mesh& mesh;
+	D3DXMATRIX*		world;
+	graphics::Mesh* mesh;
 };
 
 // -----------------------------------------------------------------------------
@@ -64,9 +64,12 @@ public:
 
 	void
 	Push(
-		D3DXMATRIX&		world,
-		graphics::Mesh&	mesh
+		D3DXMATRIX*		world,
+		graphics::Mesh*	mesh
 	);
+
+	void
+	Clear();
 
 	void
 	Draw();

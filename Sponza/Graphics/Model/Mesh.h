@@ -49,31 +49,36 @@ class Mesh
 public:
 	Mesh();
 	~Mesh();
-
-	void Create(
-		Vertex*			pVertex, 
-		size_t			numVertices, 
-		size_t*			pIndices, 
-		size_t			numIndices,
-		ID3D10Device*	pDevice
+	Mesh(
+		Mesh&& other
 	);
 
 	Material&
 	GetMaterial();
+
+	void Create(
+		D3D10_PRIMITIVE_TOPOLOGY topology,
+		Vertex*			pVertex,
+		size_t			numVertices, 
+		size_t*			pIndices, 
+		size_t			numIndices
+	);
 
 	void Load(
 		content::ContentReader&	reader, 
 		std::vector<Material>&	materials
 	);
 
-
 	void Draw();
 
 private:
-	ID3D10Buffer* mVertexBuffer;
-	ID3D10Buffer* mIndexBuffer;
-	Material*	  mMaterial;
-	size_t		  mNumIndices;
+	Mesh(const Mesh& other) {}
+
+	D3D10_PRIMITIVE_TOPOLOGY	m_topology;
+	ID3D10Buffer*				mVertexBuffer;
+	ID3D10Buffer*				mIndexBuffer;
+	Material*					mMaterial;
+	size_t						mNumIndices;
 };
 
 // -----------------------------------------------------------------------------

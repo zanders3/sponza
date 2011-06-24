@@ -27,8 +27,8 @@ class Transform
 public:
 	Transform();
 
-	void SetTransform(
-		const D3DXMATRIX& transform
+	void SetMatrix(
+		const D3DXMATRIX& matrix
 	);
 
 	void SetPosition(
@@ -40,7 +40,7 @@ public:
 	);
 
 	const D3DXMATRIX&
-	GetTransform() const;
+	GetMatrix() const;
 
 	const D3DXVECTOR3&
 	GetPosition() const;
@@ -49,10 +49,10 @@ public:
 	GetForward() const;
 
 private:
-	D3DXVECTOR3 m_position;
-	D3DXVECTOR3 m_forward;
-	D3DXMATRIX	m_transform;
-	bool		m_dirty;
+	D3DXVECTOR3			m_position;
+	D3DXVECTOR3			m_forward;
+	mutable D3DXMATRIX	m_transform;
+	mutable bool		m_dirty;
 };
 
 // -----------------------------------------------------------------------------

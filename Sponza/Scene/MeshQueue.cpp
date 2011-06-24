@@ -23,8 +23,8 @@ namespace scene
 // -----------------------------------------------------------------------------
 
 MeshQueueItem::MeshQueueItem(
-	D3DXMATRIX&		world,
-	graphics::Mesh&	mesh
+	D3DXMATRIX*		world,
+	graphics::Mesh*	mesh
 ) : world(world),
 	mesh(mesh)
 {
@@ -55,14 +55,14 @@ MeshQueue::~MeshQueue()
 
 void
 MeshQueue::Push(
-	D3DXMATRIX&		world,
-	graphics::Mesh&	mesh
+	D3DXMATRIX*		world,
+	graphics::Mesh*	mesh
 )
 {
 	auto iter = std::upper_bound(
 		m_queue.begin(), 
 		m_queue.end(), 
-		mesh.GetMaterial(), 
+		mesh->GetMaterial(), 
 		[](const graphics::Material& material, const std::unique_ptr<MaterialList>& list)
 		{
 			return material < list->material;
@@ -70,11 +70,20 @@ MeshQueue::Push(
 
 	if (iter == m_queue.end())
 	{
-		m_queue.push_back(std::unique_ptr<MaterialList>( new MaterialList( mesh.GetMaterial() ) ));
+		m_queue.push_back(std::unique_ptr<MaterialList>( new MaterialList( mesh->GetMaterial() ) ));
 		iter = m_queue.end() - 1;
 	}
 
 	(*iter)->meshList.push_back(MeshQueueItem(world, mesh));
+}
+
+//---------------------------------------------------------------------------------------
+
+void
+MeshQueue::Clear()
+{
+	for (auto iter = m_queue.begin(); iter != m_queue.end(); ++iter)
+		(*iter)->meshList.clear();
 }
 
 //---------------------------------------------------------------------------------------
@@ -85,13 +94,16 @@ MeshQueue::Draw()
 	for (auto materialIter = m_queue.begin(); materialIter != m_queue.end(); ++materialIter)
 	{
 		MaterialList& list = **materialIter;
-		list.material.Bind();
-
-		//TODO: more sorting to support mesh instancing!
-		for (auto meshIter = list.meshList.begin(); meshIter != list.meshList.end(); ++meshIter)
+		if (!list.meshList.empty())
 		{
-			list.material.SetWorld(meshIter->world);
-			meshIter->mesh.Draw();
+			list.material.Bind();
+
+			//TODO: more sorting to support mesh instancing!
+			for (auto meshIter = list.meshList.begin(); meshIter != list.meshList.end(); ++meshIter)
+			{
+				list.material.SetWorld(*(meshIter->world));
+				meshIter->mesh->Draw();
+			}
 		}
 	}
 }

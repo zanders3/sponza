@@ -54,9 +54,22 @@ public:
 	);
 
 	void
-	CullIntoMeshQueue(
-		D3DXMATRIX	transform,
-		MeshQueue&	meshQueue
+	AddChild(
+		SceneNodePtr&	child
+	);
+
+	void
+	AddMesh(
+		graphics::Mesh&	mesh
+	);
+
+	Transform&
+	GetTransform();
+
+	void
+	Cull(
+		const D3DXMATRIX&	transform,
+		MeshQueue&			meshQueue
 	);
 
 private:
@@ -64,7 +77,7 @@ private:
 	D3DXMATRIX					m_rootTransform;
 
 	std::vector<graphics::Mesh>	m_meshList;
-	std::vector<SceneNode>		m_children;
+	std::vector<SceneNodePtr>	m_children;
 };
 
 // -----------------------------------------------------------------------------

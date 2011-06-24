@@ -11,11 +11,8 @@
 // Includes 
 // -----------------------------------------------------------------------------
 #include "stdafx.h"
-
-#include "Scene/SceneList.h"
 #include "Graphics/RenderTexture.h"
 #include "Graphics/DepthTexture.h"
-#include "Scene/SceneList.h"
 #include <memory>
 
 // -----------------------------------------------------------------------------
@@ -50,7 +47,7 @@ public:
 		};
 	};
 
-	Renderer(ID3D10Device* pDevice, graphics::Shader* pShader, SceneListPtr sceneList);
+	Renderer(ID3D10Device* pDevice, graphics::Shader* pShader);
 
 	void Draw();
 
@@ -67,8 +64,6 @@ private:
 	graphics::RenderTexture	m_frameBuffer;
 	graphics::RenderTexture	m_normalBuffer;
 	graphics::RenderTexture	m_lightBuffer;
-	
-	SceneListPtr	m_sceneList;
 };
 
 // -----------------------------------------------------------------------------

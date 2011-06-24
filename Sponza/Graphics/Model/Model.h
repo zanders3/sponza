@@ -20,6 +20,12 @@
 // Namespace 
 // -----------------------------------------------------------------------------
 
+namespace scene
+{
+	class SceneNode;
+	typedef std::shared_ptr<SceneNode> SceneNodePtr;
+}
+
 namespace graphics
 {
 
@@ -39,9 +45,12 @@ public:
 		content::ContentReader& reader
 	);
 
+	scene::SceneNodePtr&
+	GetModelRoot();
+
 private:
+	scene::SceneNodePtr		m_rootNode;
 	std::vector<Material>	m_materials;
-	std::vector<Mesh>		m_meshes;
 };
 
 // -----------------------------------------------------------------------------

@@ -79,6 +79,12 @@
     <ClCompile Include="Scene\MeshQueue.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Graphics\SceneNode.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
+    <ClCompile Include="Scene\Transform.cpp">
+      <Filter>Scene</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h" />

@@ -68,7 +68,7 @@ Shader::Load(
 	//Register with the global shader params
 	GlobalShaderParams::RegisterShader(this);
 
-	m_pWorld = m_pEffect->GetVariableByName("Position")->AsMatrix();
+	m_pWorld = m_pEffect->GetVariableByName("World")->AsMatrix();
 
 	//Load effect passes
 	{
