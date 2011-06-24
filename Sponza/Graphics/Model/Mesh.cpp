@@ -8,9 +8,24 @@
 // -----------------------------------------------------------------------------
 #include "Graphics/Model/Mesh.h"
 #include "Graphics/InputLayout.h"
-
-#include "Graphics/Model/Material.h"
 #include "Content/ContentReader.h"
+#include "Graphics/Model/Material.h"
+
+// -----------------------------------------------------------------------------
+// Static Data
+// -----------------------------------------------------------------------------
+
+namespace
+{
+	D3D10_INPUT_ELEMENT_DESC layoutDesc[] =
+	{
+		{ "POSITION", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 0,  D3D10_INPUT_PER_VERTEX_DATA, 0 },
+		{ "NORMAL",   0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 12, D3D10_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TANGENT",  0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 24, D3D10_INPUT_PER_VERTEX_DATA, 0 },
+		{ "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 36, D3D10_INPUT_PER_VERTEX_DATA, 0 },
+		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,	  0, 48, D3D10_INPUT_PER_VERTEX_DATA, 0 }
+	};
+}
 
 // -----------------------------------------------------------------------------
 // Namespace 
@@ -19,8 +34,6 @@
 using namespace std;
 
 namespace graphics
-{
-namespace model
 {
 
 // -----------------------------------------------------------------------------
@@ -44,6 +57,29 @@ Mesh::~Mesh()
 
 // -----------------------------------------------------------------------------
 
+Mesh::Mesh(
+	Mesh&& other
+) : m_topology(other.m_topology),
+	mVertexBuffer(other.mVertexBuffer),
+	mIndexBuffer(other.mIndexBuffer),
+	mMaterial(other.mMaterial),
+	mNumIndices(other.mNumIndices)
+{
+	other.mVertexBuffer = nullptr;
+	other.mIndexBuffer = nullptr;
+	other.mMaterial = nullptr;
+}
+
+// -----------------------------------------------------------------------------
+
+Material&
+Mesh::GetMaterial()
+{
+	return *mMaterial;
+}
+
+// -----------------------------------------------------------------------------
+
 void 
 Mesh::Load(
 	content::ContentReader&	reader, 
@@ -59,19 +95,21 @@ Mesh::Load(
 	size_t	 mNumIndices = *reader.Read<size_t>();
 	size_t * mIndices = reader.Read<size_t>(mNumIndices);
 
-	Create(mVertices, mNumVertices, mIndices, mNumIndices, GetDevice());
+	Create(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLELIST, mVertices, mNumVertices, mIndices, mNumIndices);
 }
 
 // -----------------------------------------------------------------------------
 
 void 
 Mesh::Create(
+	D3D10_PRIMITIVE_TOPOLOGY topology,
 	Vertex* pVertex, 
 	size_t numVertices, 
 	size_t* pIndices, 
-	size_t numIndices, 
-	ID3D10Device* pDevice)
+	size_t numIndices)
 {
+	m_topology = topology;
+
 	HRESULT hr;
 
 	D3D10_BUFFER_DESC bd;
@@ -82,7 +120,7 @@ Mesh::Create(
     bd.MiscFlags = 0;
     D3D10_SUBRESOURCE_DATA InitData;
     InitData.pSysMem = pVertex;
-	V(pDevice->CreateBuffer( &bd, &InitData, &mVertexBuffer));
+	V(GetDevice()->CreateBuffer( &bd, &InitData, &mVertexBuffer));
 
 	bd.Usage = D3D10_USAGE_DEFAULT;
     bd.ByteWidth = sizeof( size_t ) * numIndices;
@@ -90,7 +128,7 @@ Mesh::Create(
     bd.CPUAccessFlags = 0;
     bd.MiscFlags = 0;
     InitData.pSysMem = pIndices;
-    V(pDevice->CreateBuffer( &bd, &InitData, &mIndexBuffer));
+    V(GetDevice()->CreateBuffer( &bd, &InitData, &mIndexBuffer));
 
 	mNumIndices = numIndices;
 }
@@ -98,10 +136,11 @@ Mesh::Create(
 // -----------------------------------------------------------------------------
 
 void 
-Mesh::Draw(
-	InputLayout& layout)
+Mesh::Draw()
 {
-	mMaterial->Bind();
+	GetDevice()->IASetPrimitiveTopology(m_topology);
+
+	static InputLayout layout(reinterpret_cast<D3D10_INPUT_ELEMENT_DESC*>(&layoutDesc), 5);
 	layout.Bind();
 
 	GetDevice()->IASetIndexBuffer(mIndexBuffer, DXGI_FORMAT_R32_UINT, 0);
@@ -115,5 +154,4 @@ Mesh::Draw(
 
 // -----------------------------------------------------------------------------
 
-}//namespace model
 }//namespace graphics

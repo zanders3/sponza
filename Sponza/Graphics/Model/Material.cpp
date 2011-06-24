@@ -18,8 +18,6 @@
 // -----------------------------------------------------------------------------
 namespace graphics
 {
-namespace model
-{
 
 // -----------------------------------------------------------------------------
 // Class Definition 
@@ -28,6 +26,8 @@ namespace model
 Material::Material(
 ) : m_shader(nullptr)
 {
+	static int count = 0;
+	m_id = count++;
 }
 
 // -----------------------------------------------------------------------------
@@ -44,6 +44,7 @@ Material::Material(
 {
 	m_params.swap(other.m_params);
 	m_shader = other.m_shader;
+	m_id = other.m_id;
 }
 
 // -----------------------------------------------------------------------------
@@ -96,5 +97,34 @@ Material::Bind()
 
 //----------------------------------------------------------------------------------------
 
-}//namespace model
+void 
+Material::SetWorld(
+	D3DXMATRIX& world
+)
+{
+	m_shader->SetWorld( world );
+}
+
+//----------------------------------------------------------------------------------------
+
+bool
+Material::operator< (
+	const Material& other
+) const
+{
+	return m_id < other.m_id;
+}
+
+//----------------------------------------------------------------------------------------
+
+bool
+Material::operator= (
+	const Material& other
+) const
+{
+	return m_id == other.m_id;
+}
+
+//----------------------------------------------------------------------------------------
+
 }//namespace graphics

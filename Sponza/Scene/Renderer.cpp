@@ -23,14 +23,13 @@ namespace scene
 // Class Implementation
 // -----------------------------------------------------------------------------
 
-Renderer::Renderer(ID3D10Device* pDevice, graphics::Shader* pShader, SceneListPtr sceneList) :
+Renderer::Renderer(ID3D10Device* pDevice, graphics::Shader* pShader) :
 	m_pDevice(pDevice),
 	m_pShader(pShader),
 	m_frameDepth(pDevice),
 	m_frameBuffer(pDevice, &m_frameDepth),
 	m_normalBuffer(pDevice, &m_frameDepth, DXGI_FORMAT_B8G8R8A8_UNORM, DXUTGetWindowWidth(), DXUTGetWindowHeight()),
-	m_lightBuffer(pDevice, &m_frameDepth, DXGI_FORMAT_B8G8R8A8_UNORM, DXUTGetWindowWidth(), DXUTGetWindowHeight()),
-	m_sceneList(sceneList)
+	m_lightBuffer(pDevice, &m_frameDepth, DXGI_FORMAT_B8G8R8A8_UNORM, DXUTGetWindowWidth(), DXUTGetWindowHeight())
 {
 }
 
@@ -47,7 +46,7 @@ void Renderer::Draw()
 		//m_lightBuffer.Clear(clearColor);
 
 		//m_pShader->Bind(Pass::Normals);
-		m_sceneList->Draw(m_pShader);
+		//m_sceneList->Draw(m_pShader);
 	}
 
 	/*{

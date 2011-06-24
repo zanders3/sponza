@@ -25,7 +25,7 @@ namespace graphics
 // Class Definition 
 // -----------------------------------------------------------------------------
 
-class ScreenQuad : model::Mesh
+class ScreenQuad : Mesh
 {
 public:
 	static void Draw();

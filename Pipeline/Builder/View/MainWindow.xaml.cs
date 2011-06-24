@@ -12,6 +12,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Builder.Model;
+using System.Windows.Shell;
 
 namespace Builder.View
 {
@@ -60,6 +61,12 @@ namespace Builder.View
             ContentItem item = (ContentItem)((MenuItem)sender).DataContext;
             item.Clean();
             item.Validate();
+        }
+
+        private void ProgressBar_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double> e)
+        {
+            taskbarItem.ProgressState = e.NewValue > 0.0f ? TaskbarItemProgressState.Normal : TaskbarItemProgressState.None;
+            taskbarItem.ProgressValue = e.NewValue / 100.0f;
         }
     }
 }

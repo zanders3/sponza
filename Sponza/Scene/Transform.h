@@ -1,8 +1,8 @@
 // -----------------------------------------------------------------------------
 //	Copyright Alex Parker © 2011
 //	
-//	Model
-//		- Loads and handles models and associated materials.
+//	Transform
+//		- Represents a scene node transform.
 // -----------------------------------------------------------------------------
 
 #pragma once
@@ -11,10 +11,6 @@
 // Includes 
 // -----------------------------------------------------------------------------
 #include "stdafx.h"
-#include "Graphics/Model/Model.h"
-#include "Graphics/Model/Material.h"
-#include "Graphics/Model/Mesh.h"
-#include "Content/ContentItem.h"
 
 // -----------------------------------------------------------------------------
 // Namespace 
@@ -22,37 +18,43 @@
 
 namespace scene
 {
-	class SceneNode;
-	typedef std::shared_ptr<SceneNode> SceneNodePtr;
-}
-
-namespace graphics
-{
-
 // -----------------------------------------------------------------------------
 // Class Definition 
 // -----------------------------------------------------------------------------
 
-class Model : public content::ContentItem
+class Transform
 {
 public:
-	Model();
-	~Model();
+	Transform();
 
-public:
-	virtual void 
-	Load(
-		content::ContentReader& reader
+	void SetMatrix(
+		const D3DXMATRIX& matrix
 	);
 
-	scene::SceneNodePtr&
-	GetModelRoot();
+	void SetPosition(
+		const D3DXVECTOR3& position
+	);
+
+	void SetForward(
+		const D3DXVECTOR3& forward
+	);
+
+	const D3DXMATRIX&
+	GetMatrix() const;
+
+	const D3DXVECTOR3&
+	GetPosition() const;
+
+	const D3DXVECTOR3&
+	GetForward() const;
 
 private:
-	scene::SceneNodePtr		m_rootNode;
-	std::vector<Material>	m_materials;
+	D3DXVECTOR3			m_position;
+	D3DXVECTOR3			m_forward;
+	mutable D3DXMATRIX	m_transform;
+	mutable bool		m_dirty;
 };
 
 // -----------------------------------------------------------------------------
 
-}//namespace graphics
+}//namespace scene

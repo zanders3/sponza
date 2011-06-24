@@ -9,14 +9,13 @@
 #include "Game.h"
 #include "Content/PackReader.h"
 #include "Graphics/Shader/ShaderParams.h"
+#include "Scene/SceneNode.h"
+#include "Scene/MeshQueue.h"
+#include "Graphics/Model/Model.h"
 
 // -----------------------------------------------------------------------------
 // Namespace 
 // -----------------------------------------------------------------------------
-
-using namespace scene;
-using namespace graphics;
-using namespace graphics::model;
 
 namespace game
 {
@@ -26,12 +25,16 @@ namespace game
 // -----------------------------------------------------------------------------
 
 
-Game::Game() :
-	m_content(".\\..\\Content\\Out", ".\\..\\Content\\Content.pack"),
-	m_camera()
+Game::Game(
+) : m_content(".\\..\\Content\\Out", ".\\..\\Content\\Content.pack"),
+	m_camera(new Camera()),
+	m_sceneRoot(new scene::SceneNode()),
+	m_meshQueue(new scene::MeshQueue())
 {
-	DXUTSetCallbackKeyboard(&m_camera.OnKeyboard);
-	DXUTSetCallbackMouse(&m_camera.OnMouse, true);
+	DXUTSetCallbackKeyboard(&m_camera->OnKeyboard);
+	DXUTSetCallbackMouse(&m_camera->OnMouse, true);
+
+	D3DXMatrixIdentity(&m_identity);
 }
 
 // -----------------------------------------------------------------------------
@@ -44,19 +47,15 @@ Game::~Game()
 
 void Game::LoadContent( ID3D10Device* pd3dDevice, int width, int height )
 {
-	m_scene = std::make_shared<SceneList>();
-	m_renderer = std::make_shared<Renderer>(pd3dDevice, m_content.GetContent<Shader>("BlankShader.fx"), m_scene);
-
 	const D3DXVECTOR3 zero = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	m_scene->Add(m_content.GetContent<Model>("sponza.obj"), zero);
+	m_sceneRoot->AddChild(m_content.GetContent<graphics::Model>("sponza.obj")->GetModelRoot());
 
-	Light* light = m_scene->CreateLight();
+	/*Light* light = m_scene->CreateLight();
 	light->SetSize(200.0f);
 	light->SetPosition(D3DXVECTOR3(0.0f, 20.0f, 0.0f));
-	light->SetColor(D3DCOLOR_ARGB(255,255,255,255));
+	light->SetColor(D3DCOLOR_ARGB(255,255,255,255));*/
 
-	D3DXMatrixIdentity(&m_world);
-	graphics::GlobalShaderParams::SetValue("Projection", &m_camera.m_Projection);
+	graphics::GlobalShaderParams::SetValue("Projection", &m_camera->m_Projection);
 
 	D3DXVECTOR2 screenSize(640.0f, 480.0f);
 	graphics::GlobalShaderParams::SetValue<D3DXVECTOR2&>("ScreenSize", screenSize);
@@ -66,13 +65,14 @@ void Game::LoadContent( ID3D10Device* pd3dDevice, int width, int height )
 
 void Game::Render( ID3D10Device* pd3dDevice, double fTime, float fElapsedTime )
 {
-	m_camera.Update(fElapsedTime);
-
-	graphics::GlobalShaderParams::SetValue("View", &m_camera.m_View);
-	graphics::GlobalShaderParams::SetValue("World", &m_world);
+	graphics::GlobalShaderParams::SetValue("View", &m_camera->m_View);
 	graphics::GlobalShaderParams::Apply();
+	
+	float clearColor[] = { 0.0f, 0.2f, 1.0f, 1.0f };
+	GetDevice()->ClearRenderTargetView(DXUTGetD3D10RenderTargetView(), clearColor);
+	GetDevice()->ClearDepthStencilView(DXUTGetD3D10DepthStencilView(), D3D10_CLEAR_DEPTH, 1.0f, 0);
 
-	m_renderer->Draw();
+	m_meshQueue->Draw();
 }
 
 // -----------------------------------------------------------------------------
@@ -80,6 +80,11 @@ void Game::Render( ID3D10Device* pd3dDevice, double fTime, float fElapsedTime )
 void Game::Update( double fTime, float fElapsedTime )
 {
 	m_content.Update();
+
+	m_camera->Update(fElapsedTime);
+
+	m_meshQueue->Clear();
+	m_sceneRoot->Cull(m_identity, *m_meshQueue);
 }
 
 // -----------------------------------------------------------------------------

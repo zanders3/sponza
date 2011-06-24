@@ -78,7 +78,13 @@ public:
 		return m_passes.size(); 
 	}
 
+	void
+	SetWorld(
+		D3DXMATRIX& world
+	);
+
 private:
+	ID3D10EffectMatrixVariable*						m_pWorld;
 	ID3D10Effect*									m_pEffect;
 	std::vector<ShaderPass>							m_passes;
 };

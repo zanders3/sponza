@@ -1,8 +1,8 @@
 // -----------------------------------------------------------------------------
 //	Copyright Alex Parker © 2011
 //	
-//	Model
-//		- Loads and handles models and associated materials.
+//	Renderer
+//		- Renders effects! (will be replaced eventually by scripting... somehow).
 // -----------------------------------------------------------------------------
 
 #pragma once
@@ -11,48 +11,73 @@
 // Includes 
 // -----------------------------------------------------------------------------
 #include "stdafx.h"
-#include "Graphics/Model/Model.h"
-#include "Graphics/Model/Material.h"
-#include "Graphics/Model/Mesh.h"
 #include "Content/ContentItem.h"
+#include <memory>
+#include <vector>
 
 // -----------------------------------------------------------------------------
 // Namespace 
 // -----------------------------------------------------------------------------
 
-namespace scene
-{
-	class SceneNode;
-	typedef std::shared_ptr<SceneNode> SceneNodePtr;
-}
-
 namespace graphics
 {
+	class Mesh;
+	class Material;
+}
 
+namespace scene
+{
 // -----------------------------------------------------------------------------
 // Class Definition 
 // -----------------------------------------------------------------------------
 
-class Model : public content::ContentItem
+struct MeshQueueItem
 {
-public:
-	Model();
-	~Model();
-
-public:
-	virtual void 
-	Load(
-		content::ContentReader& reader
+	MeshQueueItem(
+		D3DXMATRIX*		world,
+		graphics::Mesh*	mesh
 	);
 
-	scene::SceneNodePtr&
-	GetModelRoot();
-
-private:
-	scene::SceneNodePtr		m_rootNode;
-	std::vector<Material>	m_materials;
+	D3DXMATRIX*		world;
+	graphics::Mesh* mesh;
 };
 
 // -----------------------------------------------------------------------------
 
-}//namespace graphics
+struct MaterialList
+{
+	MaterialList(
+		graphics::Material& material
+	);
+
+	graphics::Material&			material;
+	std::vector<MeshQueueItem>	meshList;
+};
+
+// -----------------------------------------------------------------------------
+
+class MeshQueue
+{
+public:
+	MeshQueue();
+	~MeshQueue();
+
+	void
+	Push(
+		D3DXMATRIX*		world,
+		graphics::Mesh*	mesh
+	);
+
+	void
+	Clear();
+
+	void
+	Draw();
+
+private:
+	std::vector<std::unique_ptr<MaterialList>> m_queue;
+};
+
+// -----------------------------------------------------------------------------
+
+}//namespace scene

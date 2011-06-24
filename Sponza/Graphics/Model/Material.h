@@ -29,9 +29,6 @@ namespace graphics
 	class ShaderParams;
 	class Shader;
 
-namespace model
-{
-
 // -----------------------------------------------------------------------------
 // Class Definition 
 // -----------------------------------------------------------------------------
@@ -52,14 +49,29 @@ public:
 	//Binds the current material
 	void Bind();
 
+	//Sets the world outside of the parameter bind.
+	void SetWorld(
+		D3DXMATRIX& world
+	);
+
+	bool
+	operator< (
+		const Material& other
+	) const;
+
+	bool
+	operator= (
+		const Material& other
+	) const;
+
 private:
 	Material(const Material& other);
 
+	int								m_id;
 	std::unique_ptr<ShaderParams>	m_params;
 	Shader*							m_shader;
 };
 
 // -----------------------------------------------------------------------------
 
-}//namespace model
 }//namespace graphics

@@ -24,7 +24,7 @@ namespace graphics
 ScreenQuad::ScreenQuad()
 {
 	const D3DXVECTOR3 zero = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
-	model::Vertex vertices[] =
+	Vertex vertices[] =
 	{
 		{
 			D3DXVECTOR3(-1.0f, -1.0f, 0.0f),
@@ -62,7 +62,7 @@ ScreenQuad::ScreenQuad()
 		1, 2, 3
 	};
 
-	Create((model::Vertex*)&vertices, 4, (size_t*)&indices, 6, GetDevice());
+	Create(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP, (Vertex*)&vertices, 4, (size_t*)&indices, 6);
 }
 
 // -----------------------------------------------------------------------------
@@ -70,9 +70,7 @@ ScreenQuad::ScreenQuad()
 void ScreenQuad::Draw()
 {
 	static ScreenQuad quad;
-
-	GetDevice()->IASetPrimitiveTopology(D3D10_PRIMITIVE_TOPOLOGY_TRIANGLESTRIP);
-	//quad.Mesh::Draw();
+	quad.Mesh::Draw();
 }
 
 //----------------------------------------------------------------------------------------

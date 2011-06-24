@@ -14,15 +14,17 @@
 
 #include "resource.h"
 #include "Content\ContentManager.h"
-#include "Graphics\Model\Model.h"
-#include "Graphics\Shader.h"
 #include "Graphics\Camera.h"
-#include "Scene\Renderer.h"
-#include "Scene\SceneList.h"
 
 // -----------------------------------------------------------------------------
 // Namespace 
 // -----------------------------------------------------------------------------
+
+namespace scene
+{
+	class SceneNode;
+	class MeshQueue;
+}
 
 namespace game
 {
@@ -38,12 +40,12 @@ public:
 	void Update( double fTime, float fElapsedTime ); 
 
 private:
-	content::ContentManager m_content;
-	Camera					m_camera;
+	content::ContentManager				m_content;
+	std::unique_ptr<Camera>				m_camera;
+	std::unique_ptr<scene::SceneNode>	m_sceneRoot;
+	std::unique_ptr<scene::MeshQueue>	m_meshQueue;
 
-	scene::SceneListPtr		m_scene;
-	scene::RendererPtr		m_renderer;
-	D3DXMATRIX				m_world;
+	D3DXMATRIX							m_identity;
 };
 
 // -----------------------------------------------------------------------------

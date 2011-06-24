@@ -4,6 +4,9 @@
         xmlns:Model="clr-namespace:Builder.Model"
         Icon="../Icon.ico"
         Title="Builder" Height="350" Width="525" Closing="Window_Closing">
+    <Window.TaskbarItemInfo>
+        <TaskbarItemInfo x:Name="taskbarItem"/>
+    </Window.TaskbarItemInfo>
     <Window.Resources>
  
         <Model:ContentStateColorConverter x:Key="stateColorConverter"/>
@@ -19,13 +22,13 @@
                 <TextBlock Text="{Binding ResourceName}"/>
             </StackPanel>
         </HierarchicalDataTemplate>
-
+        
     </Window.Resources>
     <DockPanel LastChildFill="True">
         <StatusBar DockPanel.Dock="Bottom">
             <StatusBarItem Content="{Binding Builder.StatusText}" Width="200"/>
             <StatusBarItem HorizontalContentAlignment="Stretch">
-                <ProgressBar Minimum="0" Maximum="100" Height="20" Value="{Binding Builder.Progress}"/>
+                <ProgressBar Minimum="0" Maximum="100" Height="20" Value="{Binding Builder.Progress}" ValueChanged="ProgressBar_ValueChanged"/>
             </StatusBarItem>
         </StatusBar>
         
