@@ -118,11 +118,21 @@ Material::operator< (
 //----------------------------------------------------------------------------------------
 
 bool
-Material::operator= (
+Material::operator== (
 	const Material& other
 ) const
 {
 	return m_id == other.m_id;
+}
+
+//----------------------------------------------------------------------------------------
+
+bool
+Material::operator!= (
+	const Material& other
+) const
+{
+	return m_id != other.m_id;
 }
 
 //----------------------------------------------------------------------------------------

@@ -59,22 +59,26 @@ MeshQueue::Push(
 	graphics::Mesh*	mesh
 )
 {
-	auto iter = std::upper_bound(
-		m_queue.begin(), 
+	graphics::Material& material = mesh->GetMaterial();
+
+	auto find = std::lower_bound(
+		m_queue.begin(),
 		m_queue.end(), 
 		mesh->GetMaterial(), 
-		[](const graphics::Material& material, const std::unique_ptr<MaterialList>& list)
+		[](const std::unique_ptr<MaterialList>& list, const graphics::Material& material)
 		{
 			return material < list->material;
 		});
 
-	if (iter == m_queue.end())
+	if (find != m_queue.end() && material == (*find)->material)
 	{
-		m_queue.push_back(std::unique_ptr<MaterialList>( new MaterialList( mesh->GetMaterial() ) ));
-		iter = m_queue.end() - 1;
+		(*find)->meshList.push_back(MeshQueueItem(world, mesh));
 	}
-
-	(*iter)->meshList.push_back(MeshQueueItem(world, mesh));
+	else
+	{
+		m_queue.insert(find, std::unique_ptr<MaterialList>( new MaterialList( mesh->GetMaterial() ) ));
+		m_queue.back()->meshList.push_back(MeshQueueItem(world, mesh));
+	}
 }
 
 //---------------------------------------------------------------------------------------

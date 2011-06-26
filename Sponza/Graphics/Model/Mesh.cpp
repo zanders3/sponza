@@ -25,6 +25,8 @@ namespace
 		{ "BINORMAL", 0, DXGI_FORMAT_R32G32B32_FLOAT, 0, 36, D3D10_INPUT_PER_VERTEX_DATA, 0 },
 		{ "TEXCOORD", 0, DXGI_FORMAT_R32G32_FLOAT,	  0, 48, D3D10_INPUT_PER_VERTEX_DATA, 0 }
 	};
+
+	D3D10_PRIMITIVE_TOPOLOGY currentTopology = D3D10_PRIMITIVE_TOPOLOGY_UNDEFINED;
 }
 
 // -----------------------------------------------------------------------------
@@ -138,7 +140,11 @@ Mesh::Create(
 void 
 Mesh::Draw()
 {
-	GetDevice()->IASetPrimitiveTopology(m_topology);
+	if (currentTopology != m_topology)
+	{
+		currentTopology = m_topology;
+		GetDevice()->IASetPrimitiveTopology(m_topology);
+	}
 
 	static InputLayout layout(reinterpret_cast<D3D10_INPUT_ELEMENT_DESC*>(&layoutDesc), 5);
 	layout.Bind();

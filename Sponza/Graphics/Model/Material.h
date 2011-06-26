@@ -60,7 +60,12 @@ public:
 	) const;
 
 	bool
-	operator= (
+	operator== (
+		const Material& other
+	) const;
+
+	bool
+	operator!= (
 		const Material& other
 	) const;
 
