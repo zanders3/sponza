@@ -17,6 +17,11 @@
 
 using namespace std;
 
+namespace
+{
+	u32 shaderID = 0;
+}
+
 namespace graphics
 {
 
@@ -31,7 +36,8 @@ ShaderPass*			ShaderPass::s_pCurrent = nullptr;
 //----------------------------------------------------------------------------------------
 
 Shader::Shader(
-) :
+) : m_id(shaderID++),
+	m_drawOrder(0),
 	m_pEffect(nullptr)
 {
 }
@@ -75,6 +81,12 @@ Shader::Load(
 		ID3D10EffectTechnique* pTechnique = m_pEffect->GetTechniqueByIndex(0);
 		D3D10_TECHNIQUE_DESC desc;
 		pTechnique->GetDesc(&desc);
+
+		ID3D10EffectVariable* drawOrder = pTechnique->GetAnnotationByName("DrawOrder");
+		if (drawOrder)
+		{
+			drawOrder->AsScalar()->GetInt((int*)&m_drawOrder);
+		}
 		
 		m_passes.reserve(desc.Passes);
 		for (size_t i = 0; i<desc.Passes; ++i)
@@ -92,6 +104,26 @@ Shader::SetWorld(
 )
 {
 	m_pWorld->SetMatrix((float*)world);
+}
+
+//----------------------------------------------------------------------------------------
+
+bool
+Shader::operator <(
+	const Shader& other
+) const
+{
+	return m_drawOrder < other.m_drawOrder && m_id < other.m_id;
+}
+
+//----------------------------------------------------------------------------------------
+
+bool
+Shader::operator ==(
+	const Shader& other
+) const
+{
+	return m_id == other.m_id;
 }
 
 //----------------------------------------------------------------------------------------

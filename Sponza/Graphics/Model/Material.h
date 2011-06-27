@@ -54,25 +54,12 @@ public:
 		D3DXMATRIX& world
 	);
 
-	bool
-	operator< (
-		const Material& other
-	) const;
-
-	bool
-	operator== (
-		const Material& other
-	) const;
-
-	bool
-	operator!= (
-		const Material& other
-	) const;
+	Shader*
+	GetShader();
 
 private:
 	Material(const Material& other);
 
-	int								m_id;
 	std::unique_ptr<ShaderParams>	m_params;
 	Shader*							m_shader;
 };

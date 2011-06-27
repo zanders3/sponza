@@ -26,8 +26,6 @@ namespace graphics
 Material::Material(
 ) : m_shader(nullptr)
 {
-	static int count = 0;
-	m_id = count++;
 }
 
 // -----------------------------------------------------------------------------
@@ -44,7 +42,6 @@ Material::Material(
 {
 	m_params.swap(other.m_params);
 	m_shader = other.m_shader;
-	m_id = other.m_id;
 }
 
 // -----------------------------------------------------------------------------
@@ -120,32 +117,10 @@ Material::SetWorld(
 
 //----------------------------------------------------------------------------------------
 
-bool
-Material::operator< (
-	const Material& other
-) const
+Shader*
+Material::GetShader()
 {
-	return m_id < other.m_id;
-}
-
-//----------------------------------------------------------------------------------------
-
-bool
-Material::operator== (
-	const Material& other
-) const
-{
-	return m_id == other.m_id;
-}
-
-//----------------------------------------------------------------------------------------
-
-bool
-Material::operator!= (
-	const Material& other
-) const
-{
-	return m_id != other.m_id;
+	return m_shader;
 }
 
 //----------------------------------------------------------------------------------------

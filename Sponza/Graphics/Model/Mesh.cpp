@@ -140,6 +140,11 @@ Mesh::Create(
 void 
 Mesh::Draw()
 {
+	if (mMaterial)
+	{
+		mMaterial->Bind();
+	}
+
 	if (currentTopology != m_topology)
 	{
 		currentTopology = m_topology;

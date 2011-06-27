@@ -22,7 +22,7 @@
 namespace graphics
 {
 	class Mesh;
-	class Material;
+	class Shader;
 }
 
 namespace scene
@@ -44,13 +44,13 @@ struct MeshQueueItem
 
 // -----------------------------------------------------------------------------
 
-struct MaterialList
+struct ShaderList
 {
-	MaterialList(
-		graphics::Material& material
+	ShaderList(
+		graphics::Shader* material
 	);
 
-	graphics::Material&			material;
+	graphics::Shader*			shader;
 	std::vector<MeshQueueItem>	meshList;
 };
 
@@ -75,7 +75,7 @@ public:
 	Draw();
 
 private:
-	std::vector<std::unique_ptr<MaterialList>> m_queue;
+	std::vector<ShaderList> m_queue;
 };
 
 // -----------------------------------------------------------------------------

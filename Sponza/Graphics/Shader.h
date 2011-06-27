@@ -83,7 +83,19 @@ public:
 		D3DXMATRIX& world
 	);
 
+	bool
+	operator <(
+		const Shader& other
+	) const;
+
+	bool
+	operator ==(
+		const Shader& other
+	) const;
+
 private:
+	u32												m_id;
+	u32												m_drawOrder;
 	ID3D10EffectMatrixVariable*						m_pWorld;
 	ID3D10Effect*									m_pEffect;
 	std::vector<ShaderPass>							m_passes;

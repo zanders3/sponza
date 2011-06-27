@@ -9,6 +9,7 @@
 #include "Scene/MeshQueue.h"
 #include "Graphics/Model/Mesh.h"
 #include "Graphics/Model/Material.h"
+#include "Graphics/Shader.h"
 #include <algorithm>
 
 // -----------------------------------------------------------------------------
@@ -32,9 +33,9 @@ MeshQueueItem::MeshQueueItem(
 
 // -----------------------------------------------------------------------------
 
-MaterialList::MaterialList(
-	graphics::Material& material
-) : material(material)
+ShaderList::ShaderList(
+	graphics::Shader* shader
+) : shader(shader)
 {
 }
 
@@ -59,26 +60,19 @@ MeshQueue::Push(
 	graphics::Mesh*	mesh
 )
 {
-	graphics::Material& material = mesh->GetMaterial();
+	graphics::Shader* shader = mesh->GetMaterial().GetShader();
 
-	auto find = std::lower_bound(
-		m_queue.begin(),
-		m_queue.end(), 
-		mesh->GetMaterial(), 
-		[](const std::unique_ptr<MaterialList>& list, const graphics::Material& material)
+	for (auto iter = m_queue.begin(); iter != m_queue.end(); ++iter)
+	{
+		if (*iter->shader == *shader)
 		{
-			return material < list->material;
-		});
+			iter->meshList.push_back(MeshQueueItem(world, mesh));
+			return;
+		}
+	}
 
-	if (find != m_queue.end() && material == (*find)->material)
-	{
-		(*find)->meshList.push_back(MeshQueueItem(world, mesh));
-	}
-	else
-	{
-		m_queue.insert(find, std::unique_ptr<MaterialList>( new MaterialList( mesh->GetMaterial() ) ));
-		m_queue.back()->meshList.push_back(MeshQueueItem(world, mesh));
-	}
+	m_queue.push_back(ShaderList(shader));
+	m_queue.back().meshList.push_back(MeshQueueItem(world, mesh));
 }
 
 //---------------------------------------------------------------------------------------
@@ -87,7 +81,7 @@ void
 MeshQueue::Clear()
 {
 	for (auto iter = m_queue.begin(); iter != m_queue.end(); ++iter)
-		(*iter)->meshList.clear();
+		iter->meshList.clear();
 }
 
 //---------------------------------------------------------------------------------------
@@ -95,16 +89,22 @@ MeshQueue::Clear()
 void
 MeshQueue::Draw()
 {
-	for (auto materialIter = m_queue.begin(); materialIter != m_queue.end(); ++materialIter)
+	std::sort(
+		m_queue.begin(), 
+		m_queue.end(), 
+		[](const ShaderList& lhs, const ShaderList& rhs)
+		{
+			return *lhs.shader < *rhs.shader;
+		});
+
+	for (auto shaderIter = m_queue.begin(); shaderIter != m_queue.end(); ++shaderIter)
 	{
-		MaterialList& list = **materialIter;
+		ShaderList& list = *shaderIter;
 		if (!list.meshList.empty())
 		{
-			list.material.Bind();
-
 			for (auto meshIter = list.meshList.begin(); meshIter != list.meshList.end(); ++meshIter)
 			{
-				list.material.SetWorld(*(meshIter->world));
+				meshIter->mesh->GetMaterial().SetWorld(*(meshIter->world));
 				meshIter->mesh->Draw();
 			}
 		}
