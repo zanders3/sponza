@@ -39,14 +39,14 @@ public:
 	friend class ContentQueue;
 
 	ContentManager(
-		const std::string& contentRoot, 
-		const std::string& packFile
+		const char* contentRoot, 
+		const char* packFile
 	);
 
 	~ContentManager();
 
 	template <typename T> T* GetContent( 
-		const std::string& name 
+		const char* name 
 	)
 	{
 		//Has the item already been loaded?
@@ -64,7 +64,7 @@ public:
 	}
 
 	template <typename T> void GetContentAsync(
-		const std::string&		name,
+		const char*				name,
 		ContentLoadedCallback	callback
 	)
 	{

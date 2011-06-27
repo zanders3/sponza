@@ -115,16 +115,6 @@ Texture::CreatePixelTexture(
 
 //----------------------------------------------------------------------------------------
 
-void 
-Texture::Bind(
-	const BindType& type
-)
-{
-	m_pDevice->PSSetShaderResources((UINT)type, 1, &m_pTextureView);
-}
-
-//----------------------------------------------------------------------------------------
-
 Texture* 
 Texture::GetDiffuseDefault()
 {
@@ -139,6 +129,16 @@ Texture*
 Texture::GetNormalDefault()
 {
 	static Texture texture(D3DCOLOR_RGBA(255, 128, 128, 255));
+
+	return &texture;
+}
+
+//----------------------------------------------------------------------------------------
+
+Texture*
+Texture::GetOpacityDefault()
+{
+	static Texture texture(D3DCOLOR_RGBA(255, 255, 255, 255));
 
 	return &texture;
 }

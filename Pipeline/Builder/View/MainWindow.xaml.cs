@@ -68,5 +68,10 @@ namespace Builder.View
             taskbarItem.ProgressState = e.NewValue > 0.0f ? TaskbarItemProgressState.Normal : TaskbarItemProgressState.None;
             taskbarItem.ProgressValue = e.NewValue / 100.0f;
         }
+
+        private void MenuItem_Click_2(object sender, RoutedEventArgs e)
+        {
+            ((MainWindowModel)DataContext).Builder.OutputText.Clear();
+        }
     }
 }

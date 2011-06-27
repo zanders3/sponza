@@ -48,13 +48,14 @@ public:
 		content::ContentReader& reader
 	);
 
-	void Bind(const BindType& type);
-
 	static Texture* 
 	GetDiffuseDefault();
 
 	static Texture* 
 	GetNormalDefault();
+
+	static Texture*
+	GetOpacityDefault();
 
 protected:
 	void CreatePixelTexture(D3DCOLOR color);

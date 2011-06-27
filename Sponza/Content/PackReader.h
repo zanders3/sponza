@@ -37,7 +37,7 @@ class PackReader
 {
 public:
     PackReader(
-        const std::string& packFile
+        const char* packFile
     );
 
     ContentReader Get(const std::string& fileName);

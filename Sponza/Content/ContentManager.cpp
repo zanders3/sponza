@@ -23,8 +23,8 @@ namespace content
 // -----------------------------------------------------------------------------
 
 ContentManager::ContentManager(
-	const std::string& contentRoot, 
-	const std::string& packFile
+	const char* contentRoot, 
+	const char* packFile
 ) : m_items(),
 	m_packReader()
 {

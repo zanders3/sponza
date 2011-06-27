@@ -42,7 +42,13 @@
                 <TreeView ItemsSource="{Binding Builder.RootContent}"/>
             </TabItem>
             <TabItem Header="Output">
-                <ListBox ItemsSource="{Binding Builder.OutputText}"/>
+                <ListBox ItemsSource="{Binding Builder.OutputText}">
+                    <ListBox.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Header="Clear" Click="MenuItem_Click_2"/>
+                        </ContextMenu>
+                    </ListBox.ContextMenu>
+                </ListBox>
             </TabItem>
         </TabControl>
     </DockPanel>

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <BuilderXML xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
   <ContentItems>
-    <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\BlankShader.fx" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\BlankShader.fx.dat">
+    <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\DefaultShader.fx" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\DefaultShader.fx.dat">
       <Dependencies />
     </ContentItemXML>
     <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\ShaderHeader.fxh" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\ShaderHeader.fxh.dat">
@@ -15,6 +15,9 @@
         <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\sponza_thorn_ddn.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\sponza_thorn_ddn.tga.dat">
           <Dependencies />
         </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\sponza_thorn_mask.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\sponza_thorn_mask.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
         <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\vase_round.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\vase_round.tga.dat">
           <Dependencies />
         </ContentItemXML>
@@ -22,6 +25,9 @@
           <Dependencies />
         </ContentItemXML>
         <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\vase_plant.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\vase_plant.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\vase_plant_mask.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\vase_plant_mask.tga.dat">
           <Dependencies />
         </ContentItemXML>
         <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\background.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\background.tga.dat">
@@ -99,6 +105,9 @@
         <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\chain_texture_ddn.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\chain_texture_ddn.tga.dat">
           <Dependencies />
         </ContentItemXML>
+        <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\chain_texture_mask.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\chain_texture_mask.tga.dat">
+          <Dependencies />
+        </ContentItemXML>
         <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\textures\vase_hanging.tga" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\textures\vase_hanging.tga.dat">
           <Dependencies />
         </ContentItemXML>
@@ -115,6 +124,9 @@
           <Dependencies />
         </ContentItemXML>
       </Dependencies>
+    </ContentItemXML>
+    <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\TransparentShader.fx" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\TransparentShader.fx.dat">
+      <Dependencies />
     </ContentItemXML>
   </ContentItems>
 </BuilderXML>

@@ -116,6 +116,17 @@ int main(int argc, char ** argv)
 					normal = LoadTexture(pMat, aiTextureType_HEIGHT);
 
 				WriteString(fs, normal);
+
+				std::string opacity = LoadTexture(pMat, aiTextureType_OPACITY);
+				WriteString(fs, opacity);
+
+				std::string shader;
+				if (opacity.empty())
+					shader = "DefaultShader.fx";
+				else
+					shader = "TransparentShader.fx";
+
+				WriteString(fs, shader);
 			}
 
 			//---------------------------------------------------

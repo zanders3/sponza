@@ -55,11 +55,13 @@ Material::Load(
 	content::ContentReader& reader
 )
 {
-	m_shader = manager.GetContent<Shader>("BlankShader.fx");
-	m_params.reset(new ShaderParams(*m_shader));
-
 	char* diffusePath = reader.ReadArray<char>();
 	char* normalPath = reader.ReadArray<char>();
+	char* opacityPath = reader.ReadArray<char>();
+	char* shader = reader.ReadArray<char>();
+
+	m_shader = manager.GetContent<Shader>(shader);
+	m_params.reset(new ShaderParams(*m_shader));
 
 	m_params->SetValue("Diffuse", Texture::GetDiffuseDefault());
 	m_params->SetValue("Normal", Texture::GetNormalDefault());
@@ -84,11 +86,22 @@ Material::Load(
 				m_params->SetValue("Normal", normal);
 			});
 	}
+	if (*opacityPath)
+	{
+		m_params->SetValue("Opacity", Texture::GetOpacityDefault());
+		manager.GetContentAsync<Texture>(
+			opacityPath,
+			[=](content::ContentItem* item)
+			{
+				Texture* opacity = dynamic_cast<Texture*>(item);
+				m_params->SetValue("Opacity", opacity);
+			});
+	}
 }
 
 //----------------------------------------------------------------------------------------
 
-void 
+void
 Material::Bind()
 {
 	m_params->Apply();

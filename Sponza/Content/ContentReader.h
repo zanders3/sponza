@@ -33,13 +33,13 @@ class ContentReader
 public:
 	friend class PackReader;
 
-    ContentReader(
+    explicit ContentReader(
         char* start,
         char* end
     );
     
-    ContentReader(
-        const std::string& file
+    explicit ContentReader(
+        const char* file
 	);
     
     ContentReader(

@@ -102,7 +102,6 @@ MeshQueue::Draw()
 		{
 			list.material.Bind();
 
-			//TODO: more sorting to support mesh instancing!
 			for (auto meshIter = list.meshList.begin(); meshIter != list.meshList.end(); ++meshIter)
 			{
 				list.material.SetWorld(*(meshIter->world));

@@ -20,7 +20,7 @@ namespace content
 // -----------------------------------------------------------------------------
 
 PackReader::PackReader(
-    const std::string& packFile
+    const char* packFile
 ) : m_reader(packFile),
     m_packInfo()
 {

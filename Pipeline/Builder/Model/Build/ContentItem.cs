@@ -149,9 +149,15 @@ namespace Builder.Model
 
         public void Clean()
         {
-            if (File.Exists(m_outputPath))
+            try
             {
-                File.Delete(m_outputPath);
+                if (File.Exists(m_outputPath))
+                {
+                    File.Delete(m_outputPath);
+                }
+            }
+            catch
+            {
             }
         }
 

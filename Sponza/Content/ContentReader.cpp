@@ -32,10 +32,10 @@ ContentReader::ContentReader(
 // -----------------------------------------------------------------------------
     
 ContentReader::ContentReader(
-    const std::string& file)
+    const char* file)
 {
     FILE* pFile;
-	fopen_s(&pFile, file.c_str(), "rb");
+	fopen_s(&pFile, file, "rb");
 
     fseek(pFile, 0, SEEK_END);
     size_t size = ftell(pFile);
