@@ -50,6 +50,6 @@ typedef unsigned int u32;
 
 #else
 
-#define _assert(condition, expr) __noop
+#define _assert(condition) __noop
 
 #endif
