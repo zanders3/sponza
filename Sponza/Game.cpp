@@ -11,6 +11,8 @@
 #include "Graphics/Shader/ShaderParams.h"
 #include "Scene/SceneNode.h"
 #include "Scene/MeshQueue.h"
+#include "Script/ScriptEngine.h"
+#include "Script/Script.h"
 #include "Graphics/Model/Model.h"
 
 // -----------------------------------------------------------------------------
@@ -29,7 +31,8 @@ Game::Game(
 ) : m_content(".\\..\\Content\\Out", ".\\..\\Content\\Content.pack"),
 	m_camera(new Camera()),
 	m_sceneRoot(new scene::SceneNode()),
-	m_meshQueue(new scene::MeshQueue())
+	m_meshQueue(new scene::MeshQueue()),
+	m_scriptEngine(new script::ScriptEngine())
 {
 	DXUTSetCallbackKeyboard(&m_camera->OnKeyboard);
 	DXUTSetCallbackMouse(&m_camera->OnMouse, true);
@@ -49,6 +52,8 @@ void Game::LoadContent( ID3D10Device* pd3dDevice, int width, int height )
 {
 	const D3DXVECTOR3 zero = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_sceneRoot->AddChild(m_content.GetContent<graphics::Model>("sponza.obj")->GetModelRoot());
+
+	m_scriptEngine->RegisterScript(m_content.GetContent<script::Script>("renderer.as"));
 
 	/*Light* light = m_scene->CreateLight();
 	light->SetSize(200.0f);
@@ -81,6 +86,7 @@ void Game::Update( double fTime, float fElapsedTime )
 {
 	m_content.Update();
 
+	m_scriptEngine->Update(fElapsedTime);
 	m_camera->Update(fElapsedTime);
 
 	m_meshQueue->Clear();

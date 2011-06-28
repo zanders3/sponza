@@ -26,6 +26,11 @@ namespace scene
 	class MeshQueue;
 }
 
+namespace script
+{
+	class ScriptEngine;
+}
+
 namespace game
 {
 
@@ -40,10 +45,11 @@ public:
 	void Update( double fTime, float fElapsedTime ); 
 
 private:
-	content::ContentManager				m_content;
-	std::unique_ptr<Camera>				m_camera;
-	std::unique_ptr<scene::SceneNode>	m_sceneRoot;
-	std::unique_ptr<scene::MeshQueue>	m_meshQueue;
+	content::ContentManager					m_content;
+	std::unique_ptr<Camera>					m_camera;
+	std::unique_ptr<scene::SceneNode>		m_sceneRoot;
+	std::unique_ptr<scene::MeshQueue>		m_meshQueue;
+	std::unique_ptr<script::ScriptEngine>	m_scriptEngine;
 
 	D3DXMATRIX							m_identity;
 };

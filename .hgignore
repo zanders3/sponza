@@ -6,6 +6,10 @@ syntax: glob
 *.sdf
 *.opensdf
 *.pack
+*.ncb
+*.filters
+*.user
+**AS_DEBUG\**
 *.unsuccessfulbuild
 **Content\Out\**
 **Content\Source\**

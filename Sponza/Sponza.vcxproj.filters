@@ -85,6 +85,15 @@
     <ClCompile Include="Scene\Transform.cpp">
       <Filter>Scene</Filter>
     </ClCompile>
+    <ClCompile Include="Script\ScriptEngine.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="Script\scriptstdstring.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="Script\Script.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Resource.h" />
@@ -180,6 +189,15 @@
     <ClInclude Include="Scene\Transform.h">
       <Filter>Scene</Filter>
     </ClInclude>
+    <ClInclude Include="Script\ScriptEngine.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="Script\Script.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="Script\scriptstdstring.h">
+      <Filter>Script</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Sponza.rc" />
@@ -218,6 +236,9 @@
     </Filter>
     <Filter Include="Graphics\Shader">
       <UniqueIdentifier>{ba01668c-5ec8-44f0-8aa1-3eb43cb0a90f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script">
+      <UniqueIdentifier>{72ac655b-010e-4513-966a-30878b156924}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
 </Project>

@@ -11,6 +11,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TextureProcessor", "Texture
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShaderProcessor", "ShaderProcessor\ShaderProcessor.csproj", "{4AD68006-797E-40D4-A6A4-3096CD3458C4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ScriptProcessor", "ScriptProcessor\ScriptProcessor.csproj", "{7BC30A15-D18D-41C2-8FC4-43C27EFF6740}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Mixed Platforms = Debug|Mixed Platforms
@@ -59,6 +61,16 @@ Global
 		{4AD68006-797E-40D4-A6A4-3096CD3458C4}.Release|Win32.ActiveCfg = Release|x86
 		{4AD68006-797E-40D4-A6A4-3096CD3458C4}.Release|x86.ActiveCfg = Release|x86
 		{4AD68006-797E-40D4-A6A4-3096CD3458C4}.Release|x86.Build.0 = Release|x86
+		{7BC30A15-D18D-41C2-8FC4-43C27EFF6740}.Debug|Mixed Platforms.ActiveCfg = Debug|x86
+		{7BC30A15-D18D-41C2-8FC4-43C27EFF6740}.Debug|Mixed Platforms.Build.0 = Debug|x86
+		{7BC30A15-D18D-41C2-8FC4-43C27EFF6740}.Debug|Win32.ActiveCfg = Debug|x86
+		{7BC30A15-D18D-41C2-8FC4-43C27EFF6740}.Debug|x86.ActiveCfg = Debug|x86
+		{7BC30A15-D18D-41C2-8FC4-43C27EFF6740}.Debug|x86.Build.0 = Debug|x86
+		{7BC30A15-D18D-41C2-8FC4-43C27EFF6740}.Release|Mixed Platforms.ActiveCfg = Release|x86
+		{7BC30A15-D18D-41C2-8FC4-43C27EFF6740}.Release|Mixed Platforms.Build.0 = Release|x86
+		{7BC30A15-D18D-41C2-8FC4-43C27EFF6740}.Release|Win32.ActiveCfg = Release|x86
+		{7BC30A15-D18D-41C2-8FC4-43C27EFF6740}.Release|x86.ActiveCfg = Release|x86
+		{7BC30A15-D18D-41C2-8FC4-43C27EFF6740}.Release|x86.Build.0 = Release|x86
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -67,5 +79,6 @@ Global
 		{635D6D56-6B52-412C-A622-5D60466E6EC4} = {607F4200-E2E1-424B-A07A-2D2665A3BDC7}
 		{5FCAFE92-30AF-448E-B14A-444A7440B14D} = {607F4200-E2E1-424B-A07A-2D2665A3BDC7}
 		{4AD68006-797E-40D4-A6A4-3096CD3458C4} = {607F4200-E2E1-424B-A07A-2D2665A3BDC7}
+		{7BC30A15-D18D-41C2-8FC4-43C27EFF6740} = {607F4200-E2E1-424B-A07A-2D2665A3BDC7}
 	EndGlobalSection
 EndGlobal

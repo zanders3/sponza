@@ -4,6 +4,9 @@
     <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\DefaultShader.fx" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\DefaultShader.fx.dat">
       <Dependencies />
     </ContentItemXML>
+    <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\renderer.as" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\renderer.as.dat">
+      <Dependencies />
+    </ContentItemXML>
     <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\ShaderHeader.fxh" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\ShaderHeader.fxh.dat">
       <Dependencies />
     </ContentItemXML>

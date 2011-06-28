@@ -31,39 +31,10 @@ namespace scene
 // Class Definition 
 // -----------------------------------------------------------------------------
 
-class Renderer;
-typedef std::shared_ptr<Renderer> RendererPtr;
-
 class Renderer
 {
 public:
-	struct Pass
-	{
-		enum Enum
-		{
-			Normals,
-			Lights,
-			Color
-		};
-	};
 
-	Renderer(ID3D10Device* pDevice, graphics::Shader* pShader);
-
-	void Draw();
-
-private:
-	void DrawPass(Pass pass);
-
-	Pass			m_pass;
-	ID3D10Device*	m_pDevice;
-
-	graphics::Shader*		m_pShader;
-
-	graphics::DepthTexture	m_frameDepth;
-
-	graphics::RenderTexture	m_frameBuffer;
-	graphics::RenderTexture	m_normalBuffer;
-	graphics::RenderTexture	m_lightBuffer;
 };
 
 // -----------------------------------------------------------------------------

@@ -1,3 +1,4 @@
 ModelProcessor.exe .obj
 ShaderProcessor.exe .fx .fxh
 TextureProcessor.exe .tga
+ScriptProcessor.exe .as
