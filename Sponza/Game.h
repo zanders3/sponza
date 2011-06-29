@@ -24,6 +24,7 @@ namespace scene
 {
 	class SceneNode;
 	class MeshQueue;
+	class Renderer;
 }
 
 namespace script
@@ -50,6 +51,7 @@ private:
 	std::unique_ptr<scene::SceneNode>		m_sceneRoot;
 	std::unique_ptr<scene::MeshQueue>		m_meshQueue;
 	std::unique_ptr<script::ScriptEngine>	m_scriptEngine;
+	std::unique_ptr<scene::Renderer>		m_renderer;
 
 	D3DXMATRIX							m_identity;
 };

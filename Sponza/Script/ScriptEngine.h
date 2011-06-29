@@ -31,17 +31,14 @@ namespace script
 class ScriptEngine
 {
 public:
+	friend class ScriptContext;
+
 	ScriptEngine();
 	~ScriptEngine();
 
 	void
 	RegisterScript(
 		Script* script
-	);
-
-	void
-	Update(
-		float secs
 	);
 
 	asIScriptEngine*

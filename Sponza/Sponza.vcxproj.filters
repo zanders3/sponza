@@ -129,9 +129,6 @@
     <ClInclude Include="Graphics\ScreenQuad.h">
       <Filter>Graphics</Filter>
     </ClInclude>
-    <ClInclude Include="Graphics\Camera.h">
-      <Filter>Graphics</Filter>
-    </ClInclude>
     <ClInclude Include="Scene\Renderer.h">
       <Filter>Scene</Filter>
     </ClInclude>
@@ -196,6 +193,10 @@
       <Filter>Script</Filter>
     </ClInclude>
     <ClInclude Include="Script\scriptstdstring.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="Graphics\Camera.h" />
+    <ClInclude Include="Script\ScriptType.h">
       <Filter>Script</Filter>
     </ClInclude>
   </ItemGroup>

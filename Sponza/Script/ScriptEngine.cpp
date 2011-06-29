@@ -78,38 +78,22 @@ ScriptEngine::RegisterScript(
 		m_engine->SetEngineProperty(asEP_COPY_SCRIPT_SECTIONS, true);
 		script->m_module->AddScriptSection("MyScript", script->m_script, script->m_scriptSize);
 
-		HRESULT hr;
-		V(script->m_module->Build());
+		int r = script->m_module->Build();
+		if (r == 0)
+		{
+			HRESULT hr;
+			// Call the script's Init() function
+			int funcID = script->m_module->GetFunctionIdByDecl("void Init()");
+			_assert(funcID >= 0);
 
-		// Call the script's Init() function
-		int funcID = script->m_module->GetFunctionIdByDecl("void Init()");
-		_assert(funcID >= 0);
-		script->m_updateFuncID = script->m_module->GetFunctionIdByDecl("void Update(float secs)");
-		_assert(script->m_updateFuncID >= 0);
-
-		script->m_context = m_engine->CreateContext();
+			script->m_context = m_engine->CreateContext();
+			script->m_engine = this;
 		
-		V(script->m_context->Prepare(funcID));
-		Execute(script);
+			V(script->m_context->Prepare(funcID));
+			Execute(script);
 
-		m_scripts.push_back(script);
-	}
-}
-
-// -----------------------------------------------------------------------------
-
-void
-ScriptEngine::Update(
-	float secs
-)
-{
-	for (auto iter = m_scripts.begin(); iter != m_scripts.end(); ++iter)
-	{
-		Script* script = *iter;
-		script->m_context->Prepare(script->m_updateFuncID);
-		script->m_context->SetArgFloat(0, secs);
-		
-		Execute(script);
+			m_scripts.push_back(script);
+		}
 	}
 }
 
@@ -130,15 +114,21 @@ ScriptEngine::Execute(
 {
 	int r = script->m_context->Execute();
 
-	if ( r == asEXECUTION_EXCEPTION )
+	if ( r != asEXECUTION_FINISHED )
 	{
-		int column;
-		const char* sectionName;
-		int line = script->m_context->GetExceptionLineNumber(&column, &sectionName);
+		if (r == asEXECUTION_EXCEPTION )
+		{
+			int column;
+			const char* sectionName;
+			int line = script->m_context->GetExceptionLineNumber(&column, &sectionName);
 
-		char buffer[255];
-		sprintf_s<255>(buffer, "An exception '%s' occurred. Please correct the code and try again.\n%s:%d,%d", script->m_context->GetExceptionString(), sectionName, line, column);
-		OutputDebugStringA(buffer);
+			char buffer[255];
+			sprintf_s<255>(buffer, "An exception '%s' occurred. Please correct the code and try again.\n%s:%d,%d", script->m_context->GetExceptionString(), sectionName, line, column);
+			OutputDebugStringA(buffer);
+		}
+
+		script->m_context->Release();
+		script->m_context = nullptr;
 	}
 }
 

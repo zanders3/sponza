@@ -159,6 +159,7 @@
     <ClInclude Include="Scene\Renderer.h" />
     <ClInclude Include="Scene\SceneNode.h" />
     <ClInclude Include="Scene\Transform.h" />
+    <ClInclude Include="Script\ScriptType.h" />
     <ClInclude Include="Script\Script.h" />
     <ClInclude Include="Script\ScriptEngine.h" />
     <ClInclude Include="Script\scriptstdstring.h" />

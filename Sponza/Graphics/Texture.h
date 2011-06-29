@@ -62,6 +62,9 @@ protected:
 
 	ID3D10ShaderResourceView* m_pTextureView;
 	ID3D10Texture2D*		  m_pTexture;
+
+private:
+	Texture(const Texture& other) {}
 };
 
 // -----------------------------------------------------------------------------

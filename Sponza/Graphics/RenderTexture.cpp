@@ -23,21 +23,21 @@ namespace graphics
 // -----------------------------------------------------------------------------
 
 RenderTexture::RenderTexture(
-	ID3D10Device* pDevice, 
 	DepthTexture* pDepth
 )
 {
 	m_pDepthTexture = pDepth;
 
-	m_pDevice = pDevice;
+	m_pDevice = GetDevice();
 	m_pRenderTargetView = DXUTGetD3D10RenderTargetView();
 	m_isBaseRenderView = true;
 }
 
 //----------------------------------------------------------------------------------------
 
-RenderTexture::RenderTexture(ID3D10Device* pDevice, DepthTexture* pDepth, DXGI_FORMAT format, int width, int height)
+RenderTexture::RenderTexture(DepthTexture* pDepth, DXGI_FORMAT format, int width, int height)
 {
+	ID3D10Device* pDevice = GetDevice();
 	m_pDepthTexture = pDepth;
 	m_pDevice = pDevice;
 	m_isBaseRenderView = false;

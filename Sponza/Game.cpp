@@ -14,6 +14,7 @@
 #include "Script/ScriptEngine.h"
 #include "Script/Script.h"
 #include "Graphics/Model/Model.h"
+#include "Scene/Renderer.h"
 
 // -----------------------------------------------------------------------------
 // Namespace 
@@ -32,7 +33,8 @@ Game::Game(
 	m_camera(new Camera()),
 	m_sceneRoot(new scene::SceneNode()),
 	m_meshQueue(new scene::MeshQueue()),
-	m_scriptEngine(new script::ScriptEngine())
+	m_scriptEngine(new script::ScriptEngine()),
+	m_renderer(new scene::Renderer(*m_scriptEngine, *m_meshQueue))
 {
 	DXUTSetCallbackKeyboard(&m_camera->OnKeyboard);
 	DXUTSetCallbackMouse(&m_camera->OnMouse, true);
@@ -53,7 +55,13 @@ void Game::LoadContent( ID3D10Device* pd3dDevice, int width, int height )
 	const D3DXVECTOR3 zero = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_sceneRoot->AddChild(m_content.GetContent<graphics::Model>("sponza.obj")->GetModelRoot());
 
-	m_scriptEngine->RegisterScript(m_content.GetContent<script::Script>("renderer.as"));
+	script::Script* script = m_content.GetContent<script::Script>("renderer.as");
+	m_scriptEngine->RegisterScript(script);
+
+	script->Invoke<void ()>("void EmptyTest()")();
+	int returned = script->Invoke<int ()>("int RetInt()")();
+	double ret = script->Invoke<double (double)>("double One(double a)")(5.0);
+	script->Invoke<void (int, int)>("void MultiValue(int a, int b)")(5, 10);
 
 	/*Light* light = m_scene->CreateLight();
 	light->SetSize(200.0f);
@@ -86,7 +94,6 @@ void Game::Update( double fTime, float fElapsedTime )
 {
 	m_content.Update();
 
-	m_scriptEngine->Update(fElapsedTime);
 	m_camera->Update(fElapsedTime);
 
 	m_meshQueue->Clear();

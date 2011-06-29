@@ -31,9 +31,9 @@ class RenderTexture : public Texture
 {
 public:
 	// Creates a RenderTexture from the graphics device
-	RenderTexture(ID3D10Device* pDevice, DepthTexture* pDepth);
+	RenderTexture(DepthTexture* pDepth);
 	// Creates a new Render Texture
-	RenderTexture(ID3D10Device* pDevice, DepthTexture* pDepth, DXGI_FORMAT format, int width, int height);
+	RenderTexture(DepthTexture* pDepth, DXGI_FORMAT format, int width, int height);
 	~RenderTexture();
 
 	void BindRT();

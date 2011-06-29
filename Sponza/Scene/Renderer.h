@@ -11,21 +11,26 @@
 // Includes 
 // -----------------------------------------------------------------------------
 #include "stdafx.h"
-#include "Graphics/RenderTexture.h"
-#include "Graphics/DepthTexture.h"
 #include <memory>
+#include <vector>
 
 // -----------------------------------------------------------------------------
 // Namespace 
 // -----------------------------------------------------------------------------
 
+namespace script
+{
+	class ScriptEngine;
+}
+
 namespace graphics
 {
-	class Shader;
+	class RenderTexture;
 }
 
 namespace scene
 {
+	class MeshQueue;
 
 // -----------------------------------------------------------------------------
 // Class Definition 
@@ -34,7 +39,15 @@ namespace scene
 class Renderer
 {
 public:
+	Renderer(script::ScriptEngine& engine, MeshQueue& meshQueue);
+	~Renderer();
 
+	void
+	Draw();
+
+private:
+	MeshQueue&												m_meshQueue;
+	std::vector<std::unique_ptr<graphics::RenderTexture>>	m_renderTextureList;
 };
 
 // -----------------------------------------------------------------------------
