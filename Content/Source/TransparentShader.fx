@@ -57,12 +57,7 @@ NORMAL_PS_INPUT OpacityVS( NORMAL_VS_INPUT input )
 
 float4 OpacityPS( NORMAL_PS_INPUT input ) : SV_Target
 {
-	//Apply normal mapping
-    //float3 mapNormal = (Normal.Sample( samLinear, input.Tex ) * 2.0) - 1.0;
-	//float3 normal = TransformNormal(mapNormal, input.Normal, input.Tangent, input.BiNormal);
-	//normal.z = -normal.z;
-	
-	float4 color = Diffuse.Sample( samLinear, input.Tex );
+	float4 color = pow(Diffuse.Sample( samLinear, input.Tex ), 2.0f);
 	color.a = Opacity.Sample( samLinear, input.Tex );
 	
 	return color;

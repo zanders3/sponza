@@ -1,6 +1,30 @@
+// -----------------------------------------------------------------------------
+//	Copyright Alex Parker © 2011
+//	
+//	Socket
+//		- A client socket that can recieve strings.
+// -----------------------------------------------------------------------------
+
 #pragma once
+
+// -----------------------------------------------------------------------------
+// Includes 
+// -----------------------------------------------------------------------------
+#include "stdafx.h"
+
 #include <string>
 #include "winsock2.h"
+
+// -----------------------------------------------------------------------------
+// Namespace 
+// -----------------------------------------------------------------------------
+
+namespace net
+{
+
+// -----------------------------------------------------------------------------
+// Class Definition 
+// -----------------------------------------------------------------------------
 
 class Socket
 {
@@ -8,13 +32,18 @@ public:
 	Socket();
 	~Socket();
 
-	bool Connect(const std::string& ipaddress, int port);
+	bool Connect(
+		const std::string& ipaddress, 
+		int port
+	);
 
-	const std::string* ReadData();
+	const std::string ReadData();
 
 private:
-	SOCKET mSocket;
-	std::string mData;
-	char mBuffer[256];
-	static int mSocketCount;
+	SOCKET			m_socket;
+	char			m_buffer[256];
 };
+
+// -----------------------------------------------------------------------------
+
+}//namespace net

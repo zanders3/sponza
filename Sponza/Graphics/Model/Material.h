@@ -60,7 +60,7 @@ public:
 private:
 	Material(const Material& other);
 
-	std::unique_ptr<ShaderParams>	m_params;
+	ShaderParams*					m_params;
 	Shader*							m_shader;
 };
 

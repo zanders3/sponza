@@ -29,6 +29,7 @@ namespace Builder.Model
             m_worker.ProgressChanged += new ProgressChangedEventHandler(m_worker_ProgressChanged);
             m_worker.WorkerSupportsCancellation = true;
             m_worker.WorkerReportsProgress = true;
+            m_worker.RunWorkerAsync();
         }
 
         public void Dispose()
@@ -59,42 +60,96 @@ namespace Builder.Model
             {
                 m_statusMessages.Enqueue(message);
             }
+            m_worker.ReportProgress(0);
+        }
+
+        struct Client
+        {
+            public TcpClient client;
+            public BinaryReader reader;
+            public BinaryWriter writer;
         }
 
         void m_worker_DoWork(object sender, DoWorkEventArgs e)
         {
-            TcpListener listener = new TcpListener(IPAddress.Loopback, 1234);
-            NetworkStream stream = new NetworkStream(listener.Server);
-            BinaryWriter writer = new BinaryWriter(stream);
-            listener.Start();
-
-            while (!m_worker.CancellationPending)
+            try
             {
-                if (listener.Pending())
+                TcpListener listener = new TcpListener(IPAddress.Loopback, 1234);
+                List<Client> clients = new List<Client>();
+
+                listener.Start();
+
+                while (!m_worker.CancellationPending)
                 {
-                    listener.AcceptTcpClient();
-                    StatusMessage("Game Connected");
+                    if (listener.Pending())
+                    {
+                        Client client = new Client();
+                        client.client = listener.AcceptTcpClient();
+                        client.reader = new BinaryReader(client.client.GetStream());
+                        client.writer = new BinaryWriter(client.client.GetStream());
+                        clients.Add(client);
+
+                        StatusMessage("Game Connected");
+                    }
+
+                    string pendingMessage = null;
+                    lock (m_pendingMessages)
+                    {
+                        if (m_pendingMessages.Count > 0)
+                            pendingMessage = m_pendingMessages.Dequeue();
+                    }
+
+                    foreach (Client client in clients)
+                    {
+                        if (!client.client.Connected)
+                        {
+                            StatusMessage("Game Disconnected");
+                            clients.Remove(client);
+                            break;
+                        }
+
+                        if (client.client.GetStream().DataAvailable)
+                        {
+                            string recievedMessage = client.reader.ReadString();
+                            StatusMessage(recievedMessage);
+                            if (recievedMessage == "Quit")
+                            {
+                                client.client.Close();
+                                continue;
+                            }
+                        }
+
+                        if (pendingMessage != null)
+                        {
+                            try
+                            {
+                                char[] message = pendingMessage.ToArray();
+                                client.writer.Write(message);
+                                client.writer.Flush();
+                            }
+                            catch
+                            {
+                                client.client.Close();
+                            }
+                        }
+                    }
+
+                    if (pendingMessage == null)
+                    {
+                        Thread.Sleep(200);
+                    }
+                    else
+                    {
+                        StatusMessage("[" + clients.Count + " Notified]: " + pendingMessage);
+                    }
                 }
 
-                string message = null;
-                lock (m_pendingMessages)
-                {
-                    if (m_pendingMessages.Count > 0)
-                        message = m_pendingMessages.Dequeue();
-                }
-
-                if (message != null)
-                {
-                    writer.Write(message + Environment.NewLine);
-                    StatusMessage("Sent: " + message);
-                }
-                else
-                {
-                    Thread.Sleep(200);
-                }
+                listener.Stop();
             }
-
-            listener.Stop();
+            catch (Exception ex)
+            {
+                StatusMessage("GAME CONNECTION EXCEPTION: " + ex.Message);
+            }
         }
     }
 }

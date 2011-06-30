@@ -23,7 +23,7 @@ namespace graphics
 // Static Data
 // -----------------------------------------------------------------------------
 
-std::vector<std::pair<Shader*, std::unique_ptr<ShaderParams>>>	GlobalShaderParams::m_shaderList;
+std::vector<std::pair<Shader*, ShaderParams*>>	GlobalShaderParams::m_shaderList;
 
 // -----------------------------------------------------------------------------
 // Class Implementation
@@ -222,20 +222,17 @@ GlobalShaderParams::RegisterShader(
 	Shader* shader
 )
 {
-#ifdef _DEBUG
 	for (auto iter = m_shaderList.begin(); iter != m_shaderList.end(); ++iter)
 	{
 		if (iter->first == shader)
 		{
-			// Already registered!
-			_assert(false);
+			//Shader params already registered.
 			return;
 		}
 	}
-#endif
 
 	//Register a new global shader params
-	m_shaderList.push_back(std::make_pair(shader, std::unique_ptr<ShaderParams>(new ShaderParams(*shader))));
+	m_shaderList.push_back(std::make_pair(shader, shader->CreateShaderParams()));
 }
 
 //----------------------------------------------------------------------------------------

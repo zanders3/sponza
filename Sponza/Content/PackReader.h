@@ -40,7 +40,11 @@ public:
         const char* packFile
     );
 
-    ContentReader Get(const std::string& fileName);
+    ContentReader 
+	Get(
+		const std::string&	fileName
+	);
+
 private:
 	char*						m_front;
 	char*						m_end;

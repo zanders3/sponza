@@ -73,10 +73,14 @@ struct ShaderParam
 
 class ShaderParams
 {
-public:
+	friend class Shader;
+
+private:
 	ShaderParams(
 		Shader& shader
 	);
+
+public:
 
 	void 
 	Apply();
@@ -107,13 +111,17 @@ private:
 class GlobalShaderParams
 {
 public:
-	static void
-	Apply();
+	friend class Shader;
 
+private:
 	static void
 	RegisterShader(
 		Shader* shader
 	);
+
+public:
+	static void
+	Apply();
 
 	template <typename T> static void
 	SetValue(
@@ -128,7 +136,7 @@ public:
 	}
 
 private:
-	static std::vector<std::pair<Shader*, std::unique_ptr<ShaderParams>>>	m_shaderList;
+	static std::vector<std::pair<Shader*, ShaderParams*>>	m_shaderList;
 };
 
 // -----------------------------------------------------------------------------

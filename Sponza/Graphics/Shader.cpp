@@ -69,7 +69,17 @@ Shader::Load(
 
 	//Create effect file
 	HRESULT hr;
-	V(D3D10CreateEffectFromMemory(data, size, 0, m_pDevice,/* pool->m_pool*/nullptr, &m_pEffect));
+	V(D3D10CreateEffectFromMemory(data, size, 0, m_pDevice, nullptr, &m_pEffect));
+
+	//Reset all shader parameters
+	for (auto paramsIter = m_params.begin(); paramsIter != m_params.end(); ++paramsIter)
+	{
+		auto& paramMap = paramsIter->m_paramMap;
+		for (auto param = paramMap.begin(); param != paramMap.end(); ++param)
+		{
+			param->second.SetVariable(m_pEffect->GetVariableByName(param->first.c_str()));
+		}
+	}
 
 	//Register with the global shader params
 	GlobalShaderParams::RegisterShader(this);
@@ -104,6 +114,15 @@ Shader::SetWorld(
 )
 {
 	m_pWorld->SetMatrix((float*)world);
+}
+
+//----------------------------------------------------------------------------------------
+
+ShaderParams*
+Shader::CreateShaderParams()
+{
+	m_params.push_back(ShaderParams(*this));
+	return &m_params.back();
 }
 
 //----------------------------------------------------------------------------------------

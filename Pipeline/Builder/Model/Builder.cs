@@ -25,7 +25,7 @@ namespace Builder.Model
         public const string SourcePath = "\\Source";
         public const string BuilderPath = "\\Builders";
 
-        private string m_statusText = "Idle";
+        private string m_statusText = "Idle", m_outputText;
 
         private string m_outputRoot;
         private string m_sourceRoot;
@@ -40,6 +40,8 @@ namespace Builder.Model
 
         private FolderListener m_contentFolderListener;
         private FolderListener m_builderFolderListener;
+
+        private HashSet<ContentItem> m_builtItems = new HashSet<ContentItem>();
         private GameConnection m_gameConnection;
 
         public ObservableCollection<ContentItem> RootContent
@@ -57,13 +59,13 @@ namespace Builder.Model
         public string StatusText
         {
             get { return m_statusText; }
-            set { m_statusText = value; Changed("StatusText"); OutputText.Add(value); }
+            set { m_statusText = value; Changed("StatusText"); OutputText += value + "\n";  }
         }
 
-        public ObservableCollection<string> OutputText
+        public string OutputText
         {
-            get;
-            private set;
+            get { return m_outputText; }
+            set { m_outputText = value; Changed("OutputText"); }
         }
 
         private int m_progress = 0;
@@ -82,7 +84,7 @@ namespace Builder.Model
 
         public Builder()
         {
-            OutputText = new ObservableCollection<string>();
+            OutputText = string.Empty;
 
             BuildQueue = new Model.BuildQueue(
                 progress =>
@@ -91,6 +93,8 @@ namespace Builder.Model
                 },
                 () =>
                 {
+                    Notify();
+
                     StatusText = "Packaging...";
                     Progress = 0;
                     m_packager.Package(m_outputRoot, PackageFile);
@@ -301,6 +305,18 @@ namespace Builder.Model
             }
 
             return Path.Combine(m_sourceRoot, relativePath);
+        }
+
+        public void AddBuiltItem(ContentItem contentItem)
+        {
+            m_builtItems.Add(contentItem);
+        }
+
+        public void Notify()
+        {
+            foreach (ContentItem item in m_builtItems)
+                m_gameConnection.SendMessage("Reload: " + item.ResourceName);
+            m_builtItems.Clear();
         }
     }
 }

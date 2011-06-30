@@ -127,6 +127,8 @@ namespace Builder.Model
                             ContentState = State.Succeeded;
                             m_builder.StatusText = "Built: " + Path.GetFileName(m_resourcePath);
 
+                            m_builder.AddBuiltItem(this);
+
                             Dependencies.Clear();
                             foreach (ContentItem item in m_builder.GetContentItems(dependencies))
                             {
@@ -155,10 +157,18 @@ namespace Builder.Model
                 {
                     File.Delete(m_outputPath);
                 }
+
+                Validate();
             }
             catch
             {
             }
+        }
+
+        public void Notify()
+        {
+            m_builder.AddBuiltItem(this);
+            m_builder.Notify();
         }
 
         public override bool Equals(object obj)

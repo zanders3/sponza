@@ -16,6 +16,7 @@
 #include <vector>
 #include <array>
 #include <memory>
+#include <list>
 
 // -----------------------------------------------------------------------------
 // Namespace 
@@ -83,6 +84,9 @@ public:
 		D3DXMATRIX& world
 	);
 
+	ShaderParams*
+	CreateShaderParams();
+
 	bool
 	operator <(
 		const Shader& other
@@ -99,6 +103,7 @@ private:
 	ID3D10EffectMatrixVariable*						m_pWorld;
 	ID3D10Effect*									m_pEffect;
 	std::vector<ShaderPass>							m_passes;
+	std::list<ShaderParams>							m_params;
 };
 
 // -----------------------------------------------------------------------------

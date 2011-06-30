@@ -26,6 +26,7 @@ namespace content
 
 class PackReader;
 class ContentQueue;
+class GameConnection;
 
 typedef std::function<void (ContentItem*)> ContentLoadedCallback;
 
@@ -46,7 +47,7 @@ public:
 	~ContentManager();
 
 	template <typename T> T* GetContent( 
-		const char* name 
+		const char*				name 
 	)
 	{
 		//Has the item already been loaded?
@@ -82,6 +83,11 @@ public:
 	}
 
 	void
+	ReloadContent(
+		const std::string& name
+	);
+
+	void
 	Update();
 
 private:
@@ -100,8 +106,10 @@ private:
 
 	std::unordered_map<std::string, std::unique_ptr<ContentItem>>	m_items;
 	std::unique_ptr<PackReader>										m_packReader;
+	std::unique_ptr<GameConnection>									m_gameConnection;
 
 	std::unique_ptr<ContentQueue>									m_contentQueue;
+	std::string														m_contentRoot;
 };
 
 // -----------------------------------------------------------------------------

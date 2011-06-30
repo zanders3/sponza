@@ -1,3 +1,54 @@
+// -----------------------------------------------------------------------------
+//	Copyright Alex Parker © 2011
+//	
+//	PackReader
+//		- Reads the content pack file into a block of memory to speed loading.
+// -----------------------------------------------------------------------------
+
+#pragma once
+
+// -----------------------------------------------------------------------------
+// Includes 
+// -----------------------------------------------------------------------------
+#include "stdafx.h"
+#include <memory>
+
+// -----------------------------------------------------------------------------
+// Namespace 
+// -----------------------------------------------------------------------------
+
+namespace net
+{
+	class Socket;
+}
+
+namespace content
+{
+	class ContentManager;
+
+// -----------------------------------------------------------------------------
+// Class Definition 
+// -----------------------------------------------------------------------------
+
+class GameConnection
+{
+public:
+	GameConnection(
+		ContentManager& manager
+	);
+	~GameConnection();
+
+	void Update();
+
+private:
+	ContentManager&					m_contentManager;
+	std::unique_ptr<net::Socket>	m_socket;
+};
+
+// -----------------------------------------------------------------------------
+
+} //namespace content
+
 /*#ifdef _DEBUG
 #include "Net/Socket.h"
 #include "Thread/Thread.h"

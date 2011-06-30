@@ -40,7 +40,7 @@ Material::Material(
 	Material&& other
 )
 {
-	m_params.swap(other.m_params);
+	m_params = other.m_params;
 	m_shader = other.m_shader;
 }
 
@@ -58,7 +58,7 @@ Material::Load(
 	char* shader = reader.ReadArray<char>();
 
 	m_shader = manager.GetContent<Shader>(shader);
-	m_params.reset(new ShaderParams(*m_shader));
+	m_params = m_shader->CreateShaderParams();
 
 	m_params->SetValue("Diffuse", Texture::GetDiffuseDefault());
 	m_params->SetValue("Normal", Texture::GetNormalDefault());

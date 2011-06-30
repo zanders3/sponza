@@ -58,10 +58,10 @@ void Game::LoadContent( ID3D10Device* pd3dDevice, int width, int height )
 	script::Script* script = m_content.GetContent<script::Script>("renderer.as");
 	m_scriptEngine->RegisterScript(script);
 
-	script->Invoke<void ()>("void EmptyTest()")();
+	/*script->Invoke<void ()>("void EmptyTest()")();
 	int returned = script->Invoke<int ()>("int RetInt()")();
 	double ret = script->Invoke<double (double)>("double One(double a)")(5.0);
-	script->Invoke<void (int, int)>("void MultiValue(int a, int b)")(5, 10);
+	script->Invoke<void (int, int)>("void MultiValue(int a, int b)")(5, 10);*/
 
 	/*Light* light = m_scene->CreateLight();
 	light->SetSize(200.0f);

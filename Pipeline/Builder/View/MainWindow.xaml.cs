@@ -71,7 +71,13 @@ namespace Builder.View
 
         private void MenuItem_Click_2(object sender, RoutedEventArgs e)
         {
-            ((MainWindowModel)DataContext).Builder.OutputText.Clear();
+            ((MainWindowModel)DataContext).Builder.OutputText = string.Empty;
+        }
+
+        private void MenuItem_Click_3(object sender, RoutedEventArgs e)
+        {
+            ContentItem item = (ContentItem)((MenuItem)sender).DataContext;
+            item.Notify();
         }
     }
 }

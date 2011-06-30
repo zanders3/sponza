@@ -68,7 +68,8 @@ float4 NormalsPS( NORMAL_PS_INPUT input ) : SV_Target
 	//float3 normal = TransformNormal(mapNormal, input.Normal, input.Tangent, input.BiNormal);
 	//normal.z = -normal.z;
 	
-	return Diffuse.Sample( samLinear, input.Tex ); //float4(normal, input.Depth);
+	float4 color = Diffuse.Sample( samLinear, input.Tex ); //float4(normal, input.Depth);
+	return pow(color, 2.0f);
 }
 
 //--------------------------------------------------------------------------------------
