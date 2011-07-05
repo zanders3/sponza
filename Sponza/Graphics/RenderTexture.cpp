@@ -28,8 +28,8 @@ RenderTexture::RenderTexture(
 {
 	m_pDepthTexture = pDepth;
 
-	m_pDevice = GetDevice();
 	m_pRenderTargetView = DXUTGetD3D10RenderTargetView();
+	m_pDevice = GetDevice();
 	m_isBaseRenderView = true;
 }
 
@@ -39,7 +39,7 @@ RenderTexture::RenderTexture(DepthTexture* pDepth, DXGI_FORMAT format, int width
 {
 	ID3D10Device* pDevice = GetDevice();
 	m_pDepthTexture = pDepth;
-	m_pDevice = pDevice;
+	m_pDevice = GetDevice();
 	m_isBaseRenderView = false;
 
 	// Create RT Texture

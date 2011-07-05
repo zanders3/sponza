@@ -29,7 +29,7 @@ class DepthTexture : public Texture
 public:
 	friend class RenderTexture;//to permit access to m_pDepthStencilView
 
-	DepthTexture(ID3D10Device* pDevice);
+	DepthTexture();
 	//DepthTexture(ID3D10Device* pDevice, int width, int height);
 	~DepthTexture();
 

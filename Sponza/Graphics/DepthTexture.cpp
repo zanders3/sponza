@@ -22,10 +22,9 @@ namespace graphics
 // -----------------------------------------------------------------------------
 
 DepthTexture::DepthTexture(
-	ID3D10Device* pDevice
 )
 {
-	m_pDevice = pDevice;
+	m_pDevice = GetDevice();
 
 	m_pDepthStencilView = DXUTGetD3D10DepthStencilView();
 	m_isDXUTDepthStencil = true;

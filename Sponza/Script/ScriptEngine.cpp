@@ -18,6 +18,8 @@
 
 namespace
 {
+	script::ScriptEngine* s_Instance = nullptr;
+
 	void MessageCallback(const asSMessageInfo *msg, void *param)
 	{
 		const char *type = "ERR ";
@@ -45,6 +47,9 @@ namespace script
 
 ScriptEngine::ScriptEngine()
 {
+	assert(s_Instance == nullptr);
+	s_Instance = this;
+
 	HRESULT hr;
 
 	m_engine = asCreateScriptEngine(ANGELSCRIPT_VERSION);
@@ -70,30 +75,32 @@ ScriptEngine::RegisterScript(
 	Script* script
 )
 {
-	if (!script->m_module)
+	if (script->m_context)
 	{
-		script->m_module = m_engine->GetModule(script->m_script, asGM_ALWAYS_CREATE);
+		script->m_context->Release();
+	}
 
-		// Build the actual script
-		m_engine->SetEngineProperty(asEP_COPY_SCRIPT_SECTIONS, true);
-		script->m_module->AddScriptSection("MyScript", script->m_script, script->m_scriptSize);
+	script->m_module = m_engine->GetModule(script->m_script, asGM_ALWAYS_CREATE);
 
-		int r = script->m_module->Build();
-		if (r == 0)
-		{
-			HRESULT hr;
-			// Call the script's Init() function
-			int funcID = script->m_module->GetFunctionIdByDecl("void Init()");
-			_assert(funcID >= 0);
+	// Build the actual script
+	//m_engine->SetEngineProperty(asEP_COPY_SCRIPT_SECTIONS, true);
+	script->m_module->AddScriptSection("MyScript", script->m_script, script->m_scriptSize);
 
-			script->m_context = m_engine->CreateContext();
-			script->m_engine = this;
+	int r = script->m_module->Build();
+	if (r == 0)
+	{
+		HRESULT hr;
+		// Call the script's Init() function
+		int funcID = script->m_module->GetFunctionIdByDecl("void Init()");
+		_assert(funcID >= 0);
+
+		script->m_context = m_engine->CreateContext();
+		script->m_engine = this;
 		
-			V(script->m_context->Prepare(funcID));
-			Execute(script);
+		V(script->m_context->Prepare(funcID));
+		Execute(script);
 
-			m_scripts.push_back(script);
-		}
+		m_scripts.push_back(script);
 	}
 }
 
@@ -103,6 +110,15 @@ asIScriptEngine*
 ScriptEngine::GetEngine()
 {
 	return m_engine;
+}
+
+// -----------------------------------------------------------------------------
+
+ScriptEngine&
+ScriptEngine::Instance()
+{
+	assert(s_Instance);
+	return *s_Instance;
 }
 
 // -----------------------------------------------------------------------------

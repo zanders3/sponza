@@ -60,7 +60,8 @@ Script::Script(
 ) : m_script(nullptr),
 	m_scriptSize(0),
 	m_context(nullptr),
-	m_module(nullptr)
+	m_module(nullptr),
+	m_engine(nullptr)
 {
 }
 
@@ -80,6 +81,8 @@ Script::Load(
 {
 	m_scriptSize = reader.Size();
 	m_script = reader.Read<char>(m_scriptSize);
+
+	ScriptEngine::Instance().RegisterScript(this);
 }
 
 // -----------------------------------------------------------------------------

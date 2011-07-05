@@ -44,6 +44,10 @@ public:
 	asIScriptEngine*
 	GetEngine();
 
+	static
+	ScriptEngine&
+	Instance();
+
 private:
 	void Execute(
 		Script* script

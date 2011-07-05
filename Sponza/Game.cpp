@@ -55,9 +55,6 @@ void Game::LoadContent( ID3D10Device* pd3dDevice, int width, int height )
 	const D3DXVECTOR3 zero = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_sceneRoot->AddChild(m_content.GetContent<graphics::Model>("sponza.obj")->GetModelRoot());
 
-	script::Script* script = m_content.GetContent<script::Script>("renderer.as");
-	m_scriptEngine->RegisterScript(script);
-
 	/*script->Invoke<void ()>("void EmptyTest()")();
 	int returned = script->Invoke<int ()>("int RetInt()")();
 	double ret = script->Invoke<double (double)>("double One(double a)")(5.0);
@@ -67,6 +64,8 @@ void Game::LoadContent( ID3D10Device* pd3dDevice, int width, int height )
 	light->SetSize(200.0f);
 	light->SetPosition(D3DXVECTOR3(0.0f, 20.0f, 0.0f));
 	light->SetColor(D3DCOLOR_ARGB(255,255,255,255));*/
+
+	m_renderer->LoadContent(m_content);
 
 	graphics::GlobalShaderParams::SetValue("Projection", &m_camera->m_Projection);
 
@@ -81,11 +80,11 @@ void Game::Render( ID3D10Device* pd3dDevice, double fTime, float fElapsedTime )
 	graphics::GlobalShaderParams::SetValue("View", &m_camera->m_View);
 	graphics::GlobalShaderParams::Apply();
 	
-	float clearColor[] = { 0.0f, 0.2f, 1.0f, 1.0f };
+/*	float clearColor[] = { 0.0f, 0.2f, 1.0f, 1.0f };
 	GetDevice()->ClearRenderTargetView(DXUTGetD3D10RenderTargetView(), clearColor);
-	GetDevice()->ClearDepthStencilView(DXUTGetD3D10DepthStencilView(), D3D10_CLEAR_DEPTH, 1.0f, 0);
+	GetDevice()->ClearDepthStencilView(DXUTGetD3D10DepthStencilView(), D3D10_CLEAR_DEPTH, 1.0f, 0);*/
 
-	m_meshQueue->Draw();
+	m_renderer->Draw();
 }
 
 // -----------------------------------------------------------------------------

@@ -64,13 +64,24 @@ public:
 	virtual void 
 	Load(content::ContentReader& reader);
 
+	bool
+	CanInvoke()
+	{
+		return m_engine && m_context;
+	}
+
 	template <typename F>
 	ScriptFunction<F> Invoke(const char* decl)
 	{
+		assert(m_engine);
+		assert(m_context);
 		return ScriptFunction<F>(ScriptContext(decl, *this));
 	}
 
 private:
+	Script(const Script& other) {}
+	void operator =(const Script& other) {}
+
 	char*				m_script;
 	u32					m_scriptSize;
 	asIScriptContext*	m_context;
@@ -180,10 +191,10 @@ template <typename R>
 class ScriptFunction<R ()>  
 {  
 private:  
-    ScriptContext& m_context;  
+    ScriptContext m_context;  
  
 public:  
-    explicit ScriptFunction(ScriptContext& context)  
+    explicit ScriptFunction(ScriptContext context)  
     :  m_context(context)  
     {}  
  
@@ -202,10 +213,10 @@ template <typename R, typename Arg0>
 class ScriptFunction<R (Arg0)>  
 {  
 private:  
-    ScriptContext& m_context;  
+    ScriptContext m_context;  
  
 public:  
-    explicit ScriptFunction(ScriptContext& context)  
+    explicit ScriptFunction(ScriptContext context)  
     :  m_context(context)  
     {}  
  
@@ -227,10 +238,10 @@ template <typename R, typename Arg0, typename Arg1>
 class ScriptFunction<R (Arg0,Arg1)>  
 {  
 private:  
-    ScriptContext& m_context;  
+    ScriptContext m_context;  
  
 public:  
-    explicit ScriptFunction(ScriptContext& context)  
+    explicit ScriptFunction(ScriptContext context)  
     :  m_context(context)  
     {}  
  

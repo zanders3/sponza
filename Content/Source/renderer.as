@@ -4,30 +4,11 @@ RenderTexture@ framebuffer;
 
 void Init()
 {
-	print("Hello world!\n");
 	@framebuffer = GetFramebuffer();
-	framebuffer.Create(800, 600);
-	//framebuffer.BindRT();
-	//framebuffer.Clear();
 }
 
-void EmptyTest()
+void Draw()
 {
-	print("Empty");
-}
-
-int RetInt()
-{
-	print("Return 5");
-	return 5;
-}
-
-double One(double a)
-{
-	return a;
-}
-
-void MultiValue(int a, int b)
-{
-	print("multivalue");
+	framebuffer.Clear( 0.0f, 0.3f, 1.0f, 1.0f );
+	DrawPass();
 }
