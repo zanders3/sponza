@@ -15,6 +15,11 @@
 
 using namespace std;
 
+namespace
+{
+	game::Notifier<graphics::ResizeArgs>	s_notifier;
+}
+
 namespace graphics
 {
 
@@ -26,6 +31,14 @@ RenderTexture::RenderTexture(
 	DepthTexture* pDepth
 )
 {
+	m_resizeHandler.reset(new game::Observer<ResizeArgs>([=](const ResizeArgs& args)
+	{
+		this->m_pRenderTargetView = DXUTGetD3D10RenderTargetView();
+		this->m_pDevice = GetDevice();
+		this->m_pDepthTexture->OnResize(args.newWidth, args.newHeight);
+	}));
+	s_notifier.Register(m_resizeHandler.get());
+
 	m_pDepthTexture = pDepth;
 
 	m_pRenderTargetView = DXUTGetD3D10RenderTargetView();
@@ -35,12 +48,75 @@ RenderTexture::RenderTexture(
 
 //----------------------------------------------------------------------------------------
 
-RenderTexture::RenderTexture(DepthTexture* pDepth, DXGI_FORMAT format, int width, int height)
+RenderTexture::RenderTexture(DepthTexture* pDepth, DXGI_FORMAT format, int width, int height, bool resizeWithScreen)
 {
-	ID3D10Device* pDevice = GetDevice();
+	m_resizeHandler.reset(new game::Observer<ResizeArgs>([=](const ResizeArgs& args)
+	{
+		SAFE_RELEASE(this->m_pRenderTargetView);
+
+		this->m_pDevice = GetDevice();
+		this->Setup(format, resizeWithScreen ? args.newWidth : width, resizeWithScreen ? args.newHeight : height);
+		this->m_pDepthTexture->OnResize(args.newWidth, args.newHeight);
+	}));
+
 	m_pDepthTexture = pDepth;
 	m_pDevice = GetDevice();
 	m_isBaseRenderView = false;
+
+	Setup(format, width, height);
+}
+
+//----------------------------------------------------------------------------------------
+
+RenderTexture::~RenderTexture()
+{
+	if (!m_isBaseRenderView)
+	{
+		SAFE_RELEASE(m_pRenderTargetView);
+	}
+}
+
+//----------------------------------------------------------------------------------------
+
+void 
+RenderTexture::BindRT()
+{
+	m_pDevice->OMSetRenderTargets( 1, &m_pRenderTargetView, m_pDepthTexture->m_pDepthStencilView );
+}
+
+//----------------------------------------------------------------------------------------
+
+void 
+RenderTexture::Clear(
+	const D3DXVECTOR4& color
+)
+{
+	m_pDevice->ClearRenderTargetView( m_pRenderTargetView, (float*)&color );
+	m_pDepthTexture->Clear();
+}
+
+//----------------------------------------------------------------------------------------
+
+void
+RenderTexture::OnResize(
+	int newWidth, 
+	int newHeight
+)
+{
+	ResizeArgs args =
+	{
+		newWidth,
+		newHeight
+	};
+	s_notifier.Notify(args);
+}
+
+//----------------------------------------------------------------------------------------
+
+void
+RenderTexture::Setup(DXGI_FORMAT format, int width, int height)
+{
+	ID3D10Device* pDevice = GetDevice();
 
 	// Create RT Texture
 	HRESULT hr;
@@ -73,33 +149,6 @@ RenderTexture::RenderTexture(DepthTexture* pDepth, DXGI_FORMAT format, int width
 	srDesc.Texture2D.MipLevels = 1;
 
 	V(pDevice->CreateShaderResourceView( m_pTexture, &srDesc, &m_pTextureView ));
-}
-
-//----------------------------------------------------------------------------------------
-
-RenderTexture::~RenderTexture()
-{
-	if (!m_isBaseRenderView)
-	{
-		SAFE_RELEASE(m_pRenderTargetView);
-	}
-}
-
-//----------------------------------------------------------------------------------------
-
-void RenderTexture::BindRT()
-{
-	m_pDevice->OMSetRenderTargets( 1, &m_pRenderTargetView, m_pDepthTexture->m_pDepthStencilView );
-}
-
-//----------------------------------------------------------------------------------------
-
-void RenderTexture::Clear(
-	const D3DXVECTOR4& color
-)
-{
-	m_pDevice->ClearRenderTargetView( m_pRenderTargetView, (float*)&color );
-	m_pDepthTexture->Clear();
 }
 
 //----------------------------------------------------------------------------------------

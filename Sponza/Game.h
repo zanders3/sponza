@@ -35,6 +35,12 @@ namespace script
 namespace game
 {
 
+struct OnResizeArgs
+{
+	int newWidth;
+	int newHeight;
+};
+
 class Game
 {
 public:
@@ -43,7 +49,8 @@ public:
 
 	void LoadContent( ID3D10Device* pd3dDevice, int width, int height );
 	void Render( ID3D10Device* pd3dDevice, double fTime, float fElapsedTime );
-	void Update( double fTime, float fElapsedTime ); 
+	void Update( double fTime, float fElapsedTime );
+	void OnResize(int newWidth, int newHeight);
 
 private:
 	content::ContentManager					m_content;
@@ -53,7 +60,7 @@ private:
 	std::unique_ptr<script::ScriptEngine>	m_scriptEngine;
 	std::unique_ptr<scene::Renderer>		m_renderer;
 
-	D3DXMATRIX							m_identity;
+	D3DXMATRIX								m_identity;
 };
 
 // -----------------------------------------------------------------------------

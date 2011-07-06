@@ -152,6 +152,7 @@
     <ClInclude Include="Graphics\Shader\ShaderParams.h" />
     <ClInclude Include="Graphics\Texture.h" />
     <ClInclude Include="Net\Socket.h" />
+    <ClInclude Include="Observer.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="Scene\Lights.h" />

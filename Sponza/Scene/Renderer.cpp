@@ -67,8 +67,8 @@ public:
 	}
 
 private:
-	graphics::RenderTexture*	m_texture;
-	bool						m_needsRelease;
+	graphics::RenderTexture*			m_texture;
+	bool								m_needsRelease;
 };
 
 // -----------------------------------------------------------------------------

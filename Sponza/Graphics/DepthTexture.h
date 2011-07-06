@@ -33,8 +33,17 @@ public:
 	//DepthTexture(ID3D10Device* pDevice, int width, int height);
 	~DepthTexture();
 
-	void BindDepth();
-	void Clear();
+	void 
+	BindDepth();
+	
+	void 
+	Clear();
+
+	void 
+	OnResize(
+		int newWidth,
+		int newHeight
+	);
 private:
 	bool					m_isDXUTDepthStencil;
 	ID3D10DepthStencilView* m_pDepthStencilView;

@@ -50,4 +50,19 @@ DepthTexture::Clear()
 
 //----------------------------------------------------------------------------------------
 
+void 
+DepthTexture::OnResize(
+	int newWidth,
+	int newHeight
+)
+{
+	if (m_isDXUTDepthStencil)
+	{
+		m_pDevice = GetDevice();
+		m_pDepthStencilView = DXUTGetD3D10DepthStencilView();
+	}
+}
+
+//----------------------------------------------------------------------------------------
+
 }//namespace graphics

@@ -34,6 +34,7 @@ void CALLBACK OnFrameMove( double fTime, float fElapsedTime, void* pUserContext 
 
 HRESULT CALLBACK OnD3D10Resized( ID3D10Device* pd3dDevice, IDXGISwapChain *pSwapChain, const DXGI_SURFACE_DESC* pBackBufferSurfaceDesc, void* pUserContext )
 {
+	pGame->OnResize( pBackBufferSurfaceDesc->Width, pBackBufferSurfaceDesc->Height );
 	return S_OK;
 }
 

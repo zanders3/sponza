@@ -199,6 +199,7 @@
     <ClInclude Include="Script\ScriptType.h">
       <Filter>Script</Filter>
     </ClInclude>
+    <ClInclude Include="Observer.h" />
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="Sponza.rc" />

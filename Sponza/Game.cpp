@@ -9,6 +9,7 @@
 #include "Game.h"
 #include "Content/PackReader.h"
 #include "Graphics/Shader/ShaderParams.h"
+#include "Graphics/RenderTexture.h"
 #include "Scene/SceneNode.h"
 #include "Scene/MeshQueue.h"
 #include "Script/ScriptEngine.h"
@@ -97,6 +98,13 @@ void Game::Update( double fTime, float fElapsedTime )
 
 	m_meshQueue->Clear();
 	m_sceneRoot->Cull(m_identity, *m_meshQueue);
+}
+
+// -----------------------------------------------------------------------------
+
+void Game::OnResize(int newWidth, int newHeight)
+{
+	graphics::RenderTexture::OnResize(newWidth, newHeight);
 }
 
 // -----------------------------------------------------------------------------
