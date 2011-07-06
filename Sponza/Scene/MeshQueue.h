@@ -72,7 +72,9 @@ public:
 	Clear();
 
 	void
-	Draw();
+	Draw(
+		const std::string& passName
+	);
 
 private:
 	std::vector<ShaderList> m_queue;

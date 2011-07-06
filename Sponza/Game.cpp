@@ -67,11 +67,6 @@ void Game::LoadContent( ID3D10Device* pd3dDevice, int width, int height )
 	light->SetColor(D3DCOLOR_ARGB(255,255,255,255));*/
 
 	m_renderer->LoadContent(m_content);
-
-	graphics::GlobalShaderParams::SetValue("Projection", &m_camera->m_Projection);
-
-	D3DXVECTOR2 screenSize(640.0f, 480.0f);
-	graphics::GlobalShaderParams::SetValue<D3DXVECTOR2&>("ScreenSize", screenSize);
 }
 
 // -----------------------------------------------------------------------------
@@ -80,10 +75,6 @@ void Game::Render( ID3D10Device* pd3dDevice, double fTime, float fElapsedTime )
 {
 	graphics::GlobalShaderParams::SetValue("View", &m_camera->m_View);
 	graphics::GlobalShaderParams::Apply();
-	
-/*	float clearColor[] = { 0.0f, 0.2f, 1.0f, 1.0f };
-	GetDevice()->ClearRenderTargetView(DXUTGetD3D10RenderTargetView(), clearColor);
-	GetDevice()->ClearDepthStencilView(DXUTGetD3D10DepthStencilView(), D3D10_CLEAR_DEPTH, 1.0f, 0);*/
 
 	m_renderer->Draw();
 }
@@ -104,6 +95,10 @@ void Game::Update( double fTime, float fElapsedTime )
 
 void Game::OnResize(int newWidth, int newHeight)
 {
+	D3DXVECTOR2 screenSize(static_cast<float>(newWidth), static_cast<float>(newHeight));
+	graphics::GlobalShaderParams::SetValue<D3DXVECTOR2&>("ScreenSize", screenSize);
+	graphics::GlobalShaderParams::SetValue("Projection", &m_camera->m_Projection);
+
 	graphics::RenderTexture::OnResize(newWidth, newHeight);
 }
 

@@ -46,9 +46,9 @@ public:
 
 private:
 	ID3D10EffectPass*	m_pPass;
-	size_t				m_id;
+	u32					m_id;
 
-	static size_t		s_maxID;
+	static u32			s_maxID;
 	static ShaderPass*	s_pCurrent;
 };
 
@@ -67,11 +67,8 @@ public:
 		content::ContentReader& reader
 	);
 
-	void 
-	Bind(int pass) 
-	{ 
-		m_passes[pass].Bind(); 
-	}
+	bool 
+	Bind(u32 passHash);
 
 	int 
 	NumPasses()	   
@@ -102,7 +99,7 @@ private:
 	u32												m_drawOrder;
 	ID3D10EffectMatrixVariable*						m_pWorld;
 	ID3D10Effect*									m_pEffect;
-	std::vector<ShaderPass>							m_passes;
+	std::map<u32, ShaderPass>						m_passes;
 	std::list<ShaderParams>							m_params;
 };
 

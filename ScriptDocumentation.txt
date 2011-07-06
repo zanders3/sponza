@@ -1,0 +1,17 @@
+Game Script Interfaces
+
+Renderer
+	RenderTexture
+		BindShader(string paramName);
+		BindRT();
+		Clear(float r, float g, float b, float a);
+
+	RenderTexture @CreateRenderTexture();
+	RenderTexture @GetFramebuffer();
+
+	Shader <-- TODO
+		Load(string shaderName); <-- TODO
+		Bind(string passName);
+
+	void DrawPass(string passName);
+	void DrawFullscreenQuad();

@@ -138,11 +138,12 @@ Mesh::Create(
 // -----------------------------------------------------------------------------
 
 void 
-Mesh::Draw()
+Mesh::Draw(u32 passHash)
 {
 	if (mMaterial)
 	{
-		mMaterial->Bind();
+		if (!mMaterial->Bind(passHash))
+			return;
 	}
 
 	if (currentTopology != m_topology)

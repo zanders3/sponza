@@ -4,6 +4,12 @@
     <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\DefaultShader.fx" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\DefaultShader.fx.dat">
       <Dependencies />
     </ContentItemXML>
+    <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\LightShader.fx" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\LightShader.fx.dat">
+      <Dependencies />
+    </ContentItemXML>
+    <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\QuadShader.fx" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\QuadShader.fx.dat">
+      <Dependencies />
+    </ContentItemXML>
     <ContentItemXML Resource="C:\Users\Alex\Code\Projects\Sponza\Content\Source\renderer.as" Output="C:\Users\Alex\Code\Projects\Sponza\Content\Out\renderer.as.dat">
       <Dependencies />
     </ContentItemXML>

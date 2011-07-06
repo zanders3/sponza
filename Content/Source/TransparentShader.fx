@@ -55,6 +55,24 @@ NORMAL_PS_INPUT OpacityVS( NORMAL_VS_INPUT input )
 // Opacity Pixel Shader
 //--------------------------------------------------------------------------------------
 
+// Transforms Tangent Space Normal Maps into World Space.
+float3 TransformNormal(float3 mapNormal, float3 surfNormal, float3 surfTangent, float3 surfBiNormal)
+{
+	float3x3 tangentBasis = float3x3(-surfTangent, surfBiNormal, -surfNormal);
+
+	return normalize( mul( -mapNormal, tangentBasis ) );
+}
+
+float4 NormalsPS( NORMAL_PS_INPUT input ) : SV_Target
+{
+	//Apply normal mapping
+    float3 mapNormal = (Normal.Sample( samLinear, input.Tex ) * 2.0) - 1.0;
+	float3 normal = TransformNormal(mapNormal, input.Normal, input.Tangent, input.BiNormal);
+	normal.z = -normal.z;
+	
+	return float4(normal, input.Depth);
+}
+
 float4 OpacityPS( NORMAL_PS_INPUT input ) : SV_Target
 {
 	float4 color = pow(Diffuse.Sample( samLinear, input.Tex ), 2.0f);
@@ -62,6 +80,7 @@ float4 OpacityPS( NORMAL_PS_INPUT input ) : SV_Target
 	
 	return color;
 }
+
 
 //--------------------------------------------------------------------------------------
 // Rasterizer States
@@ -72,6 +91,11 @@ BlendState AlphaBlend
 	BlendEnable[0] = True;
 	SrcBlend = SRC_ALPHA;
 	DestBlend = INV_SRC_ALPHA;
+};
+
+BlendState NoBlend
+{
+	BlendEnable[0] = False;
 };
 
 RasterizerState FrontCull
@@ -90,4 +114,13 @@ technique10 <int DrawOrder = 1;>
         SetGeometryShader( NULL );
         SetPixelShader( CompileShader( ps_4_0, OpacityPS() ) );
     }
+	
+	pass Normal
+	{
+		SetBlendState(NoBlend, float4(0.0f, 0.0f, 0.0f, 0.0f), 0xFFFFFFFF);
+		SetRasterizerState(FrontCull);
+        SetVertexShader( CompileShader( vs_4_0, OpacityVS() ) );
+        SetGeometryShader( NULL );
+        SetPixelShader( CompileShader( ps_4_0, NormalsPS() ) );
+	}
 }

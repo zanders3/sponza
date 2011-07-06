@@ -46,8 +46,11 @@ public:
 		content::ContentReader&		reader
 	);
 
-	//Binds the current material
-	void Bind();
+	//Binds the current material, returns false if the material could not be bound.
+	bool 
+	Bind(
+		u32 passHash
+	);
 
 	//Sets the world outside of the parameter bind.
 	void SetWorld(

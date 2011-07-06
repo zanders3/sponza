@@ -87,8 +87,13 @@ MeshQueue::Clear()
 //---------------------------------------------------------------------------------------
 
 void
-MeshQueue::Draw()
+MeshQueue::Draw(
+	const std::string& passName
+)
 {
+	static const std::hash<std::string> stringHasher;
+	u32 passHash = stringHasher(passName);
+
 	std::sort(
 		m_queue.begin(), 
 		m_queue.end(), 
@@ -105,7 +110,7 @@ MeshQueue::Draw()
 			for (auto meshIter = list.meshList.begin(); meshIter != list.meshList.end(); ++meshIter)
 			{
 				meshIter->mesh->GetMaterial().SetWorld(*(meshIter->world));
-				meshIter->mesh->Draw();
+				meshIter->mesh->Draw(passHash);
 			}
 		}
 	}

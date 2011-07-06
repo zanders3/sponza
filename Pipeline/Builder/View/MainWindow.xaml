@@ -12,6 +12,8 @@
         <Model:ContentStateColorConverter x:Key="stateColorConverter"/>
         
         <ContextMenu x:Key="contentItemContextMenu">
+            <MenuItem Click="MenuItem_Click_4" Header="Open"/>
+            <Separator/>
             <MenuItem Click="MenuItem_Click" Header="Build"/>
             <MenuItem Click="MenuItem_Click_1" Header="Clean"/>
             <MenuItem Click="MenuItem_Click_3" Header="Notify"/>
@@ -40,7 +42,7 @@
 
         <TabControl>
             <TabItem Header="Game Content">
-                <TreeView ItemsSource="{Binding Builder.RootContent}"/>
+                <TreeView ItemsSource="{Binding Builder.RootContent}" MouseDoubleClick="TreeView_MouseDoubleClick" x:Name="treeView"/>
             </TabItem>
             <TabItem Header="Output">
                 <TextBox Text="{Binding Builder.OutputText}">

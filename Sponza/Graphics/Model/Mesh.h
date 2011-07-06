@@ -69,7 +69,7 @@ public:
 		std::vector<Material>&	materials
 	);
 
-	void Draw();
+	void Draw(u32 passHash = 0);
 
 private:
 	Mesh(const Mesh& other) {}

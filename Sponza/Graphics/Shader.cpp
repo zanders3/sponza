@@ -98,11 +98,33 @@ Shader::Load(
 			drawOrder->AsScalar()->GetInt((int*)&m_drawOrder);
 		}
 		
-		m_passes.reserve(desc.Passes);
 		for (size_t i = 0; i<desc.Passes; ++i)
 		{
-			m_passes.push_back(ShaderPass(pTechnique->GetPassByIndex(i)));
+			D3D10_PASS_DESC passDesc;
+			pTechnique->GetPassByIndex(i)->GetDesc(&passDesc);
+
+			static const std::hash<std::string> stringHasher;
+			u32 passHash = stringHasher(passDesc.Name);
+
+			m_passes.insert(std::make_pair(passHash, ShaderPass(pTechnique->GetPassByIndex(i))));
 		}
+	}
+}
+
+//----------------------------------------------------------------------------------------
+
+bool 
+Shader::Bind(u32 passHash)
+{
+	auto find = m_passes.find(passHash);
+	if (find != m_passes.end())
+	{
+		find->second.Bind();
+		return true;
+	}
+	else
+	{
+		return false;
 	}
 }
 

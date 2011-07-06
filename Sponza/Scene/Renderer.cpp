@@ -14,6 +14,8 @@
 #include "Script/ScriptType.h"
 #include "Graphics/RenderTexture.h"
 #include "Graphics/DepthTexture.h"
+#include "Graphics/Shader/ShaderParams.h"
+#include "Graphics/ScreenQuad.h"
 
 // -----------------------------------------------------------------------------
 // Namespace 
@@ -61,6 +63,11 @@ public:
 		m_texture->BindRT();
 	}
 
+	void BindShader(std::string paramName)
+	{
+		graphics::GlobalShaderParams::SetValue(paramName.c_str(), m_texture);
+	}
+
 	void Clear(float r, float g, float b, float a)
 	{
 		m_texture->Clear(D3DXVECTOR4(r, g, b, a));
@@ -85,18 +92,54 @@ static RenderTextureHandle* GetFramebufferGlobal()
 
 // -----------------------------------------------------------------------------
 
-static RenderTextureHandle* CreateRenderTexture(int width, int height)
+static RenderTextureHandle* CreateRenderTextureGlobal()
 {
 	assert(s_renderer);
-	return new RenderTextureHandle(&s_renderer->CreateRenderTexture(width, height));
+
+	return new RenderTextureHandle(&s_renderer->CreateRenderTexture(DXUTGetWindowWidth(), DXUTGetWindowHeight()));
 }
 
 // -----------------------------------------------------------------------------
 
-static void DrawPassGlobal()
+class ShaderHandle : public script::RefType<ShaderHandle>
+{
+public:
+	static const char* TYPE_NAME;
+
+	ShaderHandle(
+	) : m_shader(nullptr)
+	{
+	}
+
+	void Bind(std::string passName)
+	{
+		assert(m_shader);
+	}
+
+	void Load(std::string name)
+	{
+		//TODO load from content manager.
+	}
+
+private:
+	graphics::Shader* m_shader;
+};
+
+const char* ShaderHandle::TYPE_NAME = "Shader";
+
+// -----------------------------------------------------------------------------
+
+static void DrawFullscreenQuad()
+{
+	graphics::ScreenQuad::Draw();
+}
+
+// -----------------------------------------------------------------------------
+
+static void DrawPassGlobal(std::string passName)
 {
 	assert(s_renderer);
-	s_renderer->DrawPass();
+	s_renderer->DrawPass(passName);
 }
 
 // -----------------------------------------------------------------------------
@@ -116,10 +159,17 @@ Renderer::Renderer(
 
 	RegisterType(scriptEngine, RenderTextureHandle);
 	RegisterTypeMethod(scriptEngine, RenderTextureHandle, BindRT, "void BindRT()");
+	RegisterTypeMethod(scriptEngine, RenderTextureHandle, BindShader, "void BindShader(string)");
 	RegisterTypeMethod(scriptEngine, RenderTextureHandle, Clear, "void Clear(float,float,float,float)");
 
+	RegisterType(scriptEngine, ShaderHandle);
+	RegisterTypeMethod(scriptEngine, ShaderHandle, Bind, "void Bind(string)");
+	RegisterTypeMethod(scriptEngine, ShaderHandle, Load, "void Load(string)");
+
+	RegisterGlobalFunction(scriptEngine, CreateRenderTextureGlobal, "RenderTexture @CreateRenderTexture()");
 	RegisterGlobalFunction(scriptEngine, GetFramebufferGlobal, "RenderTexture @GetFramebuffer()");
-	RegisterGlobalFunction(scriptEngine, DrawPassGlobal, "void DrawPass()");
+	RegisterGlobalFunction(scriptEngine, DrawPassGlobal, "void DrawPass(string)");
+	RegisterGlobalFunction(scriptEngine, DrawFullscreenQuad, "void DrawFullscreenQuad()");
 }
 
 //----------------------------------------------------------------------------------------
@@ -180,9 +230,11 @@ Renderer::LoadContent(
 //---------------------------------------------------------------------------------------
 
 void
-Renderer::DrawPass()
+Renderer::DrawPass(
+	const std::string& passName
+)
 {
-	m_meshQueue.Draw();
+	m_meshQueue.Draw(passName);
 }
 
 //---------------------------------------------------------------------------------------

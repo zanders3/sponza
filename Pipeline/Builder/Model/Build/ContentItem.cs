@@ -7,6 +7,7 @@ using System.IO;
 using System.ComponentModel;
 using System.Runtime.Serialization;
 using System.Xml.Serialization;
+using System.Diagnostics;
 
 namespace Builder.Model
 {
@@ -184,6 +185,14 @@ namespace Builder.Model
         public override int GetHashCode()
         {
             return m_resourcePath.GetHashCode();
+        }
+
+        public void Open()
+        {
+            if (File.Exists(m_resourcePath))
+            {
+                Process.Start(m_resourcePath);
+            }
         }
     }
 }

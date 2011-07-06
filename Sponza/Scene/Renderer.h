@@ -71,7 +71,9 @@ public:
 	);
 
 	void
-	DrawPass();
+	DrawPass(
+		const std::string& passName
+	);
 
 private:
 	MeshQueue&												m_meshQueue;

@@ -79,5 +79,30 @@ namespace Builder.View
             ContentItem item = (ContentItem)((MenuItem)sender).DataContext;
             item.Notify();
         }
+
+        private void MenuItem_Click_4(object sender, RoutedEventArgs e)
+        {
+            ContentItem item = (ContentItem)((MenuItem)sender).DataContext;
+            item.Open();
+        }
+
+        private void TreeView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            UIElement elem = (UIElement)treeView.InputHitTest(e.GetPosition(treeView));
+            while (elem != treeView)
+            {
+                if (elem is StackPanel)
+                {
+                    ContentItem item = ((StackPanel)elem).DataContext as ContentItem;
+                    if (item != null)
+                    {
+                        item.Open();
+                    }
+
+                    return;
+                }
+                elem = (UIElement)VisualTreeHelper.GetParent(elem);
+            }
+        }
     }
 }

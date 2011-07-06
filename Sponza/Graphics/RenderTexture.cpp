@@ -53,11 +53,14 @@ RenderTexture::RenderTexture(DepthTexture* pDepth, DXGI_FORMAT format, int width
 	m_resizeHandler.reset(new game::Observer<ResizeArgs>([=](const ResizeArgs& args)
 	{
 		SAFE_RELEASE(this->m_pRenderTargetView);
+		SAFE_RELEASE(this->m_pTexture);
+		SAFE_RELEASE(this->m_pTextureView);
 
 		this->m_pDevice = GetDevice();
 		this->Setup(format, resizeWithScreen ? args.newWidth : width, resizeWithScreen ? args.newHeight : height);
 		this->m_pDepthTexture->OnResize(args.newWidth, args.newHeight);
 	}));
+	s_notifier.Register(m_resizeHandler.get());
 
 	m_pDepthTexture = pDepth;
 	m_pDevice = GetDevice();
@@ -73,6 +76,8 @@ RenderTexture::~RenderTexture()
 	if (!m_isBaseRenderView)
 	{
 		SAFE_RELEASE(m_pRenderTargetView);
+		SAFE_RELEASE(m_pTexture);
+		SAFE_RELEASE(m_pTextureView);
 	}
 }
 
