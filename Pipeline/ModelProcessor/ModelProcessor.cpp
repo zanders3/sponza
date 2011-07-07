@@ -15,7 +15,7 @@ struct Vertex
 		mNormal(normal),
 		mTangent(tangent),
 		mBiNormal(binormal),
-		mTexCoord(aiVector2D(1.0f - texCoord.y, texCoord.x))
+		mTexCoord(texCoord.x, 1.0f - texCoord.y)
 	{
 	}
 
